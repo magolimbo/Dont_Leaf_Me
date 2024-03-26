@@ -1,6 +1,7 @@
 import { StyleSheet, View, Text, Image, TouchableOpacity } from 'react-native'
 import React from 'react'
 import Colors from '../../Utils/Colors'
+import { AntDesign } from '@expo/vector-icons';
 
 export default function Login() {
     return(
@@ -9,6 +10,12 @@ export default function Login() {
             <Image source={require('./../../../assets/images/plantlogin.jpg')}  style={styles.loginImage}/> 
             <View style={styles.subcontainer}>
                 <Text style={styles.text}>Start taking care of your plants today!</Text>
+                <Text style={{color:Colors.WHITE, textAlign: 'center', fontSize: 18, marginTop: 40 }}>Login</Text>
+
+                <View style={styles.button}>
+                <AntDesign name="google" size={24} color="white" style={{marginRight:20}} />
+                    <Text style={{color:Colors.WHITE, textAlign: 'center', fontSize: 16, fontWeight: 'bold'}}>Sign in with google</Text>
+                </View>
             </View>
         </View>
     )
@@ -33,7 +40,8 @@ const styles = StyleSheet.create({
         right: 0, // Allineamento a destra rispetto al contenitore genitore
         borderTopLeftRadius: 40, // Arrotondamento angoli in alto a sinistra
         borderTopRightRadius: 40, // Arrotondamento angoli in alto a destra
-        padding: 30
+        padding: 30,
+        paddingTop: 60,
     },
 
     text:{
@@ -41,6 +49,19 @@ const styles = StyleSheet.create({
         fontSize: 24,
         textAlign: 'center',
         fontWeight: 'bold'
+    },
+
+    button:{
+        backgroundColor: Colors.ORANGE,
+        padding: 10,
+        margin: 40,
+        marginTop: 15,
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alighItems: 'center',
+        borderRadius: 15,
+
     }
 })
 
