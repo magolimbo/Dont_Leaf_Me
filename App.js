@@ -5,8 +5,6 @@ import Login from './App/Screens/LoginScreen/Login'
 
 export default function App() {
   return (
-    <View>
-      <Login/>
-    </View>
+    <Login/>
   )
 }
