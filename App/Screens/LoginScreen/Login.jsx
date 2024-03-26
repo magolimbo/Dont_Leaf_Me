@@ -3,7 +3,11 @@ import React from 'react'
 import Colors from '../../Utils/Colors'
 import { AntDesign } from '@expo/vector-icons';
 
-export default function Login() {
+export default function Login({navigation}) {
+
+    const pressHandler = () => {
+        navigation.navigate('HomePage')
+    }
     return(
 
         <View style={styles.container}>
@@ -12,10 +16,12 @@ export default function Login() {
                 <Text style={styles.text}>Start taking care of your plants today!</Text>
                 <Text style={{color:Colors.WHITE, textAlign: 'center', fontSize: 18, marginTop: 40 }}>Login</Text>
 
-                <View style={styles.button}>
-                <AntDesign name="google" size={24} color="white" style={{marginRight:20}} />
-                    <Text style={{color:Colors.WHITE, textAlign: 'center', fontSize: 16, fontWeight: 'bold'}}>Sign in with google</Text>
-                </View>
+                <TouchableOpacity onPress = {pressHandler}>
+                    <View style={styles.button}>
+                        <AntDesign name="google" size={24} color="white" style={{marginRight:20}} />
+                        <Text style={{color:Colors.WHITE, textAlign: 'center', fontSize: 16, fontWeight: 'bold'}}>Sign in with google</Text>
+                    </View>
+                </TouchableOpacity>
             </View>
         </View>
     )
@@ -28,11 +34,13 @@ const styles = StyleSheet.create({
 
     loginImage:{
         height: "60%",
-        marginLeft: -50,
+        width: "100%",
+        resizeMode: 'cover',
+        transform: [{ scale: 1.25 }]
     },
 
     subcontainer:{
-        height: "60%",
+        height: "40%",
         backgroundColor: Colors.DARKGREEN,
         position: 'absolute', // Posizionamento assoluto
         bottom: 0, // Allineamento in basso rispetto al contenitore genitore
