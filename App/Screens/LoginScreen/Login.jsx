@@ -13,8 +13,8 @@ export default function Login({navigation}) {
         <View style={styles.container}>
             <Image source={require('./../../../assets/images/plantlogin.jpg')}  style={styles.loginImage}/> 
             <View style={styles.subcontainer}>
-                <Text style={styles.text}>Start taking care of your plants today!</Text>
-                <Text style={{color:Colors.WHITE, textAlign: 'center', fontSize: 18, marginTop: 40 }}>Login</Text>
+                <Text style={styles.text}>Don't Leaf me</Text>
+                <Text style={{ marginTop: 5, textAlign:'center', color: Colors.WHITE }}>Start taking care of your plants today!</Text>
 
                 <TouchableOpacity onPress = {pressHandler}>
                     <View style={styles.button}>
@@ -54,16 +54,18 @@ const styles = StyleSheet.create({
 
     text:{
         color: Colors.WHITE,
-        fontSize: 24,
+        fontSize: 28,
         textAlign: 'center',
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        // borderColor: 'red',
+        // borderWidth: 1
     },
 
     button:{
         backgroundColor: Colors.ORANGE,
         padding: 10,
         margin: 40,
-        marginTop: 15,
+        marginTop: 35,
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'center',
