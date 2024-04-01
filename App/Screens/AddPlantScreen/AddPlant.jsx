@@ -27,10 +27,12 @@ export default function AddPlant({navigation}) {
             <Text>Be as detailed as possible to let our AI help you!</Text>
             </View>
 
-             {/* weather and AI suggestion */}
-            <View style={{backgroundColor: 'red'}}>
+             {/* Plant ID */}
+            <View style={style = styles.subcontainer}>
                 <Text style={{color:Colors.WHITE}}>Plant ID</Text>
-                <Text>AI suggestion</Text>
+                <View style={{}}>
+
+                </View>
             </View>
 
         </View>        
@@ -62,5 +64,11 @@ const styles = StyleSheet.create({
         color: Colors.DARKGREEN,
         fontWeight: 'bold',
         textAlign: 'left',
-  }
+    },
+    //box that contains input fields
+    subcontainer:{
+        backgroundColor: Colors.DARKGREEN,
+        padding: 15,
+        borderRadius: 20
+    }
 })
