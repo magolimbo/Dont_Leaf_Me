@@ -5,16 +5,17 @@ import { AntDesign } from '@expo/vector-icons';
 
 export default function Login({navigation}) {
 
+
     const pressHandler = () => {
         navigation.navigate('HomePage')
-    }
+    };
     return(
 
         <View style={styles.container}>
             <Image source={require('./../../../assets/images/plantlogin.jpg')}  style={styles.loginImage}/> 
             <View style={styles.subcontainer}>
-                <Text style={styles.text}>Don't Leaf me</Text>
-                <Text style={{ marginTop: 5, textAlign:'center', color: Colors.WHITE }}>Start taking care of your plants today!</Text>
+                <Text style={styles.title}>Don't Leaf me</Text>
+                <Text style={styles.text}>Start taking care of your plants today!</Text>
 
                 <TouchableOpacity onPress = {pressHandler}>
                     <View style={styles.button}>
@@ -30,6 +31,15 @@ export default function Login({navigation}) {
 const styles = StyleSheet.create({
     container:{
         flex: 1,
+    },
+
+    title: {
+        fontSize: 24,
+        color: Colors.WHITE,
+        fontWeight: 'bold',
+        textAlign: 'center',
+        marginTop: 5,
+        fontFamily: 'Roboto',
     },
 
     loginImage:{
@@ -52,11 +62,10 @@ const styles = StyleSheet.create({
         paddingTop: 60,
     },
 
-    text:{
+    text: {
         color: Colors.WHITE,
-        fontSize: 28,
+        fontSize: 18,
         textAlign: 'center',
-        fontWeight: 'bold',
         // borderColor: 'red',
         // borderWidth: 1
     },

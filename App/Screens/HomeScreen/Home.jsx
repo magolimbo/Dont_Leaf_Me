@@ -5,7 +5,7 @@ import Colors from '../../Utils/Colors'
 
 export default function Home({navigation}) {
 
-  // handler of the add button for a new plant (navihgate to add plant screen)
+  // handler of the add button for a new plant (navigate to add plant screen)
   const pressHandler = () => {
     navigation.navigate('AddPlantPage')
   }
@@ -37,7 +37,7 @@ export default function Home({navigation}) {
         </View>
 
         {/* plants */}
-        
+
 
       </View>
     </SafeAreaView>
