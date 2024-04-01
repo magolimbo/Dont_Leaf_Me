@@ -45,40 +45,8 @@ export default function AddPlant({ navigation }) {
                     <Text style={{ color: Colors.WHITE }}>Plant ID</Text>
                     <Text>AI suggestion</Text>
                 </View>
-                <View>
-                    <Text>PROVA GRAFICO ACQUA</Text>
-                    <LineChart
-                        data={data}
-                        width={360}
-                        height={220}
-                        yLabelsOffset={1}
-                        yAxisSuffix=" gl  "
-                        yAxisInterval={1} // optional, defaults to 1
-                        chartConfig={{
-                            backgroundColor: Colors.DARKGREEN,
-                            backgroundGradientFrom: Colors.DARKGREEN,
-                            backgroundGradientTo: Colors.PURPLE,
-                            decimalPlaces: 1, // optional, defaults to 2dp
-                            color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-                            labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-                            style: {
-                                borderRadius: 16
-                            },
-                            propsForDots: {
-                                r: "3", //point dimension
-                                strokeWidth: "1", //stroke width around the point
-                                stroke: Colors.ORANGE
-                            }
-                        }}
-                        bezier //true if you want the line to be curved
-                        style={{
-                            marginVertical: 5,
-                            flex: 1,
-                            borderRadius: 16 //radius of the corners of the graph
-                        }}
-                    />
 
-                </View>
+                
             </View>
         </SafeAreaView>
     )

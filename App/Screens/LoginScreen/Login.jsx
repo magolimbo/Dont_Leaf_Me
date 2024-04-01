@@ -2,9 +2,22 @@ import { StyleSheet, View, Text, Image, TouchableOpacity } from 'react-native'
 import React from 'react'
 import Colors from '../../Utils/Colors'
 import { AntDesign } from '@expo/vector-icons';
+import { Raleway_400Regular } from "@expo-google-fonts/raleway";
+import { Raleway_800ExtraBold } from "@expo-google-fonts/raleway";
+import { useFonts } from "expo-font";
 
 export default function Login({navigation}) {
 
+    const [fontsLoaded] = useFonts({
+        Raleway_400Regular,
+        Raleway_800ExtraBold
+      });
+
+      if (!fontsLoaded) {
+        return (
+            <Text>Font not loaded</Text>
+        )
+      }
 
     const pressHandler = () => {
         navigation.navigate('HomePage')
@@ -20,7 +33,7 @@ export default function Login({navigation}) {
                 <TouchableOpacity onPress = {pressHandler}>
                     <View style={styles.button}>
                         <AntDesign name="google" size={24} color="white" style={{marginRight:20}} />
-                        <Text style={{color:Colors.WHITE, textAlign: 'center', fontSize: 16, fontWeight: 'bold'}}>Sign in with google</Text>
+                        <Text style={{color:Colors.WHITE, textAlign: 'center', fontSize: 16, fontFamily: "Raleway_400Regular"}}>Sign in with google</Text>
                     </View>
                 </TouchableOpacity>
             </View>
@@ -31,15 +44,16 @@ export default function Login({navigation}) {
 const styles = StyleSheet.create({
     container:{
         flex: 1,
+        
     },
 
     title: {
         fontSize: 24,
         color: Colors.WHITE,
-        fontWeight: 'bold',
+        //fontWeight: 'bold',
         textAlign: 'center',
         marginTop: 5,
-        fontFamily: 'Roboto',
+        fontFamily: 'Raleway_800ExtraBold',
     },
 
     loginImage:{
@@ -68,6 +82,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         // borderColor: 'red',
         // borderWidth: 1
+        fontFamily: "Raleway_400Regular",
     },
 
     button:{

@@ -2,8 +2,23 @@ import { StyleSheet, View, Text, TouchableOpacity } from 'react-native'
 import {useState} from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Colors from '../../Utils/Colors'
+import { Raleway_400Regular } from "@expo-google-fonts/raleway";
+import { Raleway_800ExtraBold } from "@expo-google-fonts/raleway";
+import { useFonts } from "expo-font";
+
 
 export default function Home({navigation}) {
+
+  const [fontsLoaded] = useFonts({
+    Raleway_400Regular,
+    Raleway_800ExtraBold
+  });
+
+  if (!fontsLoaded) {
+    return (
+        <Text>Font not loaded</Text>
+    )
+  }
 
   // handler of the add button for a new plant (navigate to add plant screen)
   const pressHandler = () => {
@@ -16,13 +31,13 @@ export default function Home({navigation}) {
         {/* title on top */}
         <View style={{marginBottom: 30}}>
           <Text style={styles.title}>Hello Rose</Text>
-          <Text>How are your plants feeling today?</Text>
+          <Text style={styles.text}>How are your plants feeling today?</Text>
         </View>
 
         {/* weather and AI suggestion */}
         <View style={styles.weather}>
           <Text style={{color:Colors.WHITE}}>Weather</Text>
-          <Text>AI suggestion</Text>
+          <Text>AI suggestions</Text>
         </View>
 
         {/* Your plants and Add a new plant */}
@@ -31,7 +46,7 @@ export default function Home({navigation}) {
           {/* Add a new plant button */}
           <TouchableOpacity onPress = {pressHandler}>
             <View style={styles.addButton}>
-              <Text style={{color: Colors.WHITE, fontWeight: "bold"}}>Add</Text>
+              <Text style={{color: Colors.WHITE, fontFamily: "Raleway_800ExtraBold"}}>Add</Text>
             </View>
           </TouchableOpacity>
         </View>
@@ -56,10 +71,15 @@ const styles = StyleSheet.create({
   title:{
     fontSize: 24,
     color: Colors.DARKGREEN,
-    fontWeight: 'bold',
+    fontFamily: "Raleway_800ExtraBold",
     textAlign: 'left',
     borderColor: 'blue',
     borderWidth: 1
+  },
+  text:{
+    fontSize: 15,
+    color: Colors.DARKGREEN,
+    fontFamily: "Raleway_400Regular",
   },
   weather:{
     //borderColor: 'blue',
