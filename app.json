@@ -11,6 +11,12 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
+    "plugins": [
+      ["expo-font",
+        {
+          "fonts": ["./assets/fonts/"]
+        }]
+    ],
     "assetBundlePatterns": [
       "**/*"
     ],

@@ -1,54 +1,98 @@
-import { Button, StyleSheet, Text, View} from 'react-native'
+import { Button, StyleSheet, Text, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import React from 'react'
 import Colors from '../../Utils/Colors'
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler'
 import { Feather } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native'
+import { LineChart } from "react-native-chart-kit"
+import { Dimensions } from "react-native";
 
-export default function AddPlant({navigation}) {
+export default function AddPlant({ navigation }) {
 
+    const data = {
+        labels: ["January", "February", "March", "April"],
+        datasets: [
+            {
+                data: [1, 2, 3, 2],
+                color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`, // optional
+                strokeWidth: 3, // optional
+                stroke: Colors.ORANGE
+            }
+        ],
+        legend: ["Average water per Month"] // optional
+    };
 
+    return (
+        <SafeAreaView style={{ flex: 1 }}>
+            <View style={styles.container}>
 
-  return (
-    <SafeAreaView style={{flex:1}}>
-        <View style={styles.container}>
-            
-            {/* button to go back to home screen </TouchableOpacity>*/}
-            <TouchableOpacity onPress={() => navigation.goBack()}>
-                <View style={styles.buttonBack}>
-                    <Feather name="arrow-left" size={24} color={Colors.WHITE} />
-                </View>     
-            </TouchableOpacity>
+                {/* button to go back to home screen </TouchableOpacity>*/}
+                <TouchableOpacity onPress={() => navigation.goBack()}>
+                    <View style={styles.buttonBack}>
+                        <Feather name="arrow-left" size={24} color={Colors.WHITE} />
+                    </View>
+                </TouchableOpacity>
 
-            {/* title on top */}
-            <View style={{marginBottom: 30, marginTop: 20,borderColor: 'black', borderWidth:1}}>
-            <Text style={styles.title}>Add a new plant</Text>
-            <Text>Be as detailed as possible to let our AI help you!</Text>
-            </View>
+                {/* title on top */}
+                <View style={{ marginBottom: 30, marginTop: 20, borderColor: 'black', borderWidth: 1 }}>
+                    <Text style={styles.title}>Add a new plant</Text>
+                    <Text>Be as detailed as possible to let our AI help you!</Text>
+                </View>
 
-             {/* Plant ID */}
-            <View style={style = styles.subcontainer}>
-                <Text style={{color:Colors.WHITE}}>Plant ID</Text>
-                <View style={{}}>
+                {/* weather and AI suggestion */}
+                <View style={{ backgroundColor: 'red' }}>
+                    <Text style={{ color: Colors.WHITE }}>Plant ID</Text>
+                    <Text>AI suggestion</Text>
+                </View>
+                <View>
+                    <Text>PROVA GRAFICO ACQUA</Text>
+                    <LineChart
+                        data={data}
+                        width={360}
+                        height={220}
+                        yLabelsOffset={1}
+                        yAxisSuffix=" gl  "
+                        yAxisInterval={1} // optional, defaults to 1
+                        chartConfig={{
+                            backgroundColor: Colors.DARKGREEN,
+                            backgroundGradientFrom: Colors.DARKGREEN,
+                            backgroundGradientTo: Colors.PURPLE,
+                            decimalPlaces: 1, // optional, defaults to 2dp
+                            color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                            labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                            style: {
+                                borderRadius: 16
+                            },
+                            propsForDots: {
+                                r: "3", //point dimension
+                                strokeWidth: "1", //stroke width around the point
+                                stroke: Colors.ORANGE
+                            }
+                        }}
+                        bezier //true if you want the line to be curved
+                        style={{
+                            marginVertical: 5,
+                            flex: 1,
+                            borderRadius: 16 //radius of the corners of the graph
+                        }}
+                    />
 
                 </View>
             </View>
-
-        </View>        
-    </SafeAreaView>
-  )
+        </SafeAreaView>
+    )
 }
 
 const styles = StyleSheet.create({
-    container:{
-        flex:1,
+    container: {
+        flex: 1,
         backgroundColor: Colors.WHITE,
         padding: 25,
         borderColor: 'green',
         borderWidth: 1
     },
-    buttonBack:{
+    buttonBack: {
         backgroundColor: Colors.ORANGE,
         padding: 10,
         paddingTop: 5,
@@ -58,17 +102,11 @@ const styles = StyleSheet.create({
         justifyContent: 'center', // Aggiungi questa linea
         alignItems: 'center',
     },
-     //title text like hello Rose
-    title:{
+    //title text like hello Rose
+    title: {
         fontSize: 24,
         color: Colors.DARKGREEN,
         fontWeight: 'bold',
         textAlign: 'left',
-    },
-    //box that contains input fields
-    subcontainer:{
-        backgroundColor: Colors.DARKGREEN,
-        padding: 15,
-        borderRadius: 20
     }
 })
