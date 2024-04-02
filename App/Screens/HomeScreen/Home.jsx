@@ -64,8 +64,8 @@ const styles = StyleSheet.create({
     flex:1,
     backgroundColor: Colors.WHITE,
     padding: 25,
-    borderColor: 'red',
-    borderWidth: 1
+    // borderColor: 'red',
+    // borderWidth: 1
   },
   //title text like hello Rose
   title:{
@@ -73,8 +73,8 @@ const styles = StyleSheet.create({
     color: Colors.DARKGREEN,
     fontFamily: "Raleway_800ExtraBold",
     textAlign: 'left',
-    borderColor: 'blue',
-    borderWidth: 1
+    // borderColor: 'blue',
+    // borderWidth: 1
   },
   text:{
     fontSize: 15,
