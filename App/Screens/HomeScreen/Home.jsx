@@ -7,7 +7,7 @@ import { Raleway_800ExtraBold } from "@expo-google-fonts/raleway";
 import { useFonts } from "expo-font";
 
 
-export default function Home({navigation}) {
+export default function Home({navigation, route}) {
 
   const [fontsLoaded] = useFonts({
     Raleway_400Regular,
@@ -19,6 +19,21 @@ export default function Home({navigation}) {
         <Text>Font not loaded</Text>
     )
   }
+
+//------------DYNAMIC VIEWS-----------------------------------
+  const { count } = route.params || {count : 0}
+
+  // const views = Array.from({ length: count }, (_, index) => (
+  //   <View key={index} style={{ backgroundColor: 'lightblue', height: 50, marginVertical: 5 }}>
+  //     <Text>View {index + 1}</Text>
+  //   </View>
+  // ));
+
+
+//-------------------------------------------------------
+
+  //const {nickname} = route.params?.nickname || "";
+
 
   // handler of the add button for a new plant (navigate to add plant screen)
   const pressHandler = () => {
@@ -52,7 +67,12 @@ export default function Home({navigation}) {
         </View>
 
         {/* plants */}
-
+        <View>
+          <Text>{count}ciao</Text>
+        </View>
+        {/* <View style={{ flex: 1, padding: 20 }}>
+          {views}
+        </View> */}
 
       </View>
     </SafeAreaView>
