@@ -16,7 +16,9 @@
         "expo-font",
         {
           "fonts": ["./assets/fonts/"]
-        },
+        }
+      ],
+      [
         "expo-camera",
         {
           "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera",
