@@ -129,7 +129,7 @@ export default function AddPlant({ navigation }) {
                             {/* Se è presente un'immagine come profile picture, mostra l'immagine */}
                             {profilePictureUri && (
                                 <TouchableOpacity onPress={() => { uri }}>
-                                    <Image source={{ uri: profilePictureUri }} style={{ width: 100, height: 100, borderRadius: 50 }} />
+                                    <Image source={{ uri: 'profilePictureUri' }} style={{ width: 100, height: 100, borderRadius: 50 }} />
                                 </TouchableOpacity>
                             )}
                             {/* Messaggio di fallback nel caso in cui non ci sia una foto profilo */}
