@@ -10,9 +10,20 @@ import { Raleway_400Regular } from "@expo-google-fonts/raleway";
 import { Raleway_800ExtraBold } from "@expo-google-fonts/raleway";
 import { useFonts } from "expo-font";
 import { AntDesign } from '@expo/vector-icons';
+import { useRef } from 'react';
+import { Camera, CameraType } from 'expo-camera';
 
 export default function AddPlant({ navigation }) {
 
+    const [type, setType] = useState(CameraType.back);
+    const [hasPermission, setHasPermission] = useState(null);
+
+    useEffect(() => {
+        (async () => {
+            const { status } = await Camera.requestPermissionsAsync();
+            setHasPermission(status === 'granted');
+        })();
+    }, []);
     const [fontsLoaded] = useFonts({
         Raleway_400Regular,
         Raleway_800ExtraBold
@@ -25,6 +36,10 @@ export default function AddPlant({ navigation }) {
     }
 
     const [selectedValue, setSelectedValue] = useState("option1");
+
+    function toggleCameraType() {
+        setType(current => (current === CameraType.back ? CameraType.front : CameraType.back));
+    }
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
@@ -173,8 +188,16 @@ export default function AddPlant({ navigation }) {
                         <Text style={{color:Colors.WHITE, fontFamily: 'Raleway_400Regular' }}>Upload a photo of your plant and let the AI give you some useful insights.
     You should do this periodically to get the best results</Text>
                     </View>
-                    <View style={{flex:1, marginLeft: 40, marginTop: 10}}>
+                    {/* Block for camera */}
+                    <View style={{ flex: 1, marginLeft: 40, marginTop: 10 }}>
                         <View style={styles.propic}>
+                            <Camera style={styles.camera} type={type}>
+                                <View style={styles.buttonContainer}>
+                                    <TouchableOpacity style={styles.button} onPress={toggleCameraType}>
+                                        <Text style={styles.text}>Flip Camera</Text>
+                                    </TouchableOpacity>
+                                </View>
+                            </Camera>
                         </View>
                     </View>
                 </View>
@@ -236,6 +259,20 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         marginBottom: 10
+    },
+    camera: {
+        flex: 1,
+    },
+    buttonContainer: {
+        flex: 1,
+        flexDirection: 'row',
+        backgroundColor: 'transparent',
+        margin: 64,
+    },
+    button: {
+        flex: 1,
+        alignSelf: 'flex-end',
+        alignItems: 'center',
     },
 })
 
