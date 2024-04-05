@@ -32,7 +32,9 @@ export default function AddPlant({ navigation }) {
     const incrementCount = () => {
         const updatedCount = count + 1;
         setCount(updatedCount);
-        navigation.navigate('HomePage', { count: Math.floor(Math.random() * 100), });
+        navigation.navigate('HomePage', { updatedCount: Math.floor(Math.random() * 100), });
+        console.log(count)
+        console.log(updatedCount)
       };
 
 
