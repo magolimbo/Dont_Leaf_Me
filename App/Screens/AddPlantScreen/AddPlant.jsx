@@ -11,7 +11,7 @@ import { Raleway_800ExtraBold } from "@expo-google-fonts/raleway";
 import { useFonts } from "expo-font";
 import { AntDesign } from '@expo/vector-icons';
 
-export default function AddPlant({ navigation }) {
+export default function AddPlant({ navigation, route }) {
 
     //--------------------------FONT------------------------------
     const [fontsLoaded] = useFonts({
@@ -27,15 +27,19 @@ export default function AddPlant({ navigation }) {
     //------------------------------------------------------------
 
     const [selectedValue, setSelectedValue] = useState("option1");
-    const [count, setCount] = useState(0);
+
+
+    const { count } = route.params || { count: 0 };
+    const [localCount, setLocalCount] = useState(count);
 
     const incrementCount = () => {
-        const updatedCount = count + 1;
-        setCount(updatedCount);
-        navigation.navigate('HomePage', { updatedCount: Math.floor(Math.random() * 100), });
-        console.log(count)
-        console.log(updatedCount)
-      };
+    const updatedCount = localCount + 1;
+    setLocalCount(updatedCount);
+    navigation.navigate('HomePage', { count: updatedCount }); // Passa il nuovo valore di count alla schermata Home
+    console.log("localCount", localCount)
+    console.log("updatedCount", updatedCount)
+    console.log("count",count)
+    };
 
 
     return (

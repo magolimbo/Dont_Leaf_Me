@@ -23,11 +23,13 @@ export default function Home({navigation, route}) {
 //------------DYNAMIC VIEWS-----------------------------------
   const { count } = route.params || {count : 0}
 
-  // const views = Array.from({ length: count }, (_, index) => (
-  //   <View key={index} style={{ backgroundColor: 'lightblue', height: 50, marginVertical: 5 }}>
-  //     <Text>View {index + 1}</Text>
-  //   </View>
-  // ));
+  const [views, setViews] = useState([]);
+
+  // Funzione per aggiungere una nuova vista
+  const addView = () => {
+    const newView = <View key={views.length} style={styles.box} />;
+    setViews([...views, newView]);
+  };
 
 
 //-------------------------------------------------------
@@ -37,7 +39,7 @@ export default function Home({navigation, route}) {
 
   // handler of the add button for a new plant (navigate to add plant screen)
   const pressHandler = () => {
-    navigation.navigate('AddPlantPage')
+    navigation.navigate('AddPlantPage', {count})
   }
 
   return (
