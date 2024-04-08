@@ -13,6 +13,7 @@
     "@expo-google-fonts/raleway": "^0.2.3",
     "@react-native-picker/picker": "^2.7.2",
     "@react-navigation/native": "^6.1.17",
+    "@react-navigation/native-stack": "^6.9.26",
     "expo": "~50.0.14",
     "expo-status-bar": "~1.11.1",
     "expo-web-browser": "~12.8.2",

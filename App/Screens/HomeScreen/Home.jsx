@@ -1,5 +1,5 @@
-import { StyleSheet, View, Text, TouchableOpacity } from 'react-native'
-import {useState} from 'react'
+import { StyleSheet, View, Text, TouchableOpacity, ScrollView } from 'react-native'
+import {useEffect, useState} from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Colors from '../../Utils/Colors'
 import { Raleway_400Regular } from "@expo-google-fonts/raleway";
@@ -7,7 +7,7 @@ import { Raleway_800ExtraBold } from "@expo-google-fonts/raleway";
 import { useFonts } from "expo-font";
 
 
-export default function Home({navigation}) {
+export default function Home({navigation, route}) {
 
   const [fontsLoaded] = useFonts({
     Raleway_400Regular,
@@ -20,12 +20,22 @@ export default function Home({navigation}) {
     )
   }
 
+//------------DYNAMIC VIEWS-----------------------------------
+const { nicknames } = route.params || { nicknames: [] };
+
+//-------------------------------------------------------
+
+  //const {nickname} = route.params?.nickname || "";
+
+
   // handler of the add button for a new plant (navigate to add plant screen)
   const pressHandler = () => {
     navigation.navigate('AddPlantPage')
   }
 
   return (
+    <ScrollView>
+
     <SafeAreaView style={{flex:1}}>
       <View style={styles.container}>
         {/* title on top */}
@@ -41,21 +51,35 @@ export default function Home({navigation}) {
         </View>
 
         {/* Your plants and Add a new plant */}
-        <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-          <Text style={styles.title}>Your plants</Text>
-          {/* Add a new plant button */}
-          <TouchableOpacity onPress = {pressHandler}>
-            <View style={styles.addButton}>
-              <Text style={{color: Colors.WHITE, fontFamily: "Raleway_800ExtraBold"}}>Add</Text>
-            </View>
-          </TouchableOpacity>
+        <View style={{flexDirection:'column'}}>
+
+          <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+            <Text style={styles.title}>Your plants</Text>
+            {/* Add a new plant button */}
+            <TouchableOpacity onPress = {pressHandler}>
+              <View style={styles.addButton}>
+                <Text style={{color: Colors.WHITE, fontFamily: "Raleway_800ExtraBold"}}>Add</Text>
+              </View>
+            </TouchableOpacity>
+          </View>
+
+          {/* Single plant */}
+          <View style={styles.plant}>
+              <View style={{backgroundColor: Colors.WHITE, borderRadius: 50, width: 50, height: 50}}></View>
+              {nicknames.map((nickname, index) => (
+                <View key={index}>
+                  <Text>{nickname}</Text>
+                </View>
+              ))}
+          </View>
+
         </View>
 
-        {/* plants */}
-
+        
 
       </View>
     </SafeAreaView>
+    </ScrollView>
   )
 }
 
@@ -97,6 +121,14 @@ const styles = StyleSheet.create({
     paddingRight: 20,
     paddingLeft: 20,
     borderRadius: 10
+  },
+  plant:{
+    marginTop: 30,
+    backgroundColor: Colors.ORANGE,
+    padding: 20,
+    borderRadius: 20,
+    flexDirection: 'row',
+    alignItems: 'center',
   }
 })
 

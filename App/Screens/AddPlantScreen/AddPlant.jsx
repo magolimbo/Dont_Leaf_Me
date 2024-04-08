@@ -11,8 +11,9 @@ import { Raleway_800ExtraBold } from "@expo-google-fonts/raleway";
 import { useFonts } from "expo-font";
 import { AntDesign } from '@expo/vector-icons';
 
-export default function AddPlant({ navigation }) {
+export default function AddPlant({ navigation, route}) {
 
+    //--------------------------FONT------------------------------
     const [fontsLoaded] = useFonts({
         Raleway_400Regular,
         Raleway_800ExtraBold
@@ -23,8 +24,18 @@ export default function AddPlant({ navigation }) {
         <Text>Font not loaded</Text>
     )
     }
+    //------------------------------------------------------------
 
     const [selectedValue, setSelectedValue] = useState("option1");
+    const [nickname, setNickname] = useState('');
+    const [nicknames, setNicknames] = useState([]);
+
+    const addPlantButton = () => {
+        setNicknames([...nicknames, nickname]);
+        setNickname('');
+        navigation.navigate('HomePage', { nicknames: [...nicknames, nickname] });
+    };
+
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
@@ -64,6 +75,9 @@ export default function AddPlant({ navigation }) {
                             <TextInput
                                 style={{ height: 30, width:150, backgroundColor: Colors.DARKGREEN, color: Colors.WHITE}}
                                 placeholder="Hot Ficus"
+                                defaultValue='default name'
+                                onChangeText={text => setNickname(text)}
+                                value={nickname}
                             />
                         </View> 
                         </View>
@@ -182,11 +196,11 @@ export default function AddPlant({ navigation }) {
                  {/* button to confirm plant and go back to home screen </TouchableOpacity>*/}
                  <View style={{alignItems:'center', marginBottom: 50}}>
                     <Text style={{fontFamily: 'Raleway_400Regular', marginBottom: 10, color: Colors.DARKGREEN}}>Add your plant to your digital garden</Text>
-                    <TouchableOpacity onPress={() => navigation.goBack()}>
+                    <TouchableOpacity onPress={addPlantButton}>
                         <View style={styles.buttonBack}>
                             <AntDesign name="check" size={24} color="white" />
                         </View>
-                    </TouchableOpacity>
+                    </TouchableOpacity> 
                  </View>
 
 
