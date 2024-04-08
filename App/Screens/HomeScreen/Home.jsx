@@ -21,10 +21,7 @@ export default function Home({navigation, route}) {
   }
 
 //------------DYNAMIC VIEWS-----------------------------------
-  const { count } = route.params || {count : 0}
-  // Genera un array di lunghezza pari al valore del contatore
-  const views = Array.from({ length: count }, (_, index) => index + 1);
-
+const { nicknames } = route.params || { nicknames: [] };
 
 //-------------------------------------------------------
 
@@ -33,7 +30,7 @@ export default function Home({navigation, route}) {
 
   // handler of the add button for a new plant (navigate to add plant screen)
   const pressHandler = () => {
-    navigation.navigate('AddPlantPage', {count})
+    navigation.navigate('AddPlantPage')
   }
 
   return (
@@ -66,14 +63,14 @@ export default function Home({navigation, route}) {
             </TouchableOpacity>
           </View>
 
-          <View>
-          <Text>{count}</Text>
-          </View>
-          
-          <View>
-            {views.map((_, index) => (
-              <View key={index} style={{ width: 50, height: 50, backgroundColor: 'blue', margin: 5 }} />
-            ))}
+          {/* Single plant */}
+          <View style={styles.plant}>
+              <View style={{backgroundColor: Colors.WHITE, borderRadius: 50, width: 50, height: 50}}></View>
+              {nicknames.map((nickname, index) => (
+                <View key={index}>
+                  <Text>{nickname}</Text>
+                </View>
+              ))}
           </View>
 
         </View>
@@ -124,6 +121,14 @@ const styles = StyleSheet.create({
     paddingRight: 20,
     paddingLeft: 20,
     borderRadius: 10
+  },
+  plant:{
+    marginTop: 30,
+    backgroundColor: Colors.ORANGE,
+    padding: 20,
+    borderRadius: 20,
+    flexDirection: 'row',
+    alignItems: 'center',
   }
 })
 

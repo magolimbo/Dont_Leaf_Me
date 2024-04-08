@@ -11,7 +11,7 @@ import { Raleway_800ExtraBold } from "@expo-google-fonts/raleway";
 import { useFonts } from "expo-font";
 import { AntDesign } from '@expo/vector-icons';
 
-export default function AddPlant({ navigation, route }) {
+export default function AddPlant({ navigation, route}) {
 
     //--------------------------FONT------------------------------
     const [fontsLoaded] = useFonts({
@@ -27,18 +27,13 @@ export default function AddPlant({ navigation, route }) {
     //------------------------------------------------------------
 
     const [selectedValue, setSelectedValue] = useState("option1");
+    const [nickname, setNickname] = useState('');
+    const [nicknames, setNicknames] = useState([]);
 
-
-    const { count } = route.params || { count: 0 };
-    const [localCount, setLocalCount] = useState(count);
-
-    const incrementCount = () => {
-    const updatedCount = localCount + 1;
-    setLocalCount(updatedCount);
-    navigation.navigate('HomePage', { count: updatedCount }); // Passa il nuovo valore di count alla schermata Home
-    console.log("localCount", localCount)
-    console.log("updatedCount", updatedCount)
-    console.log("count",count)
+    const addPlantButton = () => {
+        setNicknames([...nicknames, nickname]);
+        setNickname('');
+        navigation.navigate('HomePage', { nicknames: [...nicknames, nickname] });
     };
 
 
@@ -81,6 +76,8 @@ export default function AddPlant({ navigation, route }) {
                                 style={{ height: 30, width:150, backgroundColor: Colors.DARKGREEN, color: Colors.WHITE}}
                                 placeholder="Hot Ficus"
                                 defaultValue='default name'
+                                onChangeText={text => setNickname(text)}
+                                value={nickname}
                             />
                         </View> 
                         </View>
@@ -199,11 +196,11 @@ export default function AddPlant({ navigation, route }) {
                  {/* button to confirm plant and go back to home screen </TouchableOpacity>*/}
                  <View style={{alignItems:'center', marginBottom: 50}}>
                     <Text style={{fontFamily: 'Raleway_400Regular', marginBottom: 10, color: Colors.DARKGREEN}}>Add your plant to your digital garden</Text>
-                    <TouchableOpacity onPress={incrementCount}>
+                    <TouchableOpacity onPress={addPlantButton}>
                         <View style={styles.buttonBack}>
                             <AntDesign name="check" size={24} color="white" />
                         </View>
-                    </TouchableOpacity>
+                    </TouchableOpacity> 
                  </View>
 
 
