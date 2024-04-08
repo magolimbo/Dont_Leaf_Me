@@ -1,5 +1,5 @@
-import { StyleSheet, View, Text, TouchableOpacity } from 'react-native'
-import {useState} from 'react'
+import { StyleSheet, View, Text, TouchableOpacity, ScrollView } from 'react-native'
+import {useEffect, useState} from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Colors from '../../Utils/Colors'
 import { Raleway_400Regular } from "@expo-google-fonts/raleway";
@@ -22,14 +22,8 @@ export default function Home({navigation, route}) {
 
 //------------DYNAMIC VIEWS-----------------------------------
   const { count } = route.params || {count : 0}
-
-  const [views, setViews] = useState([]);
-
-  // Funzione per aggiungere una nuova vista
-  const addView = () => {
-    const newView = <View key={views.length} style={styles.box} />;
-    setViews([...views, newView]);
-  };
+  // Genera un array di lunghezza pari al valore del contatore
+  const views = Array.from({ length: count }, (_, index) => index + 1);
 
 
 //-------------------------------------------------------
@@ -43,6 +37,8 @@ export default function Home({navigation, route}) {
   }
 
   return (
+    <ScrollView>
+
     <SafeAreaView style={{flex:1}}>
       <View style={styles.container}>
         {/* title on top */}
@@ -58,26 +54,35 @@ export default function Home({navigation, route}) {
         </View>
 
         {/* Your plants and Add a new plant */}
-        <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-          <Text style={styles.title}>Your plants</Text>
-          {/* Add a new plant button */}
-          <TouchableOpacity onPress = {pressHandler}>
-            <View style={styles.addButton}>
-              <Text style={{color: Colors.WHITE, fontFamily: "Raleway_800ExtraBold"}}>Add</Text>
-            </View>
-          </TouchableOpacity>
+        <View style={{flexDirection:'column'}}>
+
+          <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+            <Text style={styles.title}>Your plants</Text>
+            {/* Add a new plant button */}
+            <TouchableOpacity onPress = {pressHandler}>
+              <View style={styles.addButton}>
+                <Text style={{color: Colors.WHITE, fontFamily: "Raleway_800ExtraBold"}}>Add</Text>
+              </View>
+            </TouchableOpacity>
+          </View>
+
+          <View>
+          <Text>{count}</Text>
+          </View>
+          
+          <View>
+            {views.map((_, index) => (
+              <View key={index} style={{ width: 50, height: 50, backgroundColor: 'blue', margin: 5 }} />
+            ))}
+          </View>
+
         </View>
 
-        {/* plants */}
-        <View>
-          <Text>{count}ciao</Text>
-        </View>
-        {/* <View style={{ flex: 1, padding: 20 }}>
-          {views}
-        </View> */}
+        
 
       </View>
     </SafeAreaView>
+    </ScrollView>
   )
 }
 
