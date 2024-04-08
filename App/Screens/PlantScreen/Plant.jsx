@@ -114,8 +114,6 @@ export default function Plant({ navigation }) {
                     />
                 </View>
             </View>
-
-
         </SafeAreaView >
     )
 }
