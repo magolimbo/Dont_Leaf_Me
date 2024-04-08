@@ -14,7 +14,7 @@ export default function Plant({ navigation }) {
         datasets: [
             {
                 data: [4, 6, 2, 4, 5],
-                color: (opacity = 1) => 'rgba(241, 196, 15, ${opacity})', // optional
+                color: (opacity = 1) => `rgba(241, 196, 15, ${opacity})`, // optional
                 strokeWidth: 3, // optional
                 withDots: true,
                 withScrollableDot: true,
@@ -24,7 +24,7 @@ export default function Plant({ navigation }) {
             },
             {
                 data: [1, 3, 3, 1, 2],
-                color: (opacity = 1) => 'rgba(52, 152, 219, {opacity})', // optional
+                color: (opacity = 1) => `rgba(52, 152, 219, ${opacity})`, // optional
                 strokeWidth: 3, // optional
                 withDots: true,
                 withScrollableDot: true,
@@ -73,8 +73,8 @@ export default function Plant({ navigation }) {
                             backgroundGradientFrom: Colors.DARKGREEN,
                             backgroundGradientTo: Colors.PURPLE,
                             decimalPlaces: 1, // optional, defaults to 2dp
-                            color: (opacity = 1) => 'rgba(255, 255, 255, ${opacity})',
-                            labelColor: (opacity = 1) => 'rgba(255, 255, 255, ${opacity})',
+                            color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                            labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
                             style: {
                                 borderRadius: 16
                             },
