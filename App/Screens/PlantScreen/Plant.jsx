@@ -4,9 +4,8 @@ import React from 'react'
 import Colors from '../../Utils/Colors'
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler'
 import { Feather } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native'
 import { LineChart } from "react-native-chart-kit"
-// import CalendarHeatmap from 'react-native-calendar-heatmap';
+
 
 export default function Plant({ navigation }) {
 
@@ -15,7 +14,7 @@ export default function Plant({ navigation }) {
         datasets: [
             {
                 data: [4, 6, 2, 4, 5],
-                color: (opacity = 1) => rgba(241, 196, 15, {opacity}), // optional
+                color: (opacity = 1) => 'rgba(241, 196, 15, ${opacity})', // optional
                 strokeWidth: 3, // optional
                 withDots: true,
                 withScrollableDot: true,
@@ -25,7 +24,7 @@ export default function Plant({ navigation }) {
             },
             {
                 data: [1, 3, 3, 1, 2],
-                color: (opacity = 1) => rgba(52, 152, 219, {opacity}), // optional
+                color: (opacity = 1) => 'rgba(52, 152, 219, {opacity})', // optional
                 strokeWidth: 3, // optional
                 withDots: true,
                 withScrollableDot: true,
@@ -36,16 +35,6 @@ export default function Plant({ navigation }) {
             }
         ],
         legend: ["AVG sunlight hours", "AVG water glasses"] // optional
-    };
-
-    const data2 = {
-        labels: ["January", "February", "March", "April", "May"],
-        datasets: [
-            {
-                data: [1, 3, 3, 1, 2],
-            }
-        ],
-        legend: ["Average water per Month"] // optional
     };
 
     return (
@@ -84,8 +73,8 @@ export default function Plant({ navigation }) {
                             backgroundGradientFrom: Colors.DARKGREEN,
                             backgroundGradientTo: Colors.PURPLE,
                             decimalPlaces: 1, // optional, defaults to 2dp
-                            color: (opacity = 1) => rgba(255, 255, 255, {opacity}),
-                            labelColor: (opacity = 1) => rgba(255, 255, 255, {opacity}),
+                            color: (opacity = 1) => 'rgba(255, 255, 255, ${opacity})',
+                            labelColor: (opacity = 1) => 'rgba(255, 255, 255, ${opacity})',
                             style: {
                                 borderRadius: 16
                             },
@@ -100,18 +89,6 @@ export default function Plant({ navigation }) {
                         }}
                     />
 
-                </View>
-
-                <View style={{ margin: 16 }}>
-                    <Text style={{ fontWeight: "600", fontSize: 16, color: "#D44B79" }}>
-                        Red One
-                    </Text>
-                    <CalendarHeatmap
-                        endDate={new Date("2024-05-01")}
-                        numDays={100}
-                        colorArray={["#eee", "#D44B79", "#6B1928", "#9F3251", "#360000"]}
-                        values={staticData}
-                    />
                 </View>
             </View>
 
