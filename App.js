@@ -5,6 +5,7 @@ import { createNativeStackNavigator} from '@react-navigation/native-stack'
 import Home from './App/Screens/HomeScreen/Home'
 import Login from './App/Screens/LoginScreen/Login'
 import AddPlant from './App/Screens/AddPlantScreen/AddPlant'
+import Plant from './App/Screens/PlantScreen/Plant'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 
 
@@ -20,6 +21,7 @@ export default function App() {
           <Stack.Screen name="HomePage" 
                         component={Home} options={{headerShown: false}}/>
           <Stack.Screen name="AddPlantPage" component={AddPlant} options={{headerShown: false}}/>
+          <Stack.Screen name="PlantPage" component={Plant} options={{headerShown: false}}/>
         </Stack.Navigator>
       </NavigationContainer>
     </GestureHandlerRootView>
