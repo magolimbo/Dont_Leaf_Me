@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 import Colors from '../../Utils/Colors'
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler'
 import { Feather } from '@expo/vector-icons';
-import { LineChart } from "react-native-chart-kit"
+import { LineChart, ContributionGraph } from "react-native-chart-kit"
 import { SimpleLineIcons } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
@@ -90,6 +90,20 @@ export default function Plant({ navigation, route }) {
         legend: ["AVG sunlight hours", "AVG water glasses"] // optional
     };
 
+    const commitsData = [
+        { date: "2017-01-02", count: 1 },
+        { date: "2017-01-03", count: 2 },
+        { date: "2017-01-04", count: 3 },
+        { date: "2017-01-05", count: 4 },
+        { date: "2017-01-06", count: 5 },
+        { date: "2017-01-30", count: 2 },
+        { date: "2017-01-31", count: 3 },
+        { date: "2017-03-01", count: 2 },
+        { date: "2017-04-02", count: 4 },
+        { date: "2017-03-05", count: 2 },
+        { date: "2017-02-30", count: 4 }
+      ];
+
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <View style={styles.container}>
@@ -153,9 +167,10 @@ export default function Plant({ navigation, route }) {
                 {/* -----------------------GENERAL STATE OF THE PLANT VIEW------------------------------------- */}
                 {showGeneral && (
                     <View>
+                        <Text style={[styles.title, {alignSelf: 'center'}]}>How do I look like today?</Text>
                         <LineChart
                             data={data1}
-                            width={360}
+                            width={350}
                             height={200}
                             yLabelsOffset={1}
                             yAxisSuffix="        "
@@ -163,7 +178,7 @@ export default function Plant({ navigation, route }) {
                             chartConfig={{
                                 backgroundColor: Colors.DARKGREEN,
                                 backgroundGradientFrom: Colors.DARKGREEN,
-                                backgroundGradientTo: Colors.PURPLE,
+                                backgroundGradientTo: '#00699f',
                                 decimalPlaces: 1, // optional, defaults to 2dp
                                 color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
                                 labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
@@ -176,13 +191,37 @@ export default function Plant({ navigation, route }) {
                             }}
                             bezier //true if you want the line to be curved
                             style={{
-                                marginVertical: 5,
+                                marginVertical: 10,
                                 borderRadius: 16 //radius of the corners of the graph
+                            }}
+                        />
+
+                        <ContributionGraph
+                            values={commitsData}
+                            endDate={new Date("2017-04-01")}
+                            numDays={365}
+                            width={350}
+                            height={220}
+                            chartConfig={{
+                                backgroundColor: Colors.DARKGREEN,
+                                backgroundGradientFrom: Colors.DARKGREEN,
+                                backgroundGradientTo: '#00699f',
+                                decimalPlaces: 1, // optional, defaults to 2dp
+                                color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                                labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                                style: {
+                                    borderRadius: 16
+                                },
+                                propsForDots: {
+                                    r: "3", //point dimension
+                                }
                             }}
                         />
 
                     </View>
                 )}
+
+                
                 {/* -----------------------END GENERAL STATE OF THE PLANT VIEW------------------------------------- */}
 
                 {/* -----------------------WATER VIEW------------------------------------- */}
@@ -217,7 +256,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: Colors.WHITE,
-        padding: 25,
+        padding: 20,
         // borderColor: 'green',
         // borderWidth: 1
     },
