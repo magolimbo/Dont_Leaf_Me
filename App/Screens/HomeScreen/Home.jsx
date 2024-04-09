@@ -75,7 +75,7 @@ const { nicknames } = route.params || { nicknames: [] };
         </View>
 
         <View>
-          <TouchableOpacity onPress = {() => {navigation.navigate("PlantPage")}}>
+          <TouchableOpacity onPress = {() => {navigation.navigate("PlantPage", {nicknames : nicknames})}}>
               <View style={styles.addButton}>
                 <Text style={{color: Colors.WHITE, fontFamily: "Raleway_800ExtraBold"}}>graphs</Text>
               </View>

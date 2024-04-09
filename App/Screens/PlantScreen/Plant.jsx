@@ -1,13 +1,66 @@
-import { Button, StyleSheet, Text, View } from 'react-native'
+import { Button, Pressable, StyleSheet, Text, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import React from 'react'
+import React, { useState } from 'react'
 import Colors from '../../Utils/Colors'
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler'
 import { Feather } from '@expo/vector-icons';
 import { LineChart } from "react-native-chart-kit"
+import { SimpleLineIcons } from '@expo/vector-icons';
+import { FontAwesome5 } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 
 
-export default function Plant({ navigation }) {
+export default function Plant({ navigation, route }) {
+
+    const { nicknames } = route.params || { nicknames: '' };
+    //------------button selected (general state, water ecc)----------------
+    const [isPressed, setIsPressed] = useState(false);
+    const [currentButton, setCurrentButton] = useState(null);
+
+    const handlePress = (buttonName) => {
+        setCurrentButton(buttonName);
+        setIsPressed(true);
+
+        switch (buttonName) {
+            case 'button1':
+              setShowGeneral(true);
+              setShowWater(false);
+              setShowSun(false);
+              setShowDiseases(false);
+              break;
+            case 'button2':
+              setShowGeneral(false);
+              setShowWater(true);
+              setShowSun(false);
+              setShowDiseases(false);
+              break;
+            case 'button3':
+              setShowGeneral(false);
+              setShowWater(false);
+              setShowSun(true);
+              setShowDiseases(false);
+              break;
+            case 'button4':
+              setShowGeneral(false);
+              setShowWater(false);
+              setShowSun(false);
+              setShowDiseases(true);
+              break;
+            default:
+              setShowGeneral(true);
+              setShowWater(false);
+              setShowSun(false);
+              setShowDiseases(false);
+          }
+    };
+    //------------END button selected (general state, water ecc)----------------
+
+    //------------manage views----------------------------
+    const [showGeneral, setShowGeneral] = useState(false);
+    const [showWater, setShowWater] = useState(false);
+    const [showSun, setShowSun] = useState(false);
+    const [showDiseases, setShowDiseases] = useState(false);
+    //------------------------------------------------------
 
     const data1 = {
         labels: ["January", "February", "March", "April", "May"],
@@ -41,55 +94,120 @@ export default function Plant({ navigation }) {
         <SafeAreaView style={{ flex: 1 }}>
             <View style={styles.container}>
 
-                {/* button to go back to home screen </TouchableOpacity>*/}
-                <TouchableOpacity onPress={() => navigation.goBack()}>
-                    <View style={styles.buttonBack}>
-                        <Feather name="arrow-left" size={24} color={Colors.WHITE} />
+                {/* ---------------------------HEADER------------------------------ */}
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                    {/* button to go back to home screen */}
+                    <TouchableOpacity onPress={() => navigation.goBack()}>
+                        <View style={styles.buttonBack}>
+                            <Feather name="arrow-left" size={24} color={Colors.WHITE} />
+                        </View>
+                    </TouchableOpacity>
+
+                    <View>
+                        <Text style={styles.title}>{nicknames}</Text>
                     </View>
-                </TouchableOpacity>
 
+                    <TouchableOpacity onPress={() => navigation.goBack()}>
+                        <View style={styles.buttonBack}>
+                            <SimpleLineIcons name="magic-wand" size={24} color={Colors.WHITE} />
+                        </View>
+                    </TouchableOpacity>
+                </View>
+                {/* ---------------------------END HEADER------------------------------ */}
+
+                {/* ------------------------BUTTONS GENERAL, WATER, SUN, DISEASES--------------------------- */}
                 {/* title on top */}
-                <View style={{ marginBottom: 30, marginTop: 20, borderColor: 'black', borderWidth: 1 }}>
-                    <Text style={styles.title}>Add a new plant</Text>
-                    <Text>Be as detailed as possible to let our AI help you!</Text>
+                <View style={{ marginBottom: 10, marginTop: 20}}>
+                    <Text style={styles.title}>Stats</Text>
                 </View>
 
-                {/* weather and AI suggestion */}
-                <View style={{ backgroundColor: 'red' }}>
-                    <Text style={{ color: Colors.WHITE }}>Plant ID</Text>
-                    <Text>AI suggestion</Text>
-                </View>
-                <View>
-                    <Text>PROVA GRAFICO SOLE e ACQUA</Text>
-                    <LineChart
-                        data={data1}
-                        width={360}
-                        height={200}
-                        yLabelsOffset={1}
-                        yAxisSuffix="        "
-                        yAxisInterval={1} // optional, defaults to 1
-                        chartConfig={{
-                            backgroundColor: Colors.DARKGREEN,
-                            backgroundGradientFrom: Colors.DARKGREEN,
-                            backgroundGradientTo: Colors.PURPLE,
-                            decimalPlaces: 1, // optional, defaults to 2dp
-                            color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-                            labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-                            style: {
-                                borderRadius: 16
-                            },
-                            propsForDots: {
-                                r: "3", //point dimension
-                            }
-                        }}
-                        bezier //true if you want the line to be curved
-                        style={{
-                            marginVertical: 5,
-                            borderRadius: 16 //radius of the corners of the graph
-                        }}
-                    />
+                {/* buttons to navigate between general, water, sun, diseases */}
+                <View style={{flexDirection:'row', justifyContent: 'space-evenly', marginBottom: 20}}>
+                    <Pressable onPress={() => handlePress('button1')}>
+                        <View style={[styles.buttonStats, isPressed && currentButton=='button1' ? {elevation: 2, borderColor: Colors.DARKGREEN, borderWidth: 2} : {}]}>
+                            <FontAwesome5 name="smile" size={30} color={Colors.DARKGREEN}/>
+                        </View>
+                    </Pressable>
 
+                    <Pressable onPress={() => handlePress('button2')}>
+                        <View style={[styles.buttonStats, isPressed && currentButton=='button2' ? {elevation: 2, borderColor: Colors.DARKGREEN, borderWidth: 2} : {}]}>
+                            <Ionicons name="water-outline" size={34} color={Colors.DARKGREEN} />
+                        </View>
+                    </Pressable>
+
+                    <Pressable onPress={() => handlePress('button3')}>
+                        <View style={[styles.buttonStats, isPressed && currentButton=='button3' ? {elevation: 2, borderColor: Colors.DARKGREEN, borderWidth: 2} : {}]}>
+                            <Feather name="sun" size={30} color={Colors.DARKGREEN} />
+                        </View>
+                    </Pressable>
+
+                    <Pressable onPress={() => handlePress('button4')}>
+                        <View style={[styles.buttonStats, isPressed && currentButton=='button4' ? {elevation: 2, borderColor: Colors.DARKGREEN, borderWidth: 2} : {}]}>
+                            <Ionicons name="skull-outline" size={30} color={Colors.DARKGREEN} />
+                        </View>
+                    </Pressable>
+                   
                 </View>
+                {/* ------------------------END BUTTONS GENERAL, WATER, SUN, DISEASES--------------------------- */}
+
+                {/* -----------------------GENERAL STATE OF THE PLANT VIEW------------------------------------- */}
+                {showGeneral && (
+                    <View>
+                        <LineChart
+                            data={data1}
+                            width={360}
+                            height={200}
+                            yLabelsOffset={1}
+                            yAxisSuffix="        "
+                            yAxisInterval={1} // optional, defaults to 1
+                            chartConfig={{
+                                backgroundColor: Colors.DARKGREEN,
+                                backgroundGradientFrom: Colors.DARKGREEN,
+                                backgroundGradientTo: Colors.PURPLE,
+                                decimalPlaces: 1, // optional, defaults to 2dp
+                                color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                                labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                                style: {
+                                    borderRadius: 16
+                                },
+                                propsForDots: {
+                                    r: "3", //point dimension
+                                }
+                            }}
+                            bezier //true if you want the line to be curved
+                            style={{
+                                marginVertical: 5,
+                                borderRadius: 16 //radius of the corners of the graph
+                            }}
+                        />
+
+                    </View>
+                )}
+                {/* -----------------------END GENERAL STATE OF THE PLANT VIEW------------------------------------- */}
+
+                {/* -----------------------WATER VIEW------------------------------------- */}
+                {showWater && (
+                    <View>
+                        <Text>Water</Text>
+                    </View>
+                )}
+                {/* -----------------------END WATER VIEW------------------------------------- */}
+
+                {/* -----------------------SUN VIEW------------------------------------- */}
+                {showSun && (
+                    <View>
+                        <Text>Sun</Text>
+                    </View>
+                )}
+                {/* -----------------------END SUN VIEW------------------------------------- */}
+
+                {/* -----------------------DISEASES VIEW------------------------------------- */}
+                {showDiseases && (
+                    <View>
+                        <Text>Diseases</Text>
+                    </View>
+                )}
+                {/* -----------------------END DISEASES VIEW------------------------------------- */}
             </View>
         </SafeAreaView >
     )
@@ -100,8 +218,8 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: Colors.WHITE,
         padding: 25,
-        borderColor: 'green',
-        borderWidth: 1
+        // borderColor: 'green',
+        // borderWidth: 1
     },
     buttonBack: {
         backgroundColor: Colors.ORANGE,
@@ -112,6 +230,7 @@ const styles = StyleSheet.create({
         width: 50,
         justifyContent: 'center', // Aggiungi questa linea
         alignItems: 'center',
+        elevation: 5
     },
     //title text like hello Rose
     title: {
@@ -119,5 +238,16 @@ const styles = StyleSheet.create({
         color: Colors.DARKGREEN,
         fontWeight: 'bold',
         textAlign: 'left',
+    },
+    buttonStats:{
+        width: 60,
+        height: 60,
+        borderRadius: 15,
+        backgroundColor: Colors.WHITE,
+        borderColor: Colors.DARKGREEN,
+        padding: 10,
+        justifyContent: 'center', 
+        alignItems: 'center',
+        elevation: 10,
     }
 })
