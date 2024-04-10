@@ -10,6 +10,8 @@ import { Raleway_400Regular } from "@expo-google-fonts/raleway";
 import { Raleway_800ExtraBold } from "@expo-google-fonts/raleway";
 import { useFonts } from "expo-font";
 import { AntDesign } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useEffect } from 'react';
 
 export default function AddPlant({ navigation, route}) {
 
@@ -30,11 +32,23 @@ export default function AddPlant({ navigation, route}) {
     const [nickname, setNickname] = useState('');
     const [nicknames, setNicknames] = useState([]);
 
-    const addPlantButton = () => {
-        setNicknames([...nicknames, nickname]);
+    const addPlantButton = async () => {
+        const newNicknames = [...nicknames, nickname];
+        setNicknames(newNicknames);
         setNickname('');
-        navigation.navigate('HomePage', { nicknames: [...nicknames, nickname] });
+        await AsyncStorage.setItem('nicknames', JSON.stringify(newNicknames));
+        navigation.navigate('HomePage', { nicknames: newNicknames });
     };
+
+    useEffect(() => {
+        const getNicknames = async () => {
+            const storedNicknames = await AsyncStorage.getItem('nicknames');
+            if (storedNicknames) {
+                setNicknames(JSON.parse(storedNicknames));
+            }
+        };
+        getNicknames();
+    }, []);
 
 
     return (
