@@ -4,52 +4,194 @@ import React, { useState, useEffect } from 'react';
 import Colors from '../../Utils/Colors'
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler'
 import { Feather } from '@expo/vector-icons';
-// import { LineChart } from "react-native-chart-kit"
 import { LineChart, ruleTypes } from 'react-native-gifted-charts';
-import { DataSet } from 'gifted-charts-core';
-
+import { ScrollView } from 'react-native-gesture-handler';
+import { useRef } from 'react';
+import { LinearGradient, Stop } from 'react-native-svg';
+// import { LineChart as LineChart2 } from 'react-native-charts-wrapper';
 
 export default function Plant({ navigation }) {
-
+    const ref = useRef(null)
+    const lineData3 = [
+        { value: 2.5, label: '1 Jan', dataPointText: '2.5' },
+        { value: 3.0, label: '2 Jan', dataPointText: '3.0' },
+        { value: 2.0, label: '3 Jan', dataPointText: '2.0' },
+        { value: 2.0, label: '4 Jan', dataPointText: '2.0' },
+        { value: 2.5, label: '5 Jan', dataPointText: '2.5' },
+        { value: 2.0, label: '6 Jan', dataPointText: '2.0' },
+        { value: 2.0, label: '7 Jan', dataPointText: '2.0' },
+        { value: 3.5, label: '8 Jan', dataPointText: '3.5' },
+        { value: 2.5, label: '9 Jan', dataPointText: '2.5' },
+        { value: 2.5, label: '10 Jan', dataPointText: '2.5' },
+        { value: 3.5, label: '11 Jan', dataPointText: '3.5' },
+        { value: 4.0, label: '12 Jan', dataPointText: '4.0' },
+        { value: 4.0, label: '13 Jan', dataPointText: '4.0' },
+        { value: 3.0, label: '14 Jan', dataPointText: '3.0' },
+        { value: 2.0, label: '15 Jan', dataPointText: '2.0' },
+        { value: 3.0, label: '16 Jan', dataPointText: '3.0' },
+        { value: 2.5, label: '17 Jan', dataPointText: '2.5' },
+        { value: 2.0, label: '18 Jan', dataPointText: '2.0' },
+        { value: 3.5, label: '19 Jan', dataPointText: '3.5' },
+        { value: 2.0, label: '20 Jan', dataPointText: '2.0' },
+        { value: 3.0, label: '21 Jan', dataPointText: '3.0' },
+        { value: 2.5, label: '22 Jan', dataPointText: '2.5' },
+        { value: 3.0, label: '23 Jan', dataPointText: '3.0' },
+        { value: 4.5, label: '24 Jan', dataPointText: '4.5' },
+        { value: 3.5, label: '25 Jan', dataPointText: '3.5' },
+        { value: 3.5, label: '26 Jan', dataPointText: '3.5' },
+        { value: 3.5, label: '27 Jan', dataPointText: '3.5' },
+        { value: 4.5, label: '28 Jan', dataPointText: '4.5' },
+        { value: 2.5, label: '29 Jan', dataPointText: '2.5' },
+        { value: 4.0, label: '30 Jan', dataPointText: '4.0' },
+        { value: 4.5, label: '31 Jan', dataPointText: '4.5' },
+        // February
+        { value: 4.5, label: '1 Feb', dataPointText: '4.5' },
+        { value: 3.0, label: '2 Feb', dataPointText: '3.0' },
+        { value: 3.5, label: '3 Feb', dataPointText: '3.5' },
+        { value: 4.0, label: '4 Feb', dataPointText: '4.0' },
+        { value: 4.0, label: '5 Feb', dataPointText: '4.0' },
+        { value: 4.0, label: '6 Feb', dataPointText: '4.0' },
+        { value: 3.0, label: '7 Feb', dataPointText: '3.0' },
+        { value: 3.0, label: '8 Feb', dataPointText: '3.0' },
+        { value: 4.0, label: '9 Feb', dataPointText: '4.0' },
+        { value: 4.0, label: '10 Feb', dataPointText: '4.0' },
+        { value: 3.5, label: '11 Feb', dataPointText: '3.5' },
+        { value: 4.0, label: '12 Feb', dataPointText: '4.0' },
+        { value: 3.5, label: '13 Feb', dataPointText: '3.5' },
+        { value: 3.5, label: '14 Feb', dataPointText: '3.5' },
+        { value: 4.0, label: '15 Feb', dataPointText: '4.0' },
+        { value: 4.5, label: '16 Feb', dataPointText: '4.5' },
+        { value: 4.0, label: '17 Feb', dataPointText: '4.0' },
+        { value: 3.5, label: '18 Feb', dataPointText: '3.5' },
+        { value: 3.0, label: '19 Feb', dataPointText: '3.0' },
+        { value: 3.5, label: '20 Feb', dataPointText: '3.5' },
+        { value: 3.5, label: '21 Feb', dataPointText: '3.5' },
+        { value: 4.0, label: '22 Feb', dataPointText: '4.0' },
+        { value: 4.5, label: '23 Feb', dataPointText: '4.5' },
+        { value: 3.0, label: '24 Feb', dataPointText: '3.0' },
+        { value: 4.0, label: '25 Feb', dataPointText: '4.0' },
+        { value: 4.5, label: '26 Feb', dataPointText: '4.5' },
+        { value: 3.0, label: '27 Feb', dataPointText: '3.0' },
+        { value: 4.0, label: '28 Feb', dataPointText: '4.0' },
+        // March
+        { value: 2.5, label: '1 Mar', dataPointText: '2.5' },
+        { value: 2.5, label: '2 Mar', dataPointText: '2.5' },
+        { value: 4.0, label: '3 Mar', dataPointText: '4.0' },
+        { value: 4.5, label: '4 Mar', dataPointText: '4.5' },
+        { value: 2.5, label: '5 Mar', dataPointText: '2.5' },
+        { value: 3.5, label: '6 Mar', dataPointText: '3.5' },
+        { value: 2.5, label: '7 Mar', dataPointText: '2.5' },
+        { value: 4.5, label: '8 Mar', dataPointText: '4.5' },
+        { value: 3.5, label: '9 Mar', dataPointText: '3.5' },
+        { value: 3.0, label: '10 Mar', dataPointText: '3.0' },
+        { value: 3.0, label: '11 Mar', dataPointText: '3.0' },
+        { value: 2.5, label: '12 Mar', dataPointText: '2.5' },
+        { value: 2.5, label: '13 Mar', dataPointText: '2.5' },
+        { value: 4.0, label: '14 Mar', dataPointText: '4.0' },
+        { value: 2.5, label: '15 Mar', dataPointText: '2.5' },
+        { value: 4.0, label: '16 Mar', dataPointText: '4.0' },
+        { value: 4.0, label: '17 Mar', dataPointText: '4.0' },
+        { value: 3.0, label: '18 Mar', dataPointText: '3.0' },
+        { value: 2.5, label: '19 Mar', dataPointText: '2.5' },
+        { value: 2.5, label: '20 Mar', dataPointText: '2.5' },
+        { value: 4.5, label: '21 Mar', dataPointText: '4.5' },
+        { value: 2.5, label: '22 Mar', dataPointText: '2.5' },
+        { value: 3.0, label: '23 Mar', dataPointText: '3.0' },
+        { value: 3.0, label: '24 Mar', dataPointText: '3.0' },
+        { value: 4.0, label: '25 Mar', dataPointText: '4.0' },
+        { value: 4.0, label: '26 Mar', dataPointText: '4.0' },
+        { value: 3.5, label: '27 Mar', dataPointText: '3.5' },
+        { value: 3.5, label: '28 Mar', dataPointText: '3.5' },
+        { value: 3.0, label: '29 Mar', dataPointText: '3.0' },
+        { value: 3.5, label: '30 Mar', dataPointText: '3.5' },
+        { value: 2.5, label: '31 Mar', dataPointText: '2.5' },
+        // April
+        { value: 3.0, label: '1 Apr', dataPointText: '3.0' },
+        { value: 2.5, label: '2 Apr', dataPointText: '2.5' },
+        { value: 3.5, label: '3 Apr', dataPointText: '3.5' },
+        { value: 3.5, label: '4 Apr', dataPointText: '3.5' },
+        { value: 4.0, label: '5 Apr', dataPointText: '4.0' },
+        { value: 3.5, label: '6 Apr', dataPointText: '3.5' },
+        { value: 4.0, label: '7 Apr', dataPointText: '4.0' },
+        { value: 3.5, label: '8 Apr', dataPointText: '3.5' },
+        { value: 3.5, label: '9 Apr', dataPointText: '3.5' },
+        { value: 3.5, label: '10 Apr', dataPointText: '3.5' },
+        { value: 3.5, label: '11 Apr', dataPointText: '3.5' },
+        { value: 2.5, label: '12 Apr', dataPointText: '2.5' },
+        { value: 2.5, label: '13 Apr', dataPointText: '2.5' },
+        { value: 3.0, label: '14 Apr', dataPointText: '3.0' },
+        { value: 3.5, label: '15 Apr', dataPointText: '3.5' },
+        { value: 2.5, label: '16 Apr', dataPointText: '2.5' },
+        { value: 4.0, label: '17 Apr', dataPointText: '4.0' },
+        { value: 3.0, label: '18 Apr', dataPointText: '3.0' },
+        { value: 2.5, label: '19 Apr', dataPointText: '2.5' },
+        { value: 2.5, label: '20 Apr', dataPointText: '2.5' },
+        { value: 4.0, label: '21 Apr', dataPointText: '4.0' },
+        { value: 2.5, label: '22 Apr', dataPointText: '2.5' },
+        { value: 4.0, label: '23 Apr', dataPointText: '4.0' },
+        { value: 4.0, label: '24 Apr', dataPointText: '4.0' },
+        { value: 3.0, label: '25 Apr', dataPointText: '3.0' },
+        { value: 4.0, label: '26 Apr', dataPointText: '4.0' },
+        { value: 3.5, label: '27 Apr', dataPointText: '3.5' },
+        { value: 3.5, label: '28 Apr', dataPointText: '3.5' },
+        { value: 3.5, label: '29 Apr', dataPointText: '3.5' },
+        { value: 3.5, label: '30 Apr', dataPointText: '3.5' },
+        // May
+        { value: 2.5, label: '1 May', dataPointText: '2.5' },
+        { value: 3.0, label: '2 May', dataPointText: '3.0' },
+        { value: 2.0, label: '3 May', dataPointText: '2.0' },
+        { value: 4.0, label: '4 May', dataPointText: '4.0' },
+        { value: 3.5, label: '5 May', dataPointText: '3.5' },
+        { value: 3.5, label: '6 May', dataPointText: '3.5' },
+        { value: 2.5, label: '7 May', dataPointText: '2.5' },
+        { value: 3.5, label: '8 May', dataPointText: '3.5' },
+        { value: 4.5, label: '9 May', dataPointText: '4.5' },
+    ];
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May']
+    const showOrHidePointer = (ind) => {
+        ref.current?.scrollTo({
+            x: ind * 2000 - 500
+        }); // adjust as per your UI
+    };
     const lineData = [
-        { value: 20 },
-        { value: 10 },
-        { value: 8 },
-        { value: 58 },
-        { value: 56 },
-        { value: 78 },
-        { value: 74 },
-        { value: 98 },
+        { value: 2 },
+        { value: 1 },
+        { value: 3 },
+        { value: 2 },
+        { value: 2 },
+        { value: 2.5 },
+        { value: 3 },
+        { value: 1.5 },
     ];
     const lineData2 = [
-        { value: 20 },
-        { value: 20 },
-        { value: 18 },
-        { value: 40 },
-        { value: 36 },
-        { value: 60 },
-        { value: 54 },
-        { value: 85 },
+        { value: 1 },
+        { value: 2 },
+        { value: 5 },
+        { value: 4.5 },
+        { value: 3 },
+        { value: 2 },
+        { value: 5 },
+        { value: 6 },
     ];
     const dataSet = [
         {
             data: lineData,
-            color: 'skyblue',
-            startFillColor: 'skyblue',
-            lineSegments: [{ startIndex: 2, endIndex: 4, strokeDashArray: [3, 4] }],
+            color: Colors.ORANGE,
+            startFillColor: Colors.ORANGE,
+            lineSegments: [{ startIndex: 2, endIndex: 4, color: Colors.PURPLE }],
         },
         {
             data: lineData2,
-            color: 'orange',
-            startFillColor: 'orange',
-            lineSegments: [
-                { startIndex: 0, endIndex: 2, color: Colors.ORANGE },
-                { startIndex: 4, endIndex: 6, strokeDashArray: [3, 4], color: Colors.ORANGE },
-            ],
+            color: Colors.LIME,
+            startFillColor: Colors.LIME,
+            // lineSegments: [
+            //     { startIndex: 0, endIndex: 2, color: Colors.PURPLE },
+            //     // { startIndex: 4, endIndex: 6, strokeDashArray: [3, 4], color: Colors.BLACK },
+            // ],
         },
     ];
 
-    const ptData = [
+    const greenGraphData = [
         { value: 160, date: '1 Apr 2022' },
         { value: 180, date: '2 Apr 2022' },
         { value: 190, date: '3 Apr 2022' },
@@ -143,73 +285,101 @@ export default function Plant({ navigation }) {
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
-            <View style={styles.container}>
+            <ScrollView style={styles.container}>
+                <View style={styles.container}>
 
-                {/* button to go back to home screen </TouchableOpacity>*/}
-                <TouchableOpacity onPress={() => navigation.goBack()}>
-                    <View style={styles.buttonBack}>
-                        <Feather name="arrow-left" size={24} color={Colors.WHITE} />
+                    {/* button to go back to home screen </TouchableOpacity>*/}
+                    <TouchableOpacity onPress={() => navigation.goBack()}>
+                        <View style={styles.buttonBack}>
+                            <Feather name="arrow-left" size={24} color={Colors.WHITE} />
+                        </View>
+                    </TouchableOpacity>
+
+                    {/* title on top */}
+                    <View style={{ marginBottom: 30, marginTop: 20, borderColor: Colors.BLACK, borderWidth: 1 }}>
+                        <Text style={styles.title}>Add a new plant</Text>
+                        <Text>Be as detailed as possible to let our AI help you!</Text>
                     </View>
-                </TouchableOpacity>
 
-                {/* title on top */}
-                <View style={{ marginBottom: 30, marginTop: 20, borderColor: 'black', borderWidth: 1 }}>
-                    <Text style={styles.title}>Add a new plant</Text>
-                    <Text>Be as detailed as possible to let our AI help you!</Text>
+                    {/* weather and AI suggestion */}
+                    <View style={{ backgroundColor: 'red' }}>
+                        <Text style={{ color: Colors.WHITE }}>Plant ID</Text>
+                        <Text>AI suggestion</Text>
+                    </View>
+
+
+
                 </View>
-
-                {/* weather and AI suggestion */}
-                <View style={{ backgroundColor: 'red' }}>
-                    <Text style={{ color: Colors.WHITE }}>Plant ID</Text>
-                    <Text>AI suggestion</Text>
-                </View>
-                {/*<View>
-                    <Text>PROVA GRAFICO SOLE e ACQUA</Text>
+                <View>
+                    <View style={{ flexDirection: 'row', marginLeft: 8 }}>
+                        {months.map((item, index) => {
+                            return (
+                                <TouchableOpacity
+                                    key={index}
+                                    style={{
+                                        padding: 6,
+                                        margin: 4,
+                                        backgroundColor: '#ebb',
+                                        borderRadius: 8,
+                                    }}
+                                    onPress={() => showOrHidePointer(index)}>
+                                    <Text>{months[index]}</Text>
+                                </TouchableOpacity>
+                            );
+                        })}
+                    </View>
                     <LineChart
-                        data={data1}
-                        width={360}
-                        height={200}
-                        yLabelsOffset={1}
-                        yAxisSuffix="        "
-                        yAxisInterval={1} // optional, defaults to 1
-                        chartConfig={{
-                            backgroundColor: Colors.DARKGREEN,
-                            backgroundGradientFrom: Colors.DARKGREEN,
-                            backgroundGradientTo: Colors.PURPLE,
-                            decimalPlaces: 1, // optional, defaults to 2dp
-                            color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-                            labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-                            style: {
-                                borderRadius: 16
-                            },
-                            propsForDots: {
-                                r: "3", //point dimension
-                            }
-                        }}
-                        bezier //true if you want the line to be curved
-                        style={{
-                            marginVertical: 5,
-                            borderRadius: 16 //radius of the corners of the graph
-                        }}
-                    />
-
-                </View>*/}
-
-                <View style={{ borderWidth: 1 }}>
-                    <LineChart
+                        scrollRef={ref}
+                        data={lineData3}
                         areaChart
+                        // isAnimated
+                        textColor1="black"
+                        textShiftY={-2}
+                        textShiftX={-5}
+                        textFontSize={15}
+                        curved
+                        label
+                        areaGradientId="ag" // same as the id passed in <LinearGradient> below
+                        areaGradientComponent={() => {
+                            return (
+                                <LinearGradient id="ag" x1="0%" y1="0%" x2="100%" y2="0%">
+                                    <Stop offset="0%" stopColor="blue" />
+                                    <Stop offset="90%" stopColor="blue" />
+                                    <Stop offset="90%" stopColor="black" />
+                                    <Stop offset="92%" stopColor="black" />
+                                    <Stop offset="92%" stopColor="blue" />
+                                    <Stop offset="100%" stopColor="blue" />
+                                </LinearGradient>
+                            );
+                        }}
+                        height={200}
+                        initialSpacing={0}
+                        rotateLabel
+                        color='black'
+                        // showDataPointOnFocus
+                        // showVerticalLines
+                        spacing={50}
+                        line
+                    />
+                </View>
+                <View style={{ borderWidth: 0, paddingTop: 30 }}>
+                    <LineChart
+                        // areaChart
                         curved
                         dataSet={dataSet}
-                        height={250}
-                        showVerticalLines
-                        spacing={44}
+                        height={200}
+                        // showVerticalLines
+                        isAnimated
+                        showDataPointOnFocus
+                        spacing={50}
                         initialSpacing={0}
-                        hideDataPoints
+                        // hideDataPoints
                         startOpacity={0.8}
                         endOpacity={0.3}
                         textShiftY={-2}
                         textShiftX={-5}
                         textFontSize={13}
+                        yAxisOffset={-1}
                     />
                 </View>
 
@@ -225,7 +395,7 @@ export default function Plant({ navigation }) {
                     }}>
                     <LineChart
                         areaChart
-                        data={ptData}
+                        data={greenGraphData}
                         rotateLabel
                         width={300}
                         hideDataPoints
@@ -299,7 +469,8 @@ export default function Plant({ navigation }) {
                     />
                 </View>
 
-            </View>
+
+            </ScrollView>
         </SafeAreaView >
     )
 }
@@ -308,9 +479,9 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: Colors.WHITE,
-        padding: 25,
-        borderColor: 'green',
-        borderWidth: 1
+        padding: 10,
+        // borderColor: 'green',
+        // borderWidth: 1
     },
     buttonBack: {
         backgroundColor: Colors.ORANGE,
