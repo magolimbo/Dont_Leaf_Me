@@ -26,11 +26,13 @@ export default function AddPlant({ navigation, route}) {
     }
     //------------------------------------------------------------
 
-    const [selectedValue, setSelectedValue] = useState("option1");
+    const [species, selectSpecies] = useState("option1");
+    const [soil, selectSoil] = useState("option1");
     const [nickname, setNickname] = useState('');
+    const [height, setHeight] = useState('');
 
     const addPlantButton = () => {
-        navigation.navigate('HomePage', { nickname: nickname, showPlantView: true});
+        navigation.navigate('HomePage', { nickname: nickname, showPlantView: true, soil: soil, species: species, height: height});
     };
 
 
@@ -89,6 +91,8 @@ export default function AddPlant({ navigation, route}) {
                             <TextInput
                                 style={{ height: 30, width:150, backgroundColor: Colors.DARKGREEN, color: Colors.WHITE}}
                                 placeholder="140cm"
+                                onChangeText={text => setHeight(text)}
+                                value={height}
                             />
                         </View> 
                         </View>
@@ -100,9 +104,9 @@ export default function AddPlant({ navigation, route}) {
                             <Text style={{fontFamily:'Raleway_400Regular', color: Colors.WHITE}} >Plant Species</Text>
                             <View style={{borderRadius: 12, overflow: 'hidden', alignItems: 'center', justifyContent: 'center',borderColor: Colors.WHITE, borderWidth: 2 }}>
                                 <Picker
-                                    selectedValue={selectedValue}
+                                    selectedValue={species}
                                     style={{ height: 30, width:150, backgroundColor: Colors.DARKGREEN, color: Colors.WHITE}}
-                                    onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
+                                    onValueChange={(itemValue, itemIndex) => selectSpecies(itemValue)}
                                 >
                                     <Picker.Item label="Rose" value="Rose" />
                                     <Picker.Item label="Sunflower" value="Sunflower" />
@@ -127,9 +131,9 @@ export default function AddPlant({ navigation, route}) {
                             <Text style={{fontFamily:'Raleway_400Regular', color: Colors.WHITE}} >Type of soil</Text>
                             <View style={{borderRadius: 12, overflow: 'hidden', alignItems: 'center', justifyContent: 'center', borderColor: Colors.WHITE, borderWidth: 2 }}>
                                 <Picker
-                                    selectedValue={selectedValue}
+                                    selectedValue={soil}
                                     style={{ height: 30, width:150, backgroundColor: Colors.DARKGREEN, color: Colors.WHITE}}
-                                    onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
+                                    onValueChange={(itemValue, itemIndex) => selectSoil(itemValue)}
                                 >
                                     <Picker.Item label="Clay" value="Clay" />
                                     <Picker.Item label="Loam" value="Loam" />
@@ -145,35 +149,7 @@ export default function AddPlant({ navigation, route}) {
                             </View> 
                         </View>
                     </View>
-
-
-                    
-
-                    <View style={{marginBottom: 20, justifyContent: 'center'}}>
-                        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                            <Text style={{fontFamily:'Raleway_400Regular', color: Colors.WHITE}} >Location</Text>
-                            <View style={{borderRadius: 12, overflow: 'hidden', alignItems: 'center', justifyContent: 'center',borderColor: Colors.WHITE, borderWidth: 2 }}>
-                                <Picker
-                                    selectedValue={selectedValue}
-                                    style={{ height: 30, width:150, backgroundColor: Colors.DARKGREEN, color: Colors.WHITE}}
-                                    onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
-                                >
-                                    <Picker.Item label="Rose" value="Rose" />
-                                    <Picker.Item label="Sunflower" value="Sunflower" />
-                                    <Picker.Item label="Orchid" value="Orchid" />
-                                    <Picker.Item label="Ficus" value="Ficus" />
-                                    <Picker.Item label="Lavender" value="Lavender" />
-                                    <Picker.Item label="Pine" value="Pine" />
-                                    <Picker.Item label="Cactus" value="Cactus" />
-                                    <Picker.Item label="Peony" value="Peony" />
-                                    <Picker.Item label="Geranium" value="Geranium" />
-                                    <Picker.Item label="Tulip" value="Tulip" />
-
-                                </Picker>
-                            </View> 
-                        </View>
-    
-                    </View>                    
+                  
 
                 </View>
 

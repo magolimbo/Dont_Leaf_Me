@@ -7,6 +7,7 @@ import { Raleway_800ExtraBold } from "@expo-google-fonts/raleway";
 import { useFonts } from "expo-font";
 import { Feather } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { Fontisto } from '@expo/vector-icons';
 
 
 export default function Home({navigation, route}) {
@@ -23,9 +24,12 @@ export default function Home({navigation, route}) {
   }
 
 //------------DYNAMIC VIEWS-----------------------------------
-const { nickname = "" } = route.params || {}; // Default nickname to empty string
 const { showPlantView = false } = route.params || {}; // Default plantView to false
 const [ showInfo, setShowInfo] = useState(false); // Default showInfo to false
+const { nickname = "" } = route.params || {}; // Default nickname to empty string
+const { height = 0 } = route.params || {}; // Default height to 0
+const { species = "" } = route.params || {}; // Default species to empty string
+const { soil = "" } = route.params || {}; // Default soil to empty string
 
 //-------------------------------------------------------
 
@@ -119,10 +123,16 @@ const [ showInfo, setShowInfo] = useState(false); // Default showInfo to false
         >
           <View style={styles.modalContainer}>
             <View style={styles.modalContent}>
-              <Text>Info sulla pianta</Text>
-              <TouchableOpacity onPress = {infoPressHandler}>
-                  <Feather name="arrow-right-circle" size={34} color={Colors.DARKGREEN} />
-                </TouchableOpacity>
+              <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20}}>
+                <Text style={styles.title}>Plant ID</Text>
+                <TouchableOpacity onPress = {infoPressHandler}>
+                    <Fontisto name="close" size={30} color={Colors.DARKGREEN}/>
+                  </TouchableOpacity>
+              </View>
+              <Text style={styles.text}>Nickname: {nickname}</Text>
+              <Text style={styles.text}>Species: {species}</Text>
+              <Text style={styles.text}>Height: {height} cm</Text>
+              <Text style={styles.text}>Soil: {soil}</Text>
             </View>
           </View>
         </Modal>
@@ -192,7 +202,7 @@ const styles = StyleSheet.create({
   },
   modalContent: {
     backgroundColor: '#fff',
-    padding: 20,
+    padding: 30,
     borderRadius: 10,
     shadowColor: '#000',
     shadowOffset: {
@@ -202,7 +212,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 16,
-    height: 400,
+    height: 230,
     width: 250
   }
 })
