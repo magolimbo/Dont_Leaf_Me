@@ -26,8 +26,8 @@ export default function AddPlant({ navigation, route}) {
     }
     //------------------------------------------------------------
 
-    const [species, selectSpecies] = useState("option1");
-    const [soil, selectSoil] = useState("option1");
+    const [species, selectSpecies] = useState("");
+    const [soil, selectSoil] = useState("");
     const [nickname, setNickname] = useState('');
     const [height, setHeight] = useState('');
 
