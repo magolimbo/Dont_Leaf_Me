@@ -16,7 +16,6 @@ import { LinearGradient, Stop } from 'react-native-svg';
 
 export default function Plant({ navigation, route }) {
 
-    const { nicknames } = route.params || { nicknames: '' };
     //------------button selected (general state, water ecc)----------------
     const [isPressed, setIsPressed] = useState(false);
     const [currentButton, setCurrentButton] = useState(null);
@@ -291,6 +290,7 @@ export default function Plant({ navigation, route }) {
         { value: 5, label: '8 May', dataPointText: '5' },
         { value: 7, label: '9 May', dataPointText: '7' },
     ];
+    const { nickname } = route.params || { nickname: "" };
 
     const diseasesDataLine = [
         { value: 0, label: '1 Jan' },
@@ -439,40 +439,40 @@ export default function Plant({ navigation, route }) {
 
         switch (buttonName) {
             case 'button1':
-              setShowGeneral(true);
-              setShowWater(false);
-              setShowSun(false);
-              setShowDiseases(false);
-              break;
+                setShowGeneral(true);
+                setShowWater(false);
+                setShowSun(false);
+                setShowDiseases(false);
+                break;
             case 'button2':
-              setShowGeneral(false);
-              setShowWater(true);
-              setShowSun(false);
-              setShowDiseases(false);
-              break;
+                setShowGeneral(false);
+                setShowWater(true);
+                setShowSun(false);
+                setShowDiseases(false);
+                break;
             case 'button3':
-              setShowGeneral(false);
-              setShowWater(false);
-              setShowSun(true);
-              setShowDiseases(false);
-              break;
+                setShowGeneral(false);
+                setShowWater(false);
+                setShowSun(true);
+                setShowDiseases(false);
+                break;
             case 'button4':
-              setShowGeneral(false);
-              setShowWater(false);
-              setShowSun(false);
-              setShowDiseases(true);
-              break;
+                setShowGeneral(false);
+                setShowWater(false);
+                setShowSun(false);
+                setShowDiseases(true);
+                break;
             default:
-              setShowGeneral(true);
-              setShowWater(false);
-              setShowSun(false);
-              setShowDiseases(false);
-          }
+                setShowGeneral(true);
+                setShowWater(false);
+                setShowSun(false);
+                setShowDiseases(false);
+        }
     };
     //------------END button selected (general state, water ecc)----------------
 
     //------------manage views----------------------------
-    const [showGeneral, setShowGeneral] = useState(false);
+    const [showGeneral, setShowGeneral] = useState(true);
     const [showWater, setShowWater] = useState(false);
     const [showSun, setShowSun] = useState(false);
     const [showDiseases, setShowDiseases] = useState(false);
@@ -492,7 +492,7 @@ export default function Plant({ navigation, route }) {
                     </TouchableOpacity>
 
                     <View>
-                        <Text style={styles.title}>{nicknames}</Text>
+                        <Text style={styles.title}>{nickname}</Text>
                     </View>
 
                     <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -505,36 +505,36 @@ export default function Plant({ navigation, route }) {
 
                 {/* ------------------------BUTTONS GENERAL, WATER, SUN, DISEASES--------------------------- */}
                 {/* title on top */}
-                <View style={{ marginBottom: 10, marginTop: 20}}>
+                <View style={{ marginBottom: 10, marginTop: 20 }}>
                     <Text style={styles.title}>Stats</Text>
                 </View>
 
                 {/* buttons to navigate between general, water, sun, diseases */}
-                <View style={{flexDirection:'row', justifyContent: 'space-evenly', marginBottom: 20}}>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', marginBottom: 20 }}>
                     <Pressable onPress={() => handlePress('button1')}>
-                        <View style={[styles.buttonStats, isPressed && currentButton=='button1' ? {elevation: 2, borderColor: Colors.DARKGREEN, borderWidth: 2} : {}]}>
-                            <FontAwesome5 name="smile" size={30} color={Colors.DARKGREEN}/>
+                        <View style={[styles.buttonStats, isPressed && currentButton == 'button1' ? { elevation: 2, borderColor: Colors.DARKGREEN, borderWidth: 2 } : {}]}>
+                            <FontAwesome5 name="smile" size={30} color={Colors.DARKGREEN} />
                         </View>
                     </Pressable>
 
                     <Pressable onPress={() => handlePress('button2')}>
-                        <View style={[styles.buttonStats, isPressed && currentButton=='button2' ? {elevation: 2, borderColor: Colors.DARKGREEN, borderWidth: 2} : {}]}>
+                        <View style={[styles.buttonStats, isPressed && currentButton == 'button2' ? { elevation: 2, borderColor: Colors.DARKGREEN, borderWidth: 2 } : {}]}>
                             <Ionicons name="water-outline" size={34} color={Colors.DARKGREEN} />
                         </View>
                     </Pressable>
 
                     <Pressable onPress={() => handlePress('button3')}>
-                        <View style={[styles.buttonStats, isPressed && currentButton=='button3' ? {elevation: 2, borderColor: Colors.DARKGREEN, borderWidth: 2} : {}]}>
+                        <View style={[styles.buttonStats, isPressed && currentButton == 'button3' ? { elevation: 2, borderColor: Colors.DARKGREEN, borderWidth: 2 } : {}]}>
                             <Feather name="sun" size={30} color={Colors.DARKGREEN} />
                         </View>
                     </Pressable>
 
                     <Pressable onPress={() => handlePress('button4')}>
-                        <View style={[styles.buttonStats, isPressed && currentButton=='button4' ? {elevation: 2, borderColor: Colors.DARKGREEN, borderWidth: 2} : {}]}>
+                        <View style={[styles.buttonStats, isPressed && currentButton == 'button4' ? { elevation: 2, borderColor: Colors.DARKGREEN, borderWidth: 2 } : {}]}>
                             <Ionicons name="skull-outline" size={30} color={Colors.DARKGREEN} />
                         </View>
                     </Pressable>
-                   
+
                 </View>
                 {/* ------------------------END BUTTONS GENERAL, WATER, SUN, DISEASES--------------------------- */}
 
@@ -643,7 +643,7 @@ export default function Plant({ navigation, route }) {
                     </View>
                 )}
 
-                
+
                 {/* -----------------------END GENERAL STATE OF THE PLANT VIEW------------------------------------- */}
 
                 {/* -----------------------WATER VIEW------------------------------------- */}
@@ -700,14 +700,14 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         textAlign: 'left',
     },
-    buttonStats:{
+    buttonStats: {
         width: 60,
         height: 60,
         borderRadius: 15,
         backgroundColor: Colors.WHITE,
         borderColor: Colors.DARKGREEN,
         padding: 10,
-        justifyContent: 'center', 
+        justifyContent: 'center',
         alignItems: 'center',
         elevation: 10,
     },
