@@ -1,4 +1,4 @@
-import { StyleSheet, View, Text, TouchableOpacity, ScrollView } from 'react-native'
+import { StyleSheet, View, Text, TouchableOpacity, ScrollView, Image } from 'react-native'
 import {useEffect, useState} from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Colors from '../../Utils/Colors'
@@ -44,9 +44,17 @@ const { showPlantView = false } = route.params || {}; // Default plantView to fa
 
         {/* weather and AI suggestion */}
         <View style={styles.weather}>
-          <Text style={{color:Colors.WHITE}}>Weather</Text>
-          <Text>12 06 2024</Text>
-          <Text>"Did you know that the Ficus is actually a genus of plants with over 800 species? </Text>
+          <View style={{width: 110, flexDirection: 'column', alignItems: 'center'}}>
+            <Image 
+              source={require('./../../../assets/images/weathersymbol.png')} // replace with the path to your image
+              style={{width: '70%', height: '70%'}}
+              resizeMode="contain"
+            />
+            <Text style={{fontSize: 24, color: Colors.WHITE, fontFamily: "Raleway_800ExtraBold",}}>23 °C</Text>
+          </View>
+          <View style={{width: 170}}>
+            <Text style={[styles.text, {color: Colors.WHITE}]}>Did you know that the Ficus is actually a genus of plants with over 800 species? </Text>
+          </View>
         </View>
 
         {/* Your plants and Add a new plant */}
@@ -114,10 +122,11 @@ const styles = StyleSheet.create({
     fontFamily: "Raleway_400Regular",
   },
   weather:{
-    borderColor: 'blue',
-    borderWidth: 1,
+    // borderColor: 'blue',
+    // borderWidth: 1,
     backgroundColor: Colors.DARKGREEN,
-    padding: 50,
+    height: 130,
+    padding: 20,
     borderRadius: 20,
     flexDirection: 'row',
     justifyContent: 'space-between',
