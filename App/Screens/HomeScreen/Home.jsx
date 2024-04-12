@@ -21,16 +21,14 @@ export default function Home({navigation, route}) {
   }
 
 //------------DYNAMIC VIEWS-----------------------------------
-const { nicknames } = route.params || { nicknames: [] };
+const { nickname = "" } = route.params || {}; // Default nickname to empty string
+const { showPlantView = false } = route.params || {}; // Default plantView to false
 
 //-------------------------------------------------------
 
-  //const {nickname} = route.params?.nickname || "";
-
-
   // handler of the add button for a new plant (navigate to add plant screen)
   const pressHandler = () => {
-    navigation.navigate('AddPlantPage')
+    navigation.navigate('AddPlantPage', {nickname: nickname})
   }
 
   return (
@@ -47,13 +45,14 @@ const { nicknames } = route.params || { nicknames: [] };
         {/* weather and AI suggestion */}
         <View style={styles.weather}>
           <Text style={{color:Colors.WHITE}}>Weather</Text>
-          <Text>AI suggestions</Text>
+          <Text>12 06 2024</Text>
+          <Text>"Did you know that the Ficus is actually a genus of plants with over 800 species? </Text>
         </View>
 
         {/* Your plants and Add a new plant */}
         <View style={{flexDirection:'column'}}>
 
-          <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+          <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
             <Text style={styles.title}>Your plants</Text>
             {/* Add a new plant button */}
             <TouchableOpacity onPress = {pressHandler}>
@@ -63,24 +62,26 @@ const { nicknames } = route.params || { nicknames: [] };
             </TouchableOpacity>
           </View>
 
-          {/* Single plant */}
-          <View style={styles.plant}>
-              <View style={{backgroundColor: Colors.WHITE, borderRadius: 50, width: 50, height: 50}}></View>
-              {nicknames.map((nickname, index) => (
-                <View key={index}>
-                  <Text>{nickname}</Text>
-                </View>
-              ))}
-          </View>
+          {/* -----------------------Single plant--------------------------------------- */} 
+          {!showPlantView && (
+            <View>
+              <Text style={[styles.text, {textAlign: 'center', marginTop: 150}]}>Your garden looks quite empty. Add your first plant to your digital garden!</Text>
+            </View>
+          )}
+          {showPlantView && (
+            <View>
+              <TouchableOpacity onPress = {() => {navigation.navigate("PlantPage", {nickname : nickname})}}>
+                  <View style={[styles.plant, {height: 80}]}>
+                    <View style={{ width: 50, height: 50, borderRadius: 25, backgroundColor: Colors.WHITE, marginRight: 15 }} />
+                    <Text style={{color: Colors.WHITE, fontFamily: "Raleway_800ExtraBold", fontSize: 18}}>{nickname}</Text>
+                  </View>
+                </TouchableOpacity>
+            </View>
+          )
+          }
+          {/* -----------------------Single plant--------------------------------------- */}
         </View>
 
-        <View>
-          <TouchableOpacity onPress = {() => {navigation.navigate("PlantPage", {nicknames : nicknames})}}>
-              <View style={styles.addButton}>
-                <Text style={{color: Colors.WHITE, fontFamily: "Raleway_800ExtraBold"}}>graphs</Text>
-              </View>
-            </TouchableOpacity>
-        </View>
 
         
 
@@ -113,8 +114,8 @@ const styles = StyleSheet.create({
     fontFamily: "Raleway_400Regular",
   },
   weather:{
-    //borderColor: 'blue',
-    //borderWidth: 1,
+    borderColor: 'blue',
+    borderWidth: 1,
     backgroundColor: Colors.DARKGREEN,
     padding: 50,
     borderRadius: 20,
@@ -130,7 +131,7 @@ const styles = StyleSheet.create({
     borderRadius: 10
   },
   plant:{
-    marginTop: 30,
+    marginTop: 20,
     backgroundColor: Colors.ORANGE,
     padding: 20,
     borderRadius: 20,

@@ -1,7 +1,7 @@
 import { Button, StyleSheet, Text, View} from 'react-native'
 import {Picker} from '@react-native-picker/picker';
 import { SafeAreaView } from 'react-native-safe-area-context'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Colors from '../../Utils/Colors'
 import { ScrollView, TextInput, TouchableOpacity } from 'react-native-gesture-handler'
 import { Feather } from '@expo/vector-icons';
@@ -28,12 +28,9 @@ export default function AddPlant({ navigation, route}) {
 
     const [selectedValue, setSelectedValue] = useState("option1");
     const [nickname, setNickname] = useState('');
-    const [nicknames, setNicknames] = useState([]);
 
     const addPlantButton = () => {
-        setNicknames([...nicknames, nickname]);
-        setNickname('');
-        navigation.navigate('HomePage', { nicknames: [...nicknames, nickname] });
+        navigation.navigate('HomePage', { nickname: nickname, showPlantView: true});
     };
 
 
@@ -193,7 +190,7 @@ export default function AddPlant({ navigation, route}) {
                     </View>
                 </View>
 
-                 {/* button to confirm plant and go back to home screen </TouchableOpacity>*/}
+                 {/*button to confirm plant and go back to home screen </TouchableOpacity>*/}
                  <View style={{alignItems:'center', marginBottom: 50}}>
                     <Text style={{fontFamily: 'Raleway_400Regular', marginBottom: 10, color: Colors.DARKGREEN}}>Add your plant to your digital garden</Text>
                     <TouchableOpacity onPress={addPlantButton}>

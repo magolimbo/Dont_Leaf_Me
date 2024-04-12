@@ -12,10 +12,10 @@ import { Ionicons } from '@expo/vector-icons';
 
 export default function Plant({ navigation, route }) {
 
-    const { nicknames } = route.params || { nicknames: '' };
     //------------button selected (general state, water ecc)----------------
     const [isPressed, setIsPressed] = useState(false);
     const [currentButton, setCurrentButton] = useState(null);
+    const { nickname } = route.params || { nickname: "" };
 
     const handlePress = (buttonName) => {
         setCurrentButton(buttonName);
@@ -56,7 +56,7 @@ export default function Plant({ navigation, route }) {
     //------------END button selected (general state, water ecc)----------------
 
     //------------manage views----------------------------
-    const [showGeneral, setShowGeneral] = useState(false);
+    const [showGeneral, setShowGeneral] = useState(true);
     const [showWater, setShowWater] = useState(false);
     const [showSun, setShowSun] = useState(false);
     const [showDiseases, setShowDiseases] = useState(false);
@@ -118,7 +118,7 @@ export default function Plant({ navigation, route }) {
                     </TouchableOpacity>
 
                     <View>
-                        <Text style={styles.title}>{nicknames}</Text>
+                        <Text style={styles.title}>{nickname}</Text>
                     </View>
 
                     <TouchableOpacity onPress={() => navigation.goBack()}>
