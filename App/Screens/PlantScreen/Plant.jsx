@@ -1,13 +1,17 @@
 import { Button, Pressable, StyleSheet, Text, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import Colors from '../../Utils/Colors'
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler'
 import { Feather } from '@expo/vector-icons';
-import { LineChart, ContributionGraph } from "react-native-chart-kit"
+// import { LineChart, ContributionGraph } from "react-native-chart-kit"
 import { SimpleLineIcons } from '@expo/vector-icons';
+import { Entypo } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
+import { LineChart, ruleTypes } from 'react-native-gifted-charts';
+import { ScrollView } from 'react-native-gesture-handler';
+import { LinearGradient, Stop } from 'react-native-svg';
 
 
 export default function Plant({ navigation, route }) {
@@ -16,7 +20,419 @@ export default function Plant({ navigation, route }) {
     //------------button selected (general state, water ecc)----------------
     const [isPressed, setIsPressed] = useState(false);
     const [currentButton, setCurrentButton] = useState(null);
+    const ref = useRef(null)
+    const waterDataLine = [
+        { value: 2.5, label: '1 Jan', dataPointText: '2.5' },
+        { value: 3.0, label: '2 Jan', dataPointText: '3.0' },
+        { value: 2.0, label: '3 Jan', dataPointText: '2.0' },
+        { value: 2.0, label: '4 Jan', dataPointText: '2.0' },
+        { value: 2.5, label: '5 Jan', dataPointText: '2.5' },
+        { value: 2.0, label: '6 Jan', dataPointText: '2.0' },
+        { value: 2.0, label: '7 Jan', dataPointText: '2.0' },
+        { value: 3.5, label: '8 Jan', dataPointText: '3.5' },
+        { value: 2.5, label: '9 Jan', dataPointText: '2.5' },
+        { value: 2.5, label: '10 Jan', dataPointText: '2.5' },
+        { value: 3.5, label: '11 Jan', dataPointText: '3.5' },
+        { value: 4.0, label: '12 Jan', dataPointText: '4.0' },
+        { value: 4.0, label: '13 Jan', dataPointText: '4.0' },
+        { value: 3.0, label: '14 Jan', dataPointText: '3.0' },
+        { value: 2.0, label: '15 Jan', dataPointText: '2.0' },
+        { value: 3.0, label: '16 Jan', dataPointText: '3.0' },
+        { value: 2.5, label: '17 Jan', dataPointText: '2.5' },
+        { value: 2.0, label: '18 Jan', dataPointText: '2.0' },
+        { value: 3.5, label: '19 Jan', dataPointText: '3.5' },
+        { value: 2.0, label: '20 Jan', dataPointText: '2.0' },
+        { value: 3.0, label: '21 Jan', dataPointText: '3.0' },
+        { value: 2.5, label: '22 Jan', dataPointText: '2.5' },
+        { value: 3.0, label: '23 Jan', dataPointText: '3.0' },
+        { value: 4.5, label: '24 Jan', dataPointText: '4.5' },
+        { value: 3.5, label: '25 Jan', dataPointText: '3.5' },
+        { value: 3.5, label: '26 Jan', dataPointText: '3.5' },
+        { value: 3.5, label: '27 Jan', dataPointText: '3.5' },
+        { value: 4.5, label: '28 Jan', dataPointText: '4.5' },
+        { value: 2.5, label: '29 Jan', dataPointText: '2.5' },
+        { value: 4.0, label: '30 Jan', dataPointText: '4.0' },
+        { value: 4.5, label: '31 Jan', dataPointText: '4.5' },
+        // February
+        { value: 4.5, label: '1 Feb', dataPointText: '4.5' },
+        { value: 3.0, label: '2 Feb', dataPointText: '3.0' },
+        { value: 3.5, label: '3 Feb', dataPointText: '3.5' },
+        { value: 4.0, label: '4 Feb', dataPointText: '4.0' },
+        { value: 4.0, label: '5 Feb', dataPointText: '4.0' },
+        { value: 4.0, label: '6 Feb', dataPointText: '4.0' },
+        { value: 3.0, label: '7 Feb', dataPointText: '3.0' },
+        { value: 3.0, label: '8 Feb', dataPointText: '3.0' },
+        { value: 4.0, label: '9 Feb', dataPointText: '4.0' },
+        { value: 4.0, label: '10 Feb', dataPointText: '4.0' },
+        { value: 3.5, label: '11 Feb', dataPointText: '3.5' },
+        { value: 4.0, label: '12 Feb', dataPointText: '4.0' },
+        { value: 3.5, label: '13 Feb', dataPointText: '3.5' },
+        { value: 3.5, label: '14 Feb', dataPointText: '3.5' },
+        { value: 4.0, label: '15 Feb', dataPointText: '4.0' },
+        { value: 4.5, label: '16 Feb', dataPointText: '4.5' },
+        { value: 4.0, label: '17 Feb', dataPointText: '4.0' },
+        { value: 3.5, label: '18 Feb', dataPointText: '3.5' },
+        { value: 3.0, label: '19 Feb', dataPointText: '3.0' },
+        { value: 3.5, label: '20 Feb', dataPointText: '3.5' },
+        { value: 3.5, label: '21 Feb', dataPointText: '3.5' },
+        { value: 4.0, label: '22 Feb', dataPointText: '4.0' },
+        { value: 4.5, label: '23 Feb', dataPointText: '4.5' },
+        { value: 3.0, label: '24 Feb', dataPointText: '3.0' },
+        { value: 4.0, label: '25 Feb', dataPointText: '4.0' },
+        { value: 4.5, label: '26 Feb', dataPointText: '4.5' },
+        { value: 3.0, label: '27 Feb', dataPointText: '3.0' },
+        { value: 4.0, label: '28 Feb', dataPointText: '4.0' },
+        // March
+        { value: 2.5, label: '1 Mar', dataPointText: '2.5' },
+        { value: 2.5, label: '2 Mar', dataPointText: '2.5' },
+        { value: 4.0, label: '3 Mar', dataPointText: '4.0' },
+        { value: 4.5, label: '4 Mar', dataPointText: '4.5' },
+        { value: 2.5, label: '5 Mar', dataPointText: '2.5' },
+        { value: 3.5, label: '6 Mar', dataPointText: '3.5' },
+        { value: 2.5, label: '7 Mar', dataPointText: '2.5' },
+        { value: 4.5, label: '8 Mar', dataPointText: '4.5' },
+        { value: 3.5, label: '9 Mar', dataPointText: '3.5' },
+        { value: 3.0, label: '10 Mar', dataPointText: '3.0' },
+        { value: 3.0, label: '11 Mar', dataPointText: '3.0' },
+        { value: 2.5, label: '12 Mar', dataPointText: '2.5' },
+        { value: 2.5, label: '13 Mar', dataPointText: '2.5' },
+        { value: 4.0, label: '14 Mar', dataPointText: '4.0' },
+        { value: 2.5, label: '15 Mar', dataPointText: '2.5' },
+        { value: 4.0, label: '16 Mar', dataPointText: '4.0' },
+        { value: 4.0, label: '17 Mar', dataPointText: '4.0' },
+        { value: 3.0, label: '18 Mar', dataPointText: '3.0' },
+        { value: 2.5, label: '19 Mar', dataPointText: '2.5' },
+        { value: 2.5, label: '20 Mar', dataPointText: '2.5' },
+        { value: 4.5, label: '21 Mar', dataPointText: '4.5' },
+        { value: 2.5, label: '22 Mar', dataPointText: '2.5' },
+        { value: 3.0, label: '23 Mar', dataPointText: '3.0' },
+        { value: 3.0, label: '24 Mar', dataPointText: '3.0' },
+        { value: 4.0, label: '25 Mar', dataPointText: '4.0' },
+        { value: 4.0, label: '26 Mar', dataPointText: '4.0' },
+        { value: 3.5, label: '27 Mar', dataPointText: '3.5' },
+        { value: 3.5, label: '28 Mar', dataPointText: '3.5' },
+        { value: 3.0, label: '29 Mar', dataPointText: '3.0' },
+        { value: 3.5, label: '30 Mar', dataPointText: '3.5' },
+        { value: 2.5, label: '31 Mar', dataPointText: '2.5' },
+        // April
+        { value: 3.0, label: '1 Apr', dataPointText: '3.0' },
+        { value: 2.5, label: '2 Apr', dataPointText: '2.5' },
+        { value: 3.5, label: '3 Apr', dataPointText: '3.5' },
+        { value: 3.5, label: '4 Apr', dataPointText: '3.5' },
+        { value: 4.0, label: '5 Apr', dataPointText: '4.0' },
+        { value: 3.5, label: '6 Apr', dataPointText: '3.5' },
+        { value: 4.0, label: '7 Apr', dataPointText: '4.0' },
+        { value: 3.5, label: '8 Apr', dataPointText: '3.5' },
+        { value: 3.5, label: '9 Apr', dataPointText: '3.5' },
+        { value: 3.5, label: '10 Apr', dataPointText: '3.5' },
+        { value: 3.5, label: '11 Apr', dataPointText: '3.5' },
+        { value: 2.5, label: '12 Apr', dataPointText: '2.5' },
+        { value: 2.5, label: '13 Apr', dataPointText: '2.5' },
+        { value: 3.0, label: '14 Apr', dataPointText: '3.0' },
+        { value: 3.5, label: '15 Apr', dataPointText: '3.5' },
+        { value: 2.5, label: '16 Apr', dataPointText: '2.5' },
+        { value: 4.0, label: '17 Apr', dataPointText: '4.0' },
+        { value: 3.0, label: '18 Apr', dataPointText: '3.0' },
+        { value: 2.5, label: '19 Apr', dataPointText: '2.5' },
+        { value: 2.5, label: '20 Apr', dataPointText: '2.5' },
+        { value: 4.0, label: '21 Apr', dataPointText: '4.0' },
+        { value: 2.5, label: '22 Apr', dataPointText: '2.5' },
+        { value: 4.0, label: '23 Apr', dataPointText: '4.0' },
+        { value: 4.0, label: '24 Apr', dataPointText: '4.0' },
+        { value: 3.0, label: '25 Apr', dataPointText: '3.0' },
+        { value: 4.0, label: '26 Apr', dataPointText: '4.0' },
+        { value: 3.5, label: '27 Apr', dataPointText: '3.5' },
+        { value: 3.5, label: '28 Apr', dataPointText: '3.5' },
+        { value: 3.5, label: '29 Apr', dataPointText: '3.5' },
+        { value: 3.5, label: '30 Apr', dataPointText: '3.5' },
+        // May
+        { value: 2.5, label: '1 May', dataPointText: '2.5' },
+        { value: 3.0, label: '2 May', dataPointText: '3.0' },
+        { value: 2.0, label: '3 May', dataPointText: '2.0' },
+        { value: 4.0, label: '4 May', dataPointText: '4.0' },
+        { value: 3.5, label: '5 May', dataPointText: '3.5' },
+        { value: 3.5, label: '6 May', dataPointText: '3.5' },
+        { value: 2.5, label: '7 May', dataPointText: '2.5' },
+        { value: 3.5, label: '8 May', dataPointText: '3.5' },
+        { value: 4.5, label: '9 May', dataPointText: '4.5' },
+    ];
+    const sunDataLine = [
+        { value: 5, label: '1 Jan', dataPointText: '5' },
+        { value: 4, label: '2 Jan', dataPointText: '4' },
+        { value: 5, label: '3 Jan', dataPointText: '5' },
+        { value: 6, label: '4 Jan', dataPointText: '6' },
+        { value: 6, label: '5 Jan', dataPointText: '6' },
+        { value: 5, label: '6 Jan', dataPointText: '5' },
+        { value: 7, label: '7 Jan', dataPointText: '7' },
+        { value: 4, label: '8 Jan', dataPointText: '4' },
+        { value: 6, label: '9 Jan', dataPointText: '6' },
+        { value: 5, label: '10 Jan', dataPointText: '5' },
+        { value: 5, label: '11 Jan', dataPointText: '5' },
+        { value: 6, label: '12 Jan', dataPointText: '6' },
+        { value: 4, label: '13 Jan', dataPointText: '4' },
+        { value: 5, label: '14 Jan', dataPointText: '5' },
+        { value: 6, label: '15 Jan', dataPointText: '6' },
+        { value: 5, label: '16 Jan', dataPointText: '5' },
+        { value: 7, label: '17 Jan', dataPointText: '7' },
+        { value: 4, label: '18 Jan', dataPointText: '4' },
+        { value: 6, label: '19 Jan', dataPointText: '6' },
+        { value: 5, label: '20 Jan', dataPointText: '5' },
+        { value: 5, label: '21 Jan', dataPointText: '5' },
+        { value: 6, label: '22 Jan', dataPointText: '6' },
+        { value: 7, label: '23 Jan', dataPointText: '7' },
+        { value: 5, label: '24 Jan', dataPointText: '5' },
+        { value: 5, label: '25 Jan', dataPointText: '5' },
+        { value: 4, label: '26 Jan', dataPointText: '4' },
+        { value: 7, label: '27 Jan', dataPointText: '7' },
+        { value: 6, label: '28 Jan', dataPointText: '6' },
+        { value: 4, label: '29 Jan', dataPointText: '4' },
+        { value: 6, label: '30 Jan', dataPointText: '6' },
+        { value: 5, label: '31 Jan', dataPointText: '5' },
+        // February
+        { value: 7, label: '1 Feb', dataPointText: '7' },
+        { value: 5, label: '2 Feb', dataPointText: '5' },
+        { value: 6, label: '3 Feb', dataPointText: '6' },
+        { value: 4, label: '4 Feb', dataPointText: '4' },
+        { value: 6, label: '5 Feb', dataPointText: '6' },
+        { value: 7, label: '6 Feb', dataPointText: '7' },
+        { value: 5, label: '7 Feb', dataPointText: '5' },
+        { value: 6, label: '8 Feb', dataPointText: '6' },
+        { value: 5, label: '9 Feb', dataPointText: '5' },
+        { value: 7, label: '10 Feb', dataPointText: '7' },
+        { value: 6, label: '11 Feb', dataPointText: '6' },
+        { value: 4, label: '12 Feb', dataPointText: '4' },
+        { value: 7, label: '13 Feb', dataPointText: '7' },
+        { value: 6, label: '14 Feb', dataPointText: '6' },
+        { value: 5, label: '15 Feb', dataPointText: '5' },
+        { value: 6, label: '16 Feb', dataPointText: '6' },
+        { value: 5, label: '17 Feb', dataPointText: '5' },
+        { value: 7, label: '18 Feb', dataPointText: '7' },
+        { value: 4, label: '19 Feb', dataPointText: '4' },
+        { value: 6, label: '20 Feb', dataPointText: '6' },
+        { value: 7, label: '21 Feb', dataPointText: '7' },
+        { value: 5, label: '22 Feb', dataPointText: '5' },
+        { value: 6, label: '23 Feb', dataPointText: '6' },
+        { value: 7, label: '24 Feb', dataPointText: '7' },
+        { value: 5, label: '25 Feb', dataPointText: '5' },
+        { value: 6, label: '26 Feb', dataPointText: '6' },
+        { value: 7, label: '27 Feb', dataPointText: '7' },
+        { value: 5, label: '28 Feb', dataPointText: '5' },
+        // March
+        { value: 4, label: '1 Mar', dataPointText: '4' },
+        { value: 5, label: '2 Mar', dataPointText: '5' },
+        { value: 6, label: '3 Mar', dataPointText: '6' },
+        { value: 7, label: '4 Mar', dataPointText: '7' },
+        { value: 5, label: '5 Mar', dataPointText: '5' },
+        { value: 6, label: '6 Mar', dataPointText: '6' },
+        { value: 7, label: '7 Mar', dataPointText: '7' },
+        { value: 5, label: '8 Mar', dataPointText: '5' },
+        { value: 6, label: '9 Mar', dataPointText: '6' },
+        { value: 7, label: '10 Mar', dataPointText: '7' },
+        { value: 5, label: '11 Mar', dataPointText: '5' },
+        { value: 6, label: '12 Mar', dataPointText: '6' },
+        { value: 7, label: '13 Mar', dataPointText: '7' },
+        { value: 5, label: '14 Mar', dataPointText: '5' },
+        { value: 6, label: '15 Mar', dataPointText: '6' },
+        { value: 7, label: '16 Mar', dataPointText: '7' },
+        { value: 5, label: '17 Mar', dataPointText: '5' },
+        { value: 6, label: '18 Mar', dataPointText: '6' },
+        { value: 7, label: '19 Mar', dataPointText: '7' },
+        { value: 5, label: '20 Mar', dataPointText: '5' },
+        { value: 6, label: '21 Mar', dataPointText: '6' },
+        { value: 7, label: '22 Mar', dataPointText: '7' },
+        { value: 5, label: '23 Mar', dataPointText: '5' },
+        { value: 6, label: '24 Mar', dataPointText: '6' },
+        { value: 7, label: '25 Mar', dataPointText: '7' },
+        { value: 5, label: '26 Mar', dataPointText: '5' },
+        { value: 6, label: '27 Mar', dataPointText: '6' },
+        { value: 7, label: '28 Mar', dataPointText: '7' },
+        { value: 5, label: '29 Mar', dataPointText: '5' },
+        { value: 6, label: '30 Mar', dataPointText: '6' },
+        { value: 7, label: '31 Mar', dataPointText: '7' },
+        // April
+        { value: 5, label: '1 Apr', dataPointText: '5' },
+        { value: 6, label: '2 Apr', dataPointText: '6' },
+        { value: 7, label: '3 Apr', dataPointText: '7' },
+        { value: 5, label: '4 Apr', dataPointText: '5' },
+        { value: 6, label: '5 Apr', dataPointText: '6' },
+        { value: 7, label: '6 Apr', dataPointText: '7' },
+        { value: 5, label: '7 Apr', dataPointText: '5' },
+        { value: 6, label: '8 Apr', dataPointText: '6' },
+        { value: 7, label: '9 Apr', dataPointText: '7' },
+        { value: 5, label: '10 Apr', dataPointText: '5' },
+        { value: 6, label: '11 Apr', dataPointText: '6' },
+        { value: 7, label: '12 Apr', dataPointText: '7' },
+        { value: 5, label: '13 Apr', dataPointText: '5' },
+        { value: 6, label: '14 Apr', dataPointText: '6' },
+        { value: 7, label: '15 Apr', dataPointText: '7' },
+        { value: 5, label: '16 Apr', dataPointText: '5' },
+        { value: 6, label: '17 Apr', dataPointText: '6' },
+        { value: 7, label: '18 Apr', dataPointText: '7' },
+        { value: 5, label: '19 Apr', dataPointText: '5' },
+        { value: 6, label: '20 Apr', dataPointText: '6' },
+        { value: 7, label: '21 Apr', dataPointText: '7' },
+        { value: 5, label: '22 Apr', dataPointText: '5' },
+        { value: 6, label: '23 Apr', dataPointText: '6' },
+        { value: 7, label: '24 Apr', dataPointText: '7' },
+        { value: 5, label: '25 Apr', dataPointText: '5' },
+        { value: 6, label: '26 Apr', dataPointText: '6' },
+        { value: 7, label: '27 Apr', dataPointText: '7' },
+        { value: 5, label: '28 Apr', dataPointText: '5' },
+        { value: 6, label: '29 Apr', dataPointText: '6' },
+        { value: 7, label: '30 Apr', dataPointText: '7' },
+        // May
+        { value: 6, label: '1 May', dataPointText: '6' },
+        { value: 5, label: '2 May', dataPointText: '5' },
+        { value: 7, label: '3 May', dataPointText: '7' },
+        { value: 6, label: '4 May', dataPointText: '6' },
+        { value: 5, label: '5 May', dataPointText: '5' },
+        { value: 7, label: '6 May', dataPointText: '7' },
+        { value: 6, label: '7 May', dataPointText: '6' },
+        { value: 5, label: '8 May', dataPointText: '5' },
+        { value: 7, label: '9 May', dataPointText: '7' },
+    ];
 
+    const diseasesDataLine = [
+        { value: 0, label: '1 Jan' },
+        { value: 0, label: '2 Jan' },
+        { value: 0, label: '3 Jan' },
+        { value: 0, label: '4 Jan' },
+        { value: 0, label: '5 Jan' },
+        { value: 0, label: '6 Jan' },
+        { value: 0, label: '7 Jan' },
+        { value: 0, label: '8 Jan' },
+        { value: 0, label: '9 Jan' },
+        { value: 0, label: '10 Jan' },
+        { value: 0, label: '11 Jan' },
+        { value: 0, label: '12 Jan' },
+        { value: 0, label: '13 Jan' },
+        { value: 0, label: '14 Jan' },
+        { value: 0, label: '15 Jan' },
+        { value: 0, label: '16 Jan' },
+        { value: 0, label: '17 Jan' },
+        { value: 0, label: '18 Jan' },
+        { value: 0, label: '19 Jan' },
+        { value: 0, label: '20 Jan' },
+        { value: 0, label: '21 Jan' },
+        { value: 0, label: '22 Jan' },
+        { value: 0, label: '23 Jan' },
+        { value: 0, label: '24 Jan' },
+        { value: 0, label: '25 Jan' },
+        { value: 0, label: '26 Jan' },
+        { value: 0, label: '27 Jan' },
+        { value: 0, label: '28 Jan' },
+        { value: 0, label: '29 Jan' },
+        { value: 0, label: '30 Jan' },
+        { value: 5, label: '31 Jan' },
+        // February
+        { value: 5, label: '1 Feb' },
+        { value: 5, label: '2 Feb' },
+        { value: 5, label: '3 Feb' },
+        { value: 5, label: '4 Feb' },
+        { value: 5, label: '5 Feb' },
+        { value: 5, label: '6 Feb' },
+        { value: 5, label: '7 Feb' },
+        { value: 5, label: '8 Feb' },
+        { value: 5, label: '9 Feb' },
+        { value: 5, label: '10 Feb' },
+        { value: 0, label: '11 Feb' },
+        { value: 0, label: '12 Feb' },
+        { value: 0, label: '13 Feb' },
+        { value: 0, label: '14 Feb' },
+        { value: 0, label: '15 Feb' },
+        { value: 0, label: '16 Feb' },
+        { value: 0, label: '17 Feb' },
+        { value: 0, label: '18 Feb' },
+        { value: 0, label: '19 Feb' },
+        { value: 0, label: '20 Feb' },
+        { value: 0, label: '21 Feb' },
+        { value: 0, label: '22 Feb' },
+        { value: 0, label: '23 Feb' },
+        { value: 0, label: '24 Feb' },
+        { value: 0, label: '25 Feb' },
+        { value: 0, label: '26 Feb' },
+        { value: 0, label: '27 Feb' },
+        { value: 0, label: '28 Feb' },
+        // Marc0
+        { value: 0, label: '1 Mar' },
+        { value: 0, label: '2 Mar' },
+        { value: 0, label: '3 Mar' },
+        { value: 0, label: '4 Mar' },
+        { value: 0, label: '5 Mar' },
+        { value: 0, label: '6 Mar' },
+        { value: 0, label: '7 Mar' },
+        { value: 0, label: '8 Mar' },
+        { value: 0, label: '9 Mar' },
+        { value: 0, label: '10 Mar' },
+        { value: 0, label: '11 Mar' },
+        { value: 0, label: '12 Mar' },
+        { value: 0, label: '13 Mar' },
+        { value: 0, label: '14 Mar' },
+        { value: 0, label: '15 Mar' },
+        { value: 0, label: '16 Mar' },
+        { value: 0, label: '17 Mar' },
+        { value: 0, label: '18 Mar' },
+        { value: 0, label: '19 Mar' },
+        { value: 0, label: '20 Mar' },
+        { value: 0, label: '21 Mar' },
+        { value: 0, label: '22 Mar' },
+        { value: 0, label: '23 Mar' },
+        { value: 0, label: '24 Mar' },
+        { value: 0, label: '25 Mar' },
+        { value: 0, label: '26 Mar' },
+        { value: 0, label: '27 Mar' },
+        { value: 0, label: '28 Mar' },
+        { value: 0, label: '29 Mar' },
+        { value: 0, label: '30 Mar' },
+        { value: 0, label: '31 Mar' },
+        // April
+        { value: 0, label: '1 Apr' },
+        { value: 0, label: '2 Apr' },
+        { value: 0, label: '3 Apr' },
+        { value: 0, label: '4 Apr' },
+        { value: 0, label: '5 Apr' },
+        { value: 0, label: '6 Apr' },
+        { value: 0, label: '7 Apr' },
+        { value: 0, label: '8 Apr' },
+        { value: 0, label: '9 Apr' },
+        { value: 0, label: '10 Apr' },
+        { value: 0, label: '11 Apr' },
+        { value: 0, label: '12 Apr' },
+        { value: 0, label: '13 Apr' },
+        { value: 0, label: '14 Apr' },
+        { value: 0, label: '15 Apr' },
+        { value: 0, label: '16 Apr' },
+        { value: 0, label: '17 Apr' },
+        { value: 0, label: '18 Apr' },
+        { value: 0, label: '19 Apr' },
+        { value: 0, label: '20 Apr' },
+        { value: 0, label: '21 Apr' },
+        { value: 0, label: '22 Apr' },
+        { value: 0, label: '23 Apr' },
+        { value: 0, label: '24 Apr' },
+        { value: 0, label: '25 Apr' },
+        { value: 0, label: '26 Apr' },
+        { value: 0, label: '27 Apr' },
+        { value: 0, label: '28 Apr' },
+        { value: 0, label: '29 Apr' },
+        { value: 0, label: '30 Apr' },
+        // May
+        { value: 0, label: '1 May' },
+        { value: 0, label: '2 May' },
+        { value: 0, label: '3 May' },
+        { value: 0, label: '4 May' },
+        { value: 0, label: '5 May' },
+        { value: 0, label: '6 May' },
+        { value: 0, label: '7 May' },
+        { value: 0, label: '8 May' },
+        { value: 0, label: '9 May' },
+    ];
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May']
+    const showOrHidePointer = (ind) => {
+        ref.current?.scrollTo({
+            x: ind * 2000 - 500
+        }); // adjust as per your UI
+    };
     const handlePress = (buttonName) => {
         setCurrentButton(buttonName);
         setIsPressed(true);
@@ -61,48 +477,6 @@ export default function Plant({ navigation, route }) {
     const [showSun, setShowSun] = useState(false);
     const [showDiseases, setShowDiseases] = useState(false);
     //------------------------------------------------------
-
-    const data1 = {
-        labels: ["January", "February", "March", "April", "May"],
-        datasets: [
-            {
-                data: [4, 6, 2, 4, 5],
-                color: (opacity = 1) => `rgba(241, 196, 15, ${opacity})`, // optional
-                strokeWidth: 3, // optional
-                withDots: true,
-                withScrollableDot: true,
-                withShadow: true,
-                withInnerLines: true,
-                withOuterLines: true,
-            },
-            {
-                data: [1, 3, 3, 1, 2],
-                color: (opacity = 1) => `rgba(52, 152, 219, ${opacity})`, // optional
-                strokeWidth: 3, // optional
-                withDots: true,
-                withScrollableDot: true,
-                withShadow: true,
-                withInnerLines: true,
-                withOuterLines: true,
-
-            }
-        ],
-        legend: ["AVG sunlight hours", "AVG water glasses"] // optional
-    };
-
-    const commitsData = [
-        { date: "2017-01-02", count: 1 },
-        { date: "2017-01-03", count: 2 },
-        { date: "2017-01-04", count: 3 },
-        { date: "2017-01-05", count: 4 },
-        { date: "2017-01-06", count: 5 },
-        { date: "2017-01-30", count: 2 },
-        { date: "2017-01-31", count: 3 },
-        { date: "2017-03-01", count: 2 },
-        { date: "2017-04-02", count: 4 },
-        { date: "2017-03-05", count: 2 },
-        { date: "2017-02-30", count: 4 }
-      ];
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
@@ -167,57 +541,105 @@ export default function Plant({ navigation, route }) {
                 {/* -----------------------GENERAL STATE OF THE PLANT VIEW------------------------------------- */}
                 {showGeneral && (
                     <View>
-                        <Text style={[styles.title, {alignSelf: 'center'}]}>How do I look like today?</Text>
-                        <LineChart
-                            data={data1}
-                            width={350}
-                            height={200}
-                            yLabelsOffset={1}
-                            yAxisSuffix="        "
-                            yAxisInterval={1} // optional, defaults to 1
-                            chartConfig={{
-                                backgroundColor: Colors.DARKGREEN,
-                                backgroundGradientFrom: Colors.DARKGREEN,
-                                backgroundGradientTo: '#00699f',
-                                decimalPlaces: 1, // optional, defaults to 2dp
-                                color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-                                labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-                                style: {
-                                    borderRadius: 16
-                                },
-                                propsForDots: {
-                                    r: "3", //point dimension
-                                }
-                            }}
-                            bezier //true if you want the line to be curved
-                            style={{
-                                marginVertical: 10,
-                                borderRadius: 16 //radius of the corners of the graph
-                            }}
-                        />
+                        <Text style={[styles.title, { alignSelf: 'center' }]}>How do I look like today?</Text>
+                        <View style={{ paddingTop: 20, flexDirection: 'row', justifyContent: 'space-evenly', marginBottom: 20 }}>
+                            <Pressable onPress={() => handlePress('button1')}>
+                                <View style={[styles.buttonMood, isPressed && currentButton == 'button1' ? { elevation: 2, borderColor: Colors.DARKGREEN, borderWidth: 2 } : {}]}>
+                                    <Entypo name="emoji-sad" size={30} color='red' />
+                                </View>
+                            </Pressable>
 
-                        <ContributionGraph
-                            values={commitsData}
-                            endDate={new Date("2017-04-01")}
-                            numDays={365}
-                            width={350}
-                            height={220}
-                            chartConfig={{
-                                backgroundColor: Colors.DARKGREEN,
-                                backgroundGradientFrom: Colors.DARKGREEN,
-                                backgroundGradientTo: '#00699f',
-                                decimalPlaces: 1, // optional, defaults to 2dp
-                                color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-                                labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-                                style: {
-                                    borderRadius: 16
-                                },
-                                propsForDots: {
-                                    r: "3", //point dimension
-                                }
-                            }}
-                        />
+                            <Pressable onPress={() => handlePress('button2')}>
+                                <View style={[styles.buttonStats, isPressed && currentButton == 'button2' ? { elevation: 2, borderColor: Colors.DARKGREEN, borderWidth: 2 } : {}]}>
+                                    <Entypo name="emoji-neutral" size={30} color='orange' />
+                                </View>
+                            </Pressable>
 
+                            <Pressable onPress={() => handlePress('button3')}>
+                                <View style={[styles.buttonStats, isPressed && currentButton == 'button3' ? { elevation: 2, borderColor: Colors.DARKGREEN, borderWidth: 2 } : {}]}>
+                                    <Entypo name="emoji-happy" size={30} color='green' />
+                                </View>
+                            </Pressable>
+                        </View>
+                        <View>
+                            {/* <Text>Water</Text> */}
+                            <View style={{ flexDirection: 'row', marginLeft: 8, paddingTop: 10 }}>
+                                {months.map((item, index) => {
+                                    return (
+                                        <TouchableOpacity
+                                            key={index}
+                                            style={{
+                                                padding: 8,
+                                                margin: 6,
+                                                backgroundColor: Colors.WHITE,
+                                                borderRadius: 8,
+                                                borderColor: Colors.DARKGREEN,
+                                                borderWidth: 1.5,
+                                                elevation: 4
+                                            }}
+                                            onPress={() => showOrHidePointer(index)}>
+                                            <Text style={{ color: Colors.BLACK, textAlign: 'center' }}>{months[index]}</Text>
+                                        </TouchableOpacity>
+                                    );
+                                })}
+                            </View>
+                            <LineChart
+                                scrollRef={ref}
+                                data={waterDataLine}
+                                data2={sunDataLine}
+                                data3={diseasesDataLine}
+                                startIndex3={30}
+                                endIndex3={40}
+                                thickness3={8}
+                                isAnimated
+                                textColor="black"
+                                textShiftY={-2}
+                                textShiftX={-6}
+                                textFontSize={15}
+                                curved
+                                label
+                                color1={Colors.LIGHTBLUE}
+                                color2='orange'
+                                color3='red'
+                                dataPointsColor1={Colors.LIGHTBLUE}
+                                dataPointsColor2='orange'
+                                dataPointsColor3='red'
+                                // startFillColor3="red"
+                                // startOpacity3={0.8}
+                                // endFillColor3="red"
+                                // endOpacity3={0.3}
+                                // areaGradientId="waterGradient" // id per il gradient dell'area del dataset dell'acqua
+                                // areaGradientComponent={() => (
+                                //     <LinearGradient id="waterGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                //         <Stop offset="0%" stopColor={Colors.LIGHTBLUE} />
+                                //         <Stop offset="100%" stopColor={Colors.LIGHTBLUE} />
+                                //         <Stop offset="90%" stopColor={Colors.LIGHTBLUE} />
+                                //         <Stop offset="90%" stopColor="black" />
+                                //         <Stop offset="92%" stopColor="black" />
+                                //         <Stop offset="92%" stopColor={Colors.LIGHTBLUE} />
+                                //         <Stop offset="100%" stopColor={Colors.LIGHTBLUE} />
+                                //     </LinearGradient>
+                                // )}
+                                // areaGradientId2="sunGradient" // id per il gradient dell'area del dataset del sole
+                                // areaGradientComponent2={() => (
+                                //     <LinearGradient id="sunGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                //         <Stop offset="0%" stopColor={Colors.ORANGE} />
+                                //         <Stop offset="90%" stopColor={Colors.ORANGE} />
+                                //         <Stop offset="90%" stopColor="black" />
+                                //         <Stop offset="92%" stopColor="black" />
+                                //         <Stop offset="92%" stopColor={Colors.ORANGE} />
+                                //         <Stop offset="100%" stopColor={Colors.ORANGE} />
+                                //     </LinearGradient>
+                                // )}
+                                height={200}
+                                initialSpacing={0}
+                                rotateLabel
+                                color="black"
+                                spacing={50}
+                                line
+                            />
+
+                        </View>
                     </View>
                 )}
 
@@ -227,7 +649,7 @@ export default function Plant({ navigation, route }) {
                 {/* -----------------------WATER VIEW------------------------------------- */}
                 {showWater && (
                     <View>
-                        <Text>Water</Text>
+                        <Text style={[styles.title, { alignSelf: 'center' }]}>Water stats</Text>
                     </View>
                 )}
                 {/* -----------------------END WATER VIEW------------------------------------- */}
@@ -286,6 +708,17 @@ const styles = StyleSheet.create({
         borderColor: Colors.DARKGREEN,
         padding: 10,
         justifyContent: 'center', 
+        alignItems: 'center',
+        elevation: 10,
+    },
+    buttonMood: {
+        width: 60,
+        height: 60,
+        borderRadius: 15,
+        backgroundColor: Colors.WHITE,
+        borderColor: Colors.DARKGREEN,
+        padding: 10,
+        justifyContent: 'center',
         alignItems: 'center',
         elevation: 10,
     }

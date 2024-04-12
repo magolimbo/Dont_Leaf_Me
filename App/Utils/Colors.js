@@ -7,4 +7,5 @@ export default{
     LIGHTGREEN: "#60d385",
     LIME: "#c3f44d",
     PURPLE: '#d3c2f8',
+    LIGHTBLUE: '#2980b9',
 }
