@@ -541,8 +541,8 @@ export default function Plant({ navigation, route }) {
                 {/* -----------------------GENERAL STATE OF THE PLANT VIEW------------------------------------- */}
                 {showGeneral && (
                     <View>
-                        <Text style={[styles.title, { alignSelf: 'center' }]}>How do I look like today?</Text>
-                        <View style={{ paddingTop: 20, flexDirection: 'row', justifyContent: 'space-evenly', marginBottom: 20 }}>
+                        <Text style={[styles.title, { alignSelf: 'center' }]}>Overview of {nickname}'s health</Text>
+                        {/* <View style={{ paddingTop: 20, flexDirection: 'row', justifyContent: 'space-evenly', marginBottom: 20 }}>
                             <Pressable onPress={() => handlePress('button1')}>
                                 <View style={[styles.buttonMood, isPressed && currentButton == 'button1' ? { elevation: 2, borderColor: Colors.DARKGREEN, borderWidth: 2 } : {}]}>
                                     <Entypo name="emoji-sad" size={30} color='red' />
@@ -560,7 +560,7 @@ export default function Plant({ navigation, route }) {
                                     <Entypo name="emoji-happy" size={30} color='green' />
                                 </View>
                             </Pressable>
-                        </View>
+                        </View> */}
                         <View>
                             {/* <Text>Water</Text> */}
                             <View style={{ flexDirection: 'row', marginLeft: 8, paddingTop: 10 }}>
@@ -657,7 +657,7 @@ export default function Plant({ navigation, route }) {
                 {/* -----------------------SUN VIEW------------------------------------- */}
                 {showSun && (
                     <View>
-                        <Text>Sun</Text>
+                        <Text style={[styles.title, { alignSelf: 'center' }]}>Sun and Temperature stats</Text>
                     </View>
                 )}
                 {/* -----------------------END SUN VIEW------------------------------------- */}
@@ -665,7 +665,7 @@ export default function Plant({ navigation, route }) {
                 {/* -----------------------DISEASES VIEW------------------------------------- */}
                 {showDiseases && (
                     <View>
-                        <Text>Diseases</Text>
+                        <Text style={[styles.title, { alignSelf: 'center' }]}>Diseases stats</Text>
                     </View>
                 )}
                 {/* -----------------------END DISEASES VIEW------------------------------------- */}

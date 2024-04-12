@@ -1,10 +1,12 @@
-import { StyleSheet, View, Text, TouchableOpacity, ScrollView, Image } from 'react-native'
+import { StyleSheet, View, Text, TouchableOpacity, ScrollView, Image, Modal } from 'react-native'
 import {useEffect, useState} from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Colors from '../../Utils/Colors'
 import { Raleway_400Regular } from "@expo-google-fonts/raleway";
 import { Raleway_800ExtraBold } from "@expo-google-fonts/raleway";
 import { useFonts } from "expo-font";
+import { Feather } from '@expo/vector-icons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 
 export default function Home({navigation, route}) {
@@ -23,12 +25,19 @@ export default function Home({navigation, route}) {
 //------------DYNAMIC VIEWS-----------------------------------
 const { nickname = "" } = route.params || {}; // Default nickname to empty string
 const { showPlantView = false } = route.params || {}; // Default plantView to false
+const [ showInfo, setShowInfo] = useState(false); // Default showInfo to false
 
 //-------------------------------------------------------
 
   // handler of the add button for a new plant (navigate to add plant screen)
   const pressHandler = () => {
     navigation.navigate('AddPlantPage', {nickname: nickname})
+  }
+
+
+  //handler for info modal view popup
+  const infoPressHandler = () => {
+    setShowInfo(!showInfo);
   }
 
   return (
@@ -77,13 +86,21 @@ const { showPlantView = false } = route.params || {}; // Default plantView to fa
             </View>
           )}
           {showPlantView && (
-            <View>
-              <TouchableOpacity onPress = {() => {navigation.navigate("PlantPage", {nickname : nickname})}}>
-                  <View style={[styles.plant, {height: 80}]}>
-                    <View style={{ width: 50, height: 50, borderRadius: 25, backgroundColor: Colors.WHITE, marginRight: 15 }} />
-                    <Text style={{color: Colors.WHITE, fontFamily: "Raleway_800ExtraBold", fontSize: 18}}>{nickname}</Text>
-                  </View>
+            <View style={[styles.plant, {height: 80}]}>
+              <View style={{ width: 50, height: 50, borderRadius: 25, backgroundColor: Colors.WHITE, marginRight: 5 }} />
+              <Text style={{color: Colors.WHITE, fontFamily: "Raleway_800ExtraBold", fontSize: 18}}>{nickname}</Text>
+              <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                <TouchableOpacity onPress = {infoPressHandler}>
+                  <MaterialCommunityIcons name="information-outline" size={34} color={Colors.WHITE} />
                 </TouchableOpacity>
+                <TouchableOpacity onPress = {() => {navigation.navigate("AddPlantPage", {nickname : nickname})}}>
+                  <MaterialCommunityIcons name="pencil-circle-outline" size={34} color={Colors.WHITE} />
+                </TouchableOpacity>
+                <TouchableOpacity onPress = {() => {navigation.navigate("PlantPage", {nickname : nickname})}}>
+                  <Feather name="arrow-right-circle" size={34} color={Colors.DARKGREEN} />
+                </TouchableOpacity>
+                
+              </View>
             </View>
           )
           }
@@ -92,6 +109,25 @@ const { showPlantView = false } = route.params || {}; // Default plantView to fa
 
 
         
+        {/*-----------------------------INFO MODAL VIEW------------------------------------- */}
+        {showInfo && (
+        <Modal
+          animationType="fade"
+          transparent={true}
+          visible={showInfo}
+          onRequestClose={infoPressHandler}
+        >
+          <View style={styles.modalContainer}>
+            <View style={styles.modalContent}>
+              <Text>Info sulla pianta</Text>
+              <TouchableOpacity onPress = {infoPressHandler}>
+                  <Feather name="arrow-right-circle" size={34} color={Colors.DARKGREEN} />
+                </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
+        )}
+      {/*-----------------------------INFO MODAL VIEW------------------------------------- */}
 
       </View>
     </SafeAreaView>
@@ -145,7 +181,29 @@ const styles = StyleSheet.create({
     padding: 20,
     borderRadius: 20,
     flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
+  },
+  modalContainer: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Dim the background
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContent: {
+    backgroundColor: '#fff',
+    padding: 20,
+    borderRadius: 10,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 16,
+    height: 400,
+    width: 250
   }
 })
 
