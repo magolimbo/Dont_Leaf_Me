@@ -7,8 +7,7 @@ import { Feather } from '@expo/vector-icons';
 // import { LineChart, ContributionGraph } from "react-native-chart-kit"
 import { SimpleLineIcons } from '@expo/vector-icons';
 // import { Entypo } from '@expo/vector-icons';
-import { FontAwesome5 } from '@expo/vector-icons';
-import { Ionicons } from '@expo/vector-icons';
+import { FontAwesome5, Ionicons, Fontisto } from '@expo/vector-icons';
 import { LineChart, ruleTypes } from 'react-native-gifted-charts';
 // import { ScrollView } from 'react-native-gesture-handler';
 // import { LinearGradient, Stop } from 'react-native-svg';
@@ -619,7 +618,15 @@ export default function Plant({ navigation, route }) {
     const [showSun, setShowSun] = useState(false);
     const [showDiseases, setShowDiseases] = useState(false);
     //------------------------------------------------------
+    const [showInfo, setShowInfo] = useState(false);
 
+    const openInfoModal = () => {
+        setShowInfo(true);
+    };
+
+    const closeInfoModal = () => {
+        setShowInfo(false);
+    };
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <View style={styles.container}>
@@ -637,11 +644,27 @@ export default function Plant({ navigation, route }) {
                         <Text style={styles.title}>{nickname}</Text>
                     </View>
 
-                    <TouchableOpacity onPress={() => navigation.goBack()}>
+
+                    {/* Bottone per aprire il pop-up */}
+                    <TouchableOpacity onPress={openInfoModal}>
                         <View style={styles.buttonBack}>
                             <SimpleLineIcons name="magic-wand" size={24} color={Colors.WHITE} />
                         </View>
                     </TouchableOpacity>
+
+                    {/* Pop-up */}
+                    {showInfo && (
+                        <View style={styles.modalContainer}>
+                            <View style={styles.modalContent}>
+                                {/* Contenuto del pop-up */}
+                                <Text style={styles.infoText}>This function will be implemented soon!</Text>
+                                <TouchableOpacity onPress={closeInfoModal}>
+                                    <Fontisto name="close" size={30} color={Colors.DARKGREEN} />
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    )}
+
                 </View>
                 {/* ---------------------------END HEADER------------------------------ */}
 
@@ -865,5 +888,27 @@ const styles = StyleSheet.create({
     buttonText: {
         color: Colors.WHITE,
         textAlign: 'center',
+    },
+    modalContainer: {
+        flex: 1,
+        backgroundColor: 'rgba(0, 0, 0, 0.5)', // Dim the background
+        transform: [{ translateX: -50 }, { translateY: -50 }],
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    modalContent: {
+        backgroundColor: '#fff',
+        padding: 30,
+        borderRadius: 10,
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 16,
+        height: 230,
+        width: 250
     },
 })
