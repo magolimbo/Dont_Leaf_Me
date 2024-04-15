@@ -4,17 +4,29 @@ import React, { useState, useRef } from 'react'
 import Colors from '../../Utils/Colors'
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler'
 import { Feather } from '@expo/vector-icons';
-// import { LineChart, ContributionGraph } from "react-native-chart-kit"
 import { SimpleLineIcons } from '@expo/vector-icons';
-// import { Entypo } from '@expo/vector-icons';
 import { FontAwesome5, Ionicons, Fontisto } from '@expo/vector-icons';
-import { LineChart, ruleTypes } from 'react-native-gifted-charts';
-// import { ScrollView } from 'react-native-gesture-handler';
-// import { LinearGradient, Stop } from 'react-native-svg';
+import { LineChart, ruleTypes, BarChart } from 'react-native-gifted-charts';
+import LinearGradient from 'react-native-linear-gradient'
 
 
 export default function Plant({ navigation, route }) {
+    const data = [
+        { value: 2500, frontColor: '#006DFF', gradientColor: '#009FFF', spacing: 6, label: 'Jan' },
+        { value: 2400, frontColor: '#3BE9DE', gradientColor: '#93FCF8' },
 
+        { value: 3500, frontColor: '#006DFF', gradientColor: '#009FFF', spacing: 6, label: 'Feb' },
+        { value: 3000, frontColor: '#3BE9DE', gradientColor: '#93FCF8' },
+
+        { value: 4500, frontColor: '#006DFF', gradientColor: '#009FFF', spacing: 6, label: 'Mar' },
+        { value: 4000, frontColor: '#3BE9DE', gradientColor: '#93FCF8' },
+
+        { value: 5200, frontColor: '#006DFF', gradientColor: '#009FFF', spacing: 6, label: 'Apr' },
+        { value: 4900, frontColor: '#3BE9DE', gradientColor: '#93FCF8' },
+
+        { value: 3000, frontColor: '#006DFF', gradientColor: '#009FFF', spacing: 6, label: 'May' },
+        { value: 2800, frontColor: '#3BE9DE', gradientColor: '#93FCF8' },
+    ];
     //------------button selected (general state, water ecc)----------------
     const [isPressed, setIsPressed] = useState(false);
     const [currentButton, setCurrentButton] = useState(null);
@@ -23,6 +35,7 @@ export default function Plant({ navigation, route }) {
     const [showDiseasesLine, setShowDiseasesLine] = useState(true);
 
     const ref = useRef(null)
+
     const waterDataLine = [
         { value: 2.5, label: '1 Jan', dataPointText: '2.5' },
         { value: 3.0, label: '2 Jan', dataPointText: '3.0' },
@@ -572,8 +585,9 @@ export default function Plant({ navigation, route }) {
     const showOrHidePointer = (ind) => {
         ref.current?.scrollTo({
             x: ind * 2000 - 500
-        }); // adjust as per your UI
+        });
     };
+
     const handlePress = (buttonName) => {
         setCurrentButton(buttonName);
         setIsPressed(true);
@@ -627,6 +641,8 @@ export default function Plant({ navigation, route }) {
     const closeInfoModal = () => {
         setShowInfo(false);
     };
+
+
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <View style={styles.container}>
@@ -708,8 +724,10 @@ export default function Plant({ navigation, route }) {
                     <View>
                         <Text style={[styles.title, { alignSelf: 'center' }]}>Overview of {nickname}'s health</Text>
                         <View>
-                            {/* <Text>Water</Text> */}
-                            <View style={{ flexDirection: 'row', marginLeft: 8, paddingTop: 10 }}>
+                            <View style={{ flexDirection: 'row', justifyContent: 'center', paddingTop: 10 }}>
+                                <Text style={[styles.title, { fontSize: 18 }]}>Sunligth, water and Diseases plot</Text>
+                            </View>
+                            <View style={{ flexDirection: 'row', justifyContent: 'center', marginLeft: 8, paddingTop: 8 }}>
                                 {months.map((item, index) => {
                                     return (
                                         <TouchableOpacity
@@ -731,7 +749,7 @@ export default function Plant({ navigation, route }) {
                             </View>
                             <LineChart
                                 scrollRef={ref}
-                                data={showWaterLine || showSunLine || showDiseasesLine ? dummyData : []}
+                                data={dummyData}
                                 data2={showWaterLine ? waterDataLine : []}
                                 data3={showSunLine ? sunDataLine : []}
                                 data4={showDiseasesLine ? diseasesDataLine : []}
@@ -739,7 +757,6 @@ export default function Plant({ navigation, route }) {
                                 endIndex4={40}
                                 thickness4={8}
                                 thickness1={0.0001}
-                                // isAnimated
                                 textColor="black"
                                 textShiftY={-2}
                                 textShiftX={-6}
@@ -798,6 +815,19 @@ export default function Plant({ navigation, route }) {
                                 </View>
                             </View>
                         </View>
+                        <View>
+                            <TextInput
+                                keyboardType="numeric"
+                                // onChangeText={handleInputChange}
+                                placeholder="Enter a number"
+                            />
+                            {/* Bottone per aggiungere il nuovo dato */}
+                            <Button
+                                title="How many glasses of water today?"
+                            // onPress={handleAddData}
+                            />
+
+                        </View>
                     </View>
                 )}
 
@@ -808,6 +838,39 @@ export default function Plant({ navigation, route }) {
                 {showWater && (
                     <View>
                         <Text style={[styles.title, { alignSelf: 'center' }]}>Water stats</Text>
+                        <View
+                            style={{
+                                margin: 10,
+                                padding: 16,
+                                borderRadius: 20,
+                                backgroundColor: '#232B5D',
+                            }}>
+                            <Text style={{ color: 'white', fontSize: 16, fontWeight: 'bold' }}>
+                                Overview
+                            </Text>
+                            <View
+                                style={{
+                                    margin: 1,
+                                    padding: 15,
+                                    borderRadius: 20,
+                                    backgroundColor: '#232B5D',
+                                }}>
+                                <View>
+                                    <BarChart
+                                        // horizontal
+                                        barWidth={22}
+                                        barBorderRadius={4}
+                                        frontColor={Colors.LIGHTBLUE}
+                                        data={waterDataLine}
+                                        rotateLabel
+                                        capColor="red"
+                                        backgroundColor={Colors.WHITE}
+                                        yAxisThickness={0}
+                                        xAxisThickness={0}
+                                    />
+                                </View>
+                            </View>
+                        </View>
                     </View>
                 )}
                 {/* -----------------------END WATER VIEW------------------------------------- */}

@@ -51,7 +51,7 @@ const { soil = "" } = route.params || {}; // Default soil to empty string
       <View style={styles.container}>
         {/* title on top */}
         <View style={{marginBottom: 30}}>
-          <Text style={styles.title}>Hello Rose</Text>
+            <Text style={styles.title}>Hello Rose</Text>
           <Text style={styles.text}>How are your plants feeling today?</Text>
         </View>
 

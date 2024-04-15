@@ -94,9 +94,8 @@ export default function AddPlant({ navigation, route}) {
                                 onChangeText={text => setHeight(text)}
                                 value={height}
                             />
-                        </View> 
+                            </View> 
                         </View>
-    
                     </View>
 
                     <View style={{marginBottom: 20, justifyContent: 'center'}}>
@@ -162,6 +161,7 @@ export default function AddPlant({ navigation, route}) {
                     </View>
                     <View style={{flex:1, marginLeft: 40, marginTop: 10}}>
                         <View style={styles.propic}>
+
                         </View>
                     </View>
                 </View>
