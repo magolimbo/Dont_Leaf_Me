@@ -2,31 +2,17 @@ import { Button, Pressable, StyleSheet, Text, View, Switch } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import React, { useState, useRef } from 'react'
 import Colors from '../../Utils/Colors'
-import { TextInput, TouchableOpacity } from 'react-native-gesture-handler'
+import { ScrollView, TextInput, TouchableOpacity } from 'react-native-gesture-handler'
 import { Feather } from '@expo/vector-icons';
 import { SimpleLineIcons } from '@expo/vector-icons';
 import { FontAwesome5, Ionicons, Fontisto } from '@expo/vector-icons';
 import { LineChart, ruleTypes, BarChart } from 'react-native-gifted-charts';
-import LinearGradient from 'react-native-linear-gradient'
+import { Dimensions } from 'react-native';
+import { FontAwesome } from '@expo/vector-icons';
 
 
 export default function Plant({ navigation, route }) {
-    const data = [
-        { value: 2500, frontColor: '#006DFF', gradientColor: '#009FFF', spacing: 6, label: 'Jan' },
-        { value: 2400, frontColor: '#3BE9DE', gradientColor: '#93FCF8' },
 
-        { value: 3500, frontColor: '#006DFF', gradientColor: '#009FFF', spacing: 6, label: 'Feb' },
-        { value: 3000, frontColor: '#3BE9DE', gradientColor: '#93FCF8' },
-
-        { value: 4500, frontColor: '#006DFF', gradientColor: '#009FFF', spacing: 6, label: 'Mar' },
-        { value: 4000, frontColor: '#3BE9DE', gradientColor: '#93FCF8' },
-
-        { value: 5200, frontColor: '#006DFF', gradientColor: '#009FFF', spacing: 6, label: 'Apr' },
-        { value: 4900, frontColor: '#3BE9DE', gradientColor: '#93FCF8' },
-
-        { value: 3000, frontColor: '#006DFF', gradientColor: '#009FFF', spacing: 6, label: 'May' },
-        { value: 2800, frontColor: '#3BE9DE', gradientColor: '#93FCF8' },
-    ];
     //------------button selected (general state, water ecc)----------------
     const [isPressed, setIsPressed] = useState(false);
     const [currentButton, setCurrentButton] = useState(null);
@@ -34,6 +20,7 @@ export default function Plant({ navigation, route }) {
     const [showSunLine, setShowSunLine] = useState(true);
     const [showDiseasesLine, setShowDiseasesLine] = useState(true);
 
+    const screenWidth = Dimensions.get('window').width;
     const ref = useRef(null)
 
     const waterDataLine = [
@@ -172,6 +159,11 @@ export default function Plant({ navigation, route }) {
         { value: 4.5, label: '9 May', dataPointText: '4.5' },
     ];
 
+    const sumWater = waterDataLine.reduce((a, b) => a + b.value, 0);
+    const avgWater = sumWater / waterDataLine.length;
+    const minWater = Math.min(...waterDataLine.map(item => item.value));
+    const maxWater = Math.max(...waterDataLine.map(item => item.value));
+
     const sunDataLine = [
         { value: 5, label: '1 Jan', dataPointText: '5' },
         { value: 4, label: '2 Jan', dataPointText: '4' },
@@ -307,6 +299,10 @@ export default function Plant({ navigation, route }) {
         { value: 5, label: '8 May', dataPointText: '5' },
         { value: 7, label: '9 May', dataPointText: '7' },
     ];
+    const sumSun = sunDataLine.reduce((a, b) => a + b.value, 0);
+    const avgSun = sumSun / sunDataLine.length;
+    const minSun = Math.min(...sunDataLine.map(item => item.value));
+    const maxSun = Math.max(...sunDataLine.map(item => item.value));
 
     const diseasesDataLine = [
         { value: 0, label: '1 Jan' },
@@ -369,7 +365,7 @@ export default function Plant({ navigation, route }) {
         { value: 0, label: '26 Feb' },
         { value: 0, label: '27 Feb' },
         { value: 0, label: '28 Feb' },
-        // Marc0
+        // March
         { value: 0, label: '1 Mar' },
         { value: 0, label: '2 Mar' },
         { value: 0, label: '3 Mar' },
@@ -429,17 +425,17 @@ export default function Plant({ navigation, route }) {
         { value: 0, label: '25 Apr' },
         { value: 0, label: '26 Apr' },
         { value: 0, label: '27 Apr' },
-        { value: 0, label: '28 Apr' },
-        { value: 0, label: '29 Apr' },
-        { value: 0, label: '30 Apr' },
+        { value: 2, label: '28 Apr' },
+        { value: 2, label: '29 Apr' },
+        { value: 2, label: '30 Apr' },
         // May
-        { value: 0, label: '1 May' },
-        { value: 0, label: '2 May' },
-        { value: 0, label: '3 May' },
-        { value: 0, label: '4 May' },
-        { value: 0, label: '5 May' },
-        { value: 0, label: '6 May' },
-        { value: 0, label: '7 May' },
+        { value: 2, label: '1 May' },
+        { value: 2, label: '2 May' },
+        { value: 2, label: '3 May' },
+        { value: 2, label: '4 May' },
+        { value: 2, label: '5 May' },
+        { value: 2, label: '6 May' },
+        { value: 2, label: '7 May' },
         { value: 0, label: '8 May' },
         { value: 0, label: '9 May' },
     ];
@@ -642,7 +638,6 @@ export default function Plant({ navigation, route }) {
         setShowInfo(false);
     };
 
-
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <View style={styles.container}>
@@ -664,7 +659,7 @@ export default function Plant({ navigation, route }) {
                     {/* Bottone per aprire il pop-up */}
                     <TouchableOpacity onPress={openInfoModal}>
                         <View style={styles.buttonBack}>
-                            <SimpleLineIcons name="magic-wand" size={24} color={Colors.WHITE} />
+                            <FontAwesome name="magic" size={24} color={Colors.WHITE} />
                         </View>
                     </TouchableOpacity>
 
@@ -721,42 +716,226 @@ export default function Plant({ navigation, route }) {
 
                 {/* -----------------------GENERAL STATE OF THE PLANT VIEW------------------------------------- */}
                 {showGeneral && (
-                    <View>
-                        <Text style={[styles.title, { alignSelf: 'center' }]}>Overview of {nickname}'s health</Text>
+                    <ScrollView showsVerticalScrollIndicator={false}>
                         <View>
-                            <View style={{ flexDirection: 'row', justifyContent: 'center', paddingTop: 10 }}>
-                                <Text style={[styles.title, { fontSize: 18 }]}>Sunligth, water and Diseases plot</Text>
+                            <Text style={[styles.title, { alignSelf: 'center' }]}>Overview of {nickname}'s health</Text>
+                            <View>
+                                <View style={{ flexDirection: 'row', justifyContent: 'center', paddingTop: 10 }}>
+                                    <Text style={[styles.title, { fontSize: 18 }]}>Sunligth, water and Diseases plot</Text>
+                                </View>
+                                <View style={{ flexDirection: 'row', justifyContent: 'center', marginLeft: 8, paddingTop: 8 }}>
+                                    {months.map((item, index) => {
+                                        return (
+                                            <TouchableOpacity
+                                                key={index}
+                                                style={{
+                                                    padding: 8,
+                                                    margin: 6,
+                                                    backgroundColor: Colors.WHITE,
+                                                    borderRadius: 8,
+                                                    borderColor: Colors.DARKGREEN,
+                                                    borderWidth: 1.5,
+                                                    elevation: 2
+                                                }}
+                                                onPress={() => showOrHidePointer(index)}>
+                                                <Text style={styles.buttonText}>{months[index]}</Text>
+                                            </TouchableOpacity>
+                                        );
+                                    })}
+                                </View>
+                                <LineChart
+                                    scrollRef={ref}
+                                    data={dummyData}
+                                    data2={showWaterLine ? waterDataLine : []}
+                                    data3={showSunLine ? sunDataLine : []}
+                                    data4={showDiseasesLine ? diseasesDataLine : []}
+                                    data5={showDiseasesLine ? diseasesDataLine : []}
+                                    startIndex4={30}
+                                    endIndex4={40}
+                                    thickness4={8}
+                                    startIndex5={117}
+                                    endIndex5={126}
+                                    thickness5={8}
+                                    thickness1={0.0001}
+                                    textColor="black"
+                                    textShiftY={-2}
+                                    textShiftX={-6}
+                                    textFontSize={15}
+                                    curved
+                                    label
+                                    maxValue={10}
+                                    showScrollIndicator={true}
+                                    scrollToEnd={true}
+                                    scrollAnimation={false}
+                                    color1="black"
+                                    color2={Colors.LIGHTBLUE}
+                                    color3='orange'
+                                    color4={Colors.PURPLE}
+                                    color5={Colors.PURPLE}
+                                    dataPointsColor1="transparent"
+                                    dataPointsColor2={Colors.LIGHTBLUE}
+                                    dataPointsColor3='orange'
+                                    dataPointsColor4={Colors.PURPLE}
+                                    dataPointsColor5={Colors.PURPLE}
+                                    height={200}
+                                    initialSpacing={0}
+                                    rotateLabel
+                                    spacing={50}
+                                    line
+                                    xAxisLabelsVerticalShift={10}
+                                />
+                                <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 20 }}>
+                                    <Text style={{ fontSize: 16, color: Colors.LIGHTBLUE, marginTop: 9 }}>Water</Text>
+                                    <View style={{ alignItems: 'center', flexDirection: 'row' }}>
+                                        <Switch
+                                            trackColor={{ false: Colors.GREY, true: Colors.LIGHTBLUE }}
+                                            thumbColor={showWaterLine ? Colors.WHITE : Colors.WHITE}
+                                            ios_backgroundColor={Colors.GREY}
+                                            onValueChange={() => setShowWaterLine((previousState) => !previousState)}
+                                            value={showWaterLine}
+                                            elevation={2}
+                                        />
+                                    </View>
+                                    <Text style={{ fontSize: 16, color: 'orange', marginTop: 9, marginLeft: 10 }}>Sun</Text>
+                                    <View style={{ alignItems: 'center', flexDirection: 'row' }}>
+                                        <Switch
+                                            trackColor={{ false: Colors.GREY, true: 'orange' }}
+                                            thumbColor={showSunLine ? Colors.WHITE : Colors.WHITE}
+                                            ios_backgroundColor={Colors.GREY}
+                                            onValueChange={() => setShowSunLine((previousState) => !previousState)}
+                                            value={showSunLine}
+                                            elevation={2}
+                                        />
+                                    </View>
+                                    <Text style={{ fontSize: 16, color: Colors.PURPLE, marginTop: 9, marginLeft: 10 }}>Diseases</Text>
+                                    <View style={{ alignItems: 'center', flexDirection: 'row' }}>
+                                        <Switch
+                                            trackColor={{ false: Colors.GREY, true: Colors.PURPLE }}
+                                            thumbColor={showDiseasesLine ? Colors.WHITE : Colors.WHITE}
+                                            ios_backgroundColor={Colors.GREY}
+                                            onValueChange={() => setShowDiseasesLine((previousState) => !previousState)}
+                                            value={showDiseasesLine}
+                                            elevation={2}
+                                        />
+                                    </View>
+                                </View>
                             </View>
-                            <View style={{ flexDirection: 'row', justifyContent: 'center', marginLeft: 8, paddingTop: 8 }}>
-                                {months.map((item, index) => {
-                                    return (
-                                        <TouchableOpacity
-                                            key={index}
-                                            style={{
-                                                padding: 8,
-                                                margin: 6,
-                                                backgroundColor: Colors.WHITE,
-                                                borderRadius: 8,
-                                                borderColor: Colors.DARKGREEN,
-                                                borderWidth: 1.5,
-                                                elevation: 2
-                                            }}
-                                            onPress={() => showOrHidePointer(index)}>
-                                            <Text style={{ color: Colors.BLACK, textAlign: 'center' }}>{months[index]}</Text>
-                                        </TouchableOpacity>
-                                    );
-                                })}
+                            <Text style={[styles.title, { alignSelf: 'center', marginTop: 10, fontSize: 20 }]}>
+                                <Text style={{ fontWeight: 'bold' }}>Take Action  </Text>
+                                <FontAwesome name="magic" size={18} color={Colors.DARKGREEN} />
+                            </Text>
+                            <View style={{ borderWidth: 1, borderColor: Colors.DARKGREEN, borderRadius: 10, marginTop: 7 }}>
+                                <Text style={[styles.text, { alignSelf: 'center', marginTop: 10, padding: 7, paddingTop: 2 }]}>
+                                    <Text style={{ fontWeight: 'bold' }}>Quick care for {nickname}:{'\n'}{'\n'}</Text>
+                                    <Text style={{ fontWeight: 'bold' }}>Light:</Text> 5-6 hours bright, indirect sunlight daily.{'\n'}
+                                    <Text style={{ fontWeight: 'bold' }}>Water:</Text> Top inch of soil dry? Water deeply, avoid overwatering.{'\n'}
+                                    <Text style={{ fontWeight: 'bold' }}>Temperature:</Text> (18-27°C), avoid drafts.{'\n'}
+                                    <Text style={{ fontWeight: 'bold' }}>Humidity:</Text> Medium to high, group plants, use a pebble tray, or humidifier.{'\n'}
+                                    <Text style={{ fontWeight: 'bold' }}>Soil:</Text> Well-draining potting mix.{'\n'}
+                                    <Text style={{ fontWeight: 'bold' }}>Bonus:</Text> Fertilize monthly (spring/summer), rotate plant, wipe leaves.{'\n'}
+                                </Text>
+
                             </View>
+                        </View>
+                    </ScrollView>
+                )}
+
+
+                {/* -----------------------END GENERAL STATE OF THE PLANT VIEW------------------------------------- */}
+
+                {/* -----------------------WATER VIEW------------------------------------- */}
+                {showWater && (
+                    <ScrollView showsVerticalScrollIndicator={false}>
+                        <View>
+                            <Text style={[styles.title, { alignSelf: 'center' }]}>Water stats</Text>
+
+                            <View>
+                                <BarChart
+                                    data={waterDataLine}
+                                    height={200}
+                                    width={screenWidth - 90}
+                                    spacing={35}
+                                    barWidth={15}
+                                    rotateLabel
+                                    barBorderRadius={20}
+                                    showScrollIndicator={true}
+                                    scrollToEnd={true}
+                                    scrollAnimation={false}
+                                    frontColor={Colors.LIGHTBLUE}
+
+                                />
+                                <View style={{ flexDirection: 'row', justifyContent: 'space-around', padding: 20, marginTop: 20 }}>
+                                    <View style={{ alignItems: 'center' }}>
+                                        <Text style={{ fontSize: 20, color: Colors.LIGHTBLUE }}>Avg</Text>
+                                        <Text style={{ fontSize: 16 }}>{parseFloat(avgWater.toFixed(1))}</Text>
+                                    </View>
+                                    <View style={{ alignItems: 'center' }}>
+                                        <Text style={{ fontSize: 20, color: Colors.LIGHTBLUE }}>Min</Text>
+                                        <Text style={{ fontSize: 16 }}>{minWater}</Text>
+                                    </View>
+                                    <View style={{ alignItems: 'center' }}>
+                                        <Text style={{ fontSize: 20, color: Colors.LIGHTBLUE }}>Max</Text>
+                                        <Text style={{ fontSize: 16 }}>{maxWater}</Text>
+                                    </View>
+                                </View>
+                            </View>
+                        </View>
+                    </ScrollView>
+                )}
+                {/* -----------------------END WATER VIEW------------------------------------- */}
+
+                {/* -----------------------SUN VIEW------------------------------------- */}
+                {showSun && (
+                    <ScrollView showsVerticalScrollIndicator={false}>
+                        <View>
+                            <Text style={[styles.title, { alignSelf: 'center' }]}>Sun and Temperature stats</Text>
+                            <View>
+                                <BarChart
+                                    data={sunDataLine}
+                                    height={200}
+                                    width={screenWidth - 90}
+                                    spacing={35}
+                                    barWidth={15}
+                                    capColor={'rgba(78, 0, 142)'}
+                                    rotateLabel
+                                    barBorderRadius={20}
+                                    showScrollIndicator={true}
+                                    scrollToEnd={true}
+                                    scrollAnimation={false}
+                                    frontColor={Colors.ORANGE}
+                                />
+                                <View style={{ flexDirection: 'row', justifyContent: 'space-around', padding: 20, marginTop: 20 }}>
+                                    <View style={{ alignItems: 'center' }}>
+                                        <Text style={{ fontSize: 20, color: 'orange' }}>Avg</Text>
+                                        <Text style={{ fontSize: 16 }}>{parseFloat(avgSun.toFixed(1))}</Text>
+                                    </View>
+                                    <View style={{ alignItems: 'center' }}>
+                                        <Text style={{ fontSize: 20, color: 'orange' }}>Min</Text>
+                                        <Text style={{ fontSize: 16 }}>{minSun}</Text>
+                                    </View>
+                                    <View style={{ alignItems: 'center' }}>
+                                        <Text style={{ fontSize: 20, color: 'orange' }}>Max</Text>
+                                        <Text style={{ fontSize: 16 }}>{maxSun}</Text>
+                                    </View>
+                                </View>
+                            </View>
+                        </View>
+                    </ScrollView>
+                )}
+                {/* -----------------------END SUN VIEW------------------------------------- */}
+
+                {/* -----------------------DISEASES VIEW------------------------------------- */}
+                {showDiseases && (
+                    <View>
+                        <Text style={[styles.title, { alignSelf: 'center' }]}>Diseases stats</Text>
+
+                        <View>
                             <LineChart
                                 scrollRef={ref}
-                                data={dummyData}
-                                data2={showWaterLine ? waterDataLine : []}
-                                data3={showSunLine ? sunDataLine : []}
-                                data4={showDiseasesLine ? diseasesDataLine : []}
-                                startIndex4={30}
-                                endIndex4={40}
-                                thickness4={8}
-                                thickness1={0.0001}
+                                data={diseasesDataLine}
+                                startIndex={30}
+                                endIndex={40}
+                                thickness={15}
                                 textColor="black"
                                 textShiftY={-2}
                                 textShiftX={-6}
@@ -767,126 +946,17 @@ export default function Plant({ navigation, route }) {
                                 showScrollIndicator={true}
                                 scrollToEnd={true}
                                 scrollAnimation={false}
-                                color1="black"
-                                color2={Colors.LIGHTBLUE}
-                                color3='orange'
-                                color4={Colors.PURPLE}
-                                dataPointsColor1="transparent"
-                                dataPointsColor2={Colors.LIGHTBLUE}
-                                dataPointsColor3='orange'
-                                dataPointsColor4={Colors.PURPLE}
+                                color={Colors.PURPLE}
+                                dataPointsColor={Colors.PURPLE}
                                 height={200}
                                 initialSpacing={0}
                                 rotateLabel
                                 spacing={50}
-                                line
+                                // line
                                 xAxisLabelsVerticalShift={10}
                             />
-                            <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 20 }}>
-                                <View style={{ alignItems: 'center', flexDirection: 'row' }}>
-                                    <Switch
-                                        trackColor={{ false: Colors.GREY, true: Colors.LIGHTBLUE }}
-                                        thumbColor={showWaterLine ? Colors.WHITE : Colors.WHITE}
-                                        ios_backgroundColor={Colors.GREY}
-                                        onValueChange={() => setShowWaterLine((previousState) => !previousState)}
-                                        value={showWaterLine}
-                                        elevation={2}
-                                    />
-                                </View>
-                                <View style={{ alignItems: 'center', flexDirection: 'row' }}>
-                                    <Switch
-                                        trackColor={{ false: Colors.GREY, true: 'orange' }}
-                                        thumbColor={showSunLine ? Colors.WHITE : Colors.WHITE}
-                                        ios_backgroundColor={Colors.GREY}
-                                        onValueChange={() => setShowSunLine((previousState) => !previousState)}
-                                        value={showSunLine}
-                                        elevation={2}
-                                    />
-                                </View>
-                                <View style={{ alignItems: 'center', flexDirection: 'row' }}>
-                                    <Switch
-                                        trackColor={{ false: Colors.GREY, true: Colors.PURPLE }}
-                                        thumbColor={showDiseasesLine ? Colors.WHITE : Colors.WHITE}
-                                        ios_backgroundColor={Colors.GREY}
-                                        onValueChange={() => setShowDiseasesLine((previousState) => !previousState)}
-                                        value={showDiseasesLine}
-                                        elevation={2}
-                                    />
-                                </View>
-                            </View>
                         </View>
-                        <View>
-                            <TextInput
-                                keyboardType="numeric"
-                                // onChangeText={handleInputChange}
-                                placeholder="Enter a number"
-                            />
-                            {/* Bottone per aggiungere il nuovo dato */}
-                            <Button
-                                title="How many glasses of water today?"
-                            // onPress={handleAddData}
-                            />
 
-                        </View>
-                    </View>
-                )}
-
-
-                {/* -----------------------END GENERAL STATE OF THE PLANT VIEW------------------------------------- */}
-
-                {/* -----------------------WATER VIEW------------------------------------- */}
-                {showWater && (
-                    <View>
-                        <Text style={[styles.title, { alignSelf: 'center' }]}>Water stats</Text>
-                        <View
-                            style={{
-                                margin: 10,
-                                padding: 16,
-                                borderRadius: 20,
-                                backgroundColor: '#232B5D',
-                            }}>
-                            <Text style={{ color: 'white', fontSize: 16, fontWeight: 'bold' }}>
-                                Overview
-                            </Text>
-                            <View
-                                style={{
-                                    margin: 1,
-                                    padding: 15,
-                                    borderRadius: 20,
-                                    backgroundColor: '#232B5D',
-                                }}>
-                                <View>
-                                    <BarChart
-                                        // horizontal
-                                        barWidth={22}
-                                        barBorderRadius={4}
-                                        frontColor={Colors.LIGHTBLUE}
-                                        data={waterDataLine}
-                                        rotateLabel
-                                        capColor="red"
-                                        backgroundColor={Colors.WHITE}
-                                        yAxisThickness={0}
-                                        xAxisThickness={0}
-                                    />
-                                </View>
-                            </View>
-                        </View>
-                    </View>
-                )}
-                {/* -----------------------END WATER VIEW------------------------------------- */}
-
-                {/* -----------------------SUN VIEW------------------------------------- */}
-                {showSun && (
-                    <View>
-                        <Text style={[styles.title, { alignSelf: 'center' }]}>Sun and Temperature stats</Text>
-                    </View>
-                )}
-                {/* -----------------------END SUN VIEW------------------------------------- */}
-
-                {/* -----------------------DISEASES VIEW------------------------------------- */}
-                {showDiseases && (
-                    <View>
-                        <Text style={[styles.title, { alignSelf: 'center' }]}>Diseases stats</Text>
                     </View>
                 )}
                 {/* -----------------------END DISEASES VIEW------------------------------------- */}
@@ -921,6 +991,11 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         textAlign: 'left',
     },
+    text: {
+        fontSize: 15,
+        color: 'black',
+        fontFamily: "Raleway_400Regular",
+    },
     buttonStats: {
         width: 60,
         height: 60,
@@ -949,8 +1024,9 @@ const styles = StyleSheet.create({
         borderRadius: 8,
     },
     buttonText: {
-        color: Colors.WHITE,
         textAlign: 'center',
+        color: 'black',
+        fontFamily: "Raleway_400Regular",
     },
     modalContainer: {
         flex: 1,
