@@ -1,10 +1,9 @@
 import { Button, Pressable, StyleSheet, Text, View, Switch, Alert, Modal } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import Colors from '../../Utils/Colors'
 import { ScrollView, TextInput, TouchableOpacity } from 'react-native-gesture-handler'
 import { Feather } from '@expo/vector-icons';
-import { SimpleLineIcons } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
 import { FontAwesome, FontAwesome5, Ionicons, Fontisto } from '@expo/vector-icons';
 import { LineChart, ruleTypes, BarChart } from 'react-native-gifted-charts';
@@ -19,7 +18,6 @@ export default function Plant({ navigation, route }) {
     const [showWaterLine, setShowWaterLine] = useState(true);
     const [showSunLine, setShowSunLine] = useState(true);
     const [showDiseasesLine, setShowDiseasesLine] = useState(true);
-    const [set2Glasses] = useState(false);
 
     const screenWidth = Dimensions.get('window').width;
     const ref = useRef(null)
@@ -160,9 +158,6 @@ export default function Plant({ navigation, route }) {
         { value: 4.5, label: '9 May', dataPointText: '4.5' },
     ]);
 
-    const openInputWater = () => {
-
-    }
 
     const handleAddData = (inputValue) => {
         if (inputValue.trim() !== '') {
@@ -193,8 +188,6 @@ export default function Plant({ navigation, route }) {
     };
 
     const [inputValue, setInputValue] = useState('');
-    const twoGlasses = useState('2');
-
 
     const sumWater = waterDataLine.reduce((a, b) => a + b.value, 0);
     const avgWater = sumWater / waterDataLine.length;
@@ -668,17 +661,25 @@ export default function Plant({ navigation, route }) {
     //------------------------------------------------------
     const [showInfo, setShowInfo] = useState(false);
 
+    {/** SCROLLING OF 2 GRAPHS AT THE SAME TIME */ }
+    const scrollRef1 = useRef();
+    const scrollRef2 = useRef();
+    const handleScroll1 = (event) => {
+        const scrollPosition = event.nativeEvent.contentOffset.x;
+        scrollRef2.current.scrollTo({ x: scrollPosition });
+    };
+
+    const handleScroll2 = (event) => {
+        const scrollPosition = event.nativeEvent.contentOffset.x;
+        scrollRef1.current.scrollTo({ x: scrollPosition });
+    };
     const openAIModal = () => {
         setShowInfo(true);
     };
 
-    const closeAIModal = () => {
-        setShowInfo(false);
-    };
-
-    const openInputWaterModal = () => {
-        setShowInputWater(true);
-    }
+    useEffect(() => {
+        handlePress('button1')
+    }, []);
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
@@ -796,7 +797,7 @@ export default function Plant({ navigation, route }) {
                                                 </Pressable>
                                                 <Pressable
                                                     style={[styles.button, styles.buttonClose]}
-                                                    // onPress={() => handleAddData(inputValue)}>
+                                                    // onPress={openInputWaterModal}>
                                                     onPress={() => setShowInputWater(!showInputWater)}>
                                                     <Text style={[styles.text, { color: 'white' }]}>NO</Text>
                                                 </Pressable>
@@ -830,10 +831,10 @@ export default function Plant({ navigation, route }) {
                                     <Modal
                                         animationType="fade"
                                         transparent={false}
-                                        visible={!showInputWater}
+                                        visible={showInputWater}
                                         onRequestClose={() => {
                                             Alert.alert('Modal has been closed.');
-                                            setShowInput(!showInputWater);
+                                            setShowInput(showInputWater);
                                         }}>
                                         <View style={styles.centeredView}>
                                             <TextInput
@@ -845,11 +846,11 @@ export default function Plant({ navigation, route }) {
                                             <Button title="ADD" onPress={handleAddDataWater(inputValue)} />
                                         </View>
                                     </Modal>
-                            </View>
+                                </View>
                             )}
 
                             <View>
-                                <View style={{ flexDirection: 'row', justifyContent: 'center', paddingTop: 10 }}>
+                                <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
                                     <Text style={[styles.title, { fontSize: 18 }]}>Sunligth, water and Diseases plot</Text>
                                 </View>
                                 <View style={{ flexDirection: 'row', justifyContent: 'center', marginLeft: 8, paddingTop: 8 }}>
@@ -915,6 +916,110 @@ export default function Plant({ navigation, route }) {
                                     line
                                     xAxisLabelsVerticalShift={10}
                                 />
+                                {/** TRYING TO FIGURE OUT HOW TO SCROLL BOTH GRAPHS */}
+                                {/* <View>
+                                    <ScrollView
+                                        ref={scrollRef1}
+                                        horizontal
+                                        onScroll={handleScroll1}
+                                        scrollEventThrottle={25} // controlla la frequenza degli eventi di scorrimento
+                                    >
+                                        <LineChart
+                                            scrollRef={ref}
+                                            data={dummyData}
+                                            data2={showWaterLine ? waterDataLine : []}
+                                            data3={showSunLine ? sunDataLine : []}
+                                            data4={showDiseasesLine ? diseasesDataLine : []}
+                                            data5={showDiseasesLine ? diseasesDataLine : []}
+                                            startIndex4={30}
+                                            endIndex4={40}
+                                            thickness4={8}
+                                            startIndex5={117}
+                                            endIndex5={126}
+                                            thickness5={8}
+                                            thickness1={0.0001}
+                                            textColor="black"
+                                            textShiftY={-2}
+                                            textShiftX={-6}
+                                            textFontSize={15}
+                                            curved
+                                            label
+                                            secondaryYAxis={true}
+                                            maxValue2={10}
+                                            maxValue={10}
+                                            showScrollIndicator={true}
+                                            scrollToEnd={true}
+                                            scrollAnimation={false}
+                                            color1="black"
+                                            color2={Colors.LIGHTBLUE}
+                                            color3='orange'
+                                            color4={Colors.PURPLE}
+                                            color5={Colors.PURPLE}
+                                            dataPointsColor1="transparent"
+                                            dataPointsColor2={Colors.LIGHTBLUE}
+                                            dataPointsColor3='orange'
+                                            dataPointsColor4={Colors.PURPLE}
+                                            dataPointsColor5={Colors.PURPLE}
+                                            height={200}
+                                            initialSpacing={0}
+                                            rotateLabel
+                                            spacing={50}
+                                            line
+                                            xAxisLabelsVerticalShift={10}
+                                        />
+                                    </ScrollView>
+                                    <ScrollView
+                                        ref={scrollRef2}
+                                        horizontal
+                                        onScroll={handleScroll2}
+                                        scrollEventThrottle={25} // controlla la frequenza degli eventi di scorrimento
+                                    >
+                                        <LineChart
+                                            scrollRef={ref}
+                                            data={dummyData}
+                                            data2={showWaterLine ? waterDataLine : []}
+                                            data3={showSunLine ? sunDataLine : []}
+                                            data4={showDiseasesLine ? diseasesDataLine : []}
+                                            data5={showDiseasesLine ? diseasesDataLine : []}
+                                            startIndex4={30}
+                                            endIndex4={40}
+                                            thickness4={8}
+                                            startIndex5={117}
+                                            endIndex5={126}
+                                            thickness5={8}
+                                            thickness1={0.0001}
+                                            textColor="black"
+                                            textShiftY={-2}
+                                            textShiftX={-6}
+                                            textFontSize={15}
+                                            curved
+                                            label
+                                            secondaryYAxis={true}
+                                            maxValue2={10}
+                                            maxValue={10}
+                                            showScrollIndicator={true}
+                                            scrollToEnd={true}
+                                            scrollAnimation={false}
+                                            color1="black"
+                                            color2={Colors.LIGHTBLUE}
+                                            color3='orange'
+                                            color4={Colors.PURPLE}
+                                            color5={Colors.PURPLE}
+                                            dataPointsColor1="transparent"
+                                            dataPointsColor2={Colors.LIGHTBLUE}
+                                            dataPointsColor3='orange'
+                                            dataPointsColor4={Colors.PURPLE}
+                                            dataPointsColor5={Colors.PURPLE}
+                                            height={200}
+                                            initialSpacing={0}
+                                            rotateLabel
+                                            spacing={50}
+                                            line
+                                            xAxisLabelsVerticalShift={10}
+                                        />
+                                    </ScrollView>
+                                </View> */}
+
                                 <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 20 }}>
                                     <Text style={{ fontSize: 16, color: Colors.LIGHTBLUE, marginTop: 9 }}>Water</Text>
                                     <View style={{ alignItems: 'center', flexDirection: 'row' }}>
