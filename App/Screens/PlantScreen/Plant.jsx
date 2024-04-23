@@ -1,15 +1,15 @@
-import { Button, Pressable, StyleSheet, Text, View, Switch } from 'react-native'
+import { Button, Pressable, StyleSheet, Text, View, Switch, Alert, Modal } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import React, { useState, useRef } from 'react'
 import Colors from '../../Utils/Colors'
 import { ScrollView, TextInput, TouchableOpacity } from 'react-native-gesture-handler'
 import { Feather } from '@expo/vector-icons';
 import { SimpleLineIcons } from '@expo/vector-icons';
-import { FontAwesome5, Ionicons, Fontisto } from '@expo/vector-icons';
+import { Entypo } from '@expo/vector-icons';
+import { FontAwesome, FontAwesome5, Ionicons, Fontisto } from '@expo/vector-icons';
 import { LineChart, ruleTypes, BarChart } from 'react-native-gifted-charts';
 import { Dimensions } from 'react-native';
-import { FontAwesome } from '@expo/vector-icons';
-
+import moment from 'moment';
 
 export default function Plant({ navigation, route }) {
 
@@ -23,7 +23,7 @@ export default function Plant({ navigation, route }) {
     const screenWidth = Dimensions.get('window').width;
     const ref = useRef(null)
 
-    const waterDataLine = [
+    const [waterDataLine, setWaterData] = useState([
         { value: 2.5, label: '1 Jan', dataPointText: '2.5' },
         { value: 3.0, label: '2 Jan', dataPointText: '3.0' },
         { value: 2.0, label: '3 Jan', dataPointText: '2.0' },
@@ -157,7 +157,19 @@ export default function Plant({ navigation, route }) {
         { value: 2.5, label: '7 May', dataPointText: '2.5' },
         { value: 3.5, label: '8 May', dataPointText: '3.5' },
         { value: 4.5, label: '9 May', dataPointText: '4.5' },
-    ];
+    ]);
+
+    const handleAddData = () => {
+        if (inputValue.trim() !== '') {
+            const newValue = parseFloat(inputValue);
+            const newDataPoint = { value: newValue, label: '10 May', dataPointText: String(newValue) };
+            setWaterData([...waterDataLine, newDataPoint]); // Aggiungi il nuovo dato al dataset esistente
+            setInputValue(''); // Resetta il valore dell'input
+        }
+    };
+
+    const [inputValue, setInputValue] = useState('');
+
 
     const sumWater = waterDataLine.reduce((a, b) => a + b.value, 0);
     const avgWater = sumWater / waterDataLine.length;
@@ -623,6 +635,7 @@ export default function Plant({ navigation, route }) {
     //------------END button selected (general state, water ecc)----------------
 
     //------------manage views----------------------------
+    const [showInput, setShowInput] = useState(true);
     const [showGeneral, setShowGeneral] = useState(true);
     const [showWater, setShowWater] = useState(false);
     const [showSun, setShowSun] = useState(false);
@@ -637,6 +650,8 @@ export default function Plant({ navigation, route }) {
     const closeInfoModal = () => {
         setShowInfo(false);
     };
+
+
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
@@ -718,6 +733,60 @@ export default function Plant({ navigation, route }) {
                 {showGeneral && (
                     <ScrollView showsVerticalScrollIndicator={false}>
                         <View>
+
+                            <View style={styles.centeredView}>
+                                <Modal
+                                    animationType="fade"
+                                    transparent={false}
+                                    visible={showInput}
+                                    onRequestClose={() => {
+                                        Alert.alert('Modal has been closed.');
+                                        setShowInput(!showInput);
+                                    }}>
+                                    <View style={styles.centeredView}>
+                                        <View style={styles.modalView}>
+                                            <Text style={styles.text}>The optimal amount of water
+                                                <Text style={{ fontWeight: 'bold' }}> {nickname}</Text> needs today is 2 glasses of water. Did you put this amount?</Text>
+                                            <View style={{ flexDirection: 'row' }}>
+                                                <Pressable
+                                                    style={[styles.button, styles.buttonClose]}
+                                                    onPress={() => setShowInput(!showInput)}>
+                                                    <Text style={[styles.text, { color: 'white' }]}>YES</Text>
+                                                </Pressable>
+                                                <Pressable
+                                                    style={[styles.button, styles.buttonClose]}
+                                                    onPress={() => setShowInput(!showInput)}>
+                                                    <Text style={[styles.text, { color: 'white' }]}>NO</Text>
+                                                </Pressable>
+                                            </View>
+                                            <Text style={styles.text}>How is <Text style={{ fontWeight: 'bold' }}>{nickname}</Text> looking today?</Text>
+                                            <View style={{ flexDirection: 'row' }}>
+                                                <Pressable
+                                                    style={[styles.button, styles.buttonClose]}
+                                                    onPress={() => setShowInput(!showInput)}>
+                                                    <Entypo name="emoji-sad" size={24} color='white' />
+                                                </Pressable>
+                                                <Pressable
+                                                    style={[styles.button, styles.buttonClose]}
+                                                    onPress={() => setShowInput(!showInput)}>
+                                                    <Entypo name="emoji-neutral" size={24} color='white' />
+                                                </Pressable>
+                                                <Pressable
+                                                    style={[styles.button, styles.buttonClose]}
+                                                    onPress={() => setShowInput(!showInput)}>
+                                                    <Entypo name="emoji-happy" size={24} color='white' />
+                                                </Pressable>
+                                            </View>
+                                        </View>
+                                    </View>
+                                </Modal>
+                                <Pressable
+                                    style={[styles.button, styles.buttonOpen]}
+                                    onPress={() => setShowInput(true)}>
+                                    <Text style={styles.textStyle}>INPUT</Text>
+                                </Pressable>
+                            </View>
+
                             <Text style={[styles.title, { alignSelf: 'center' }]}>Overview of {nickname}'s health</Text>
                             <View>
                                 <View style={{ flexDirection: 'row', justifyContent: 'center', paddingTop: 10 }}>
@@ -743,6 +812,13 @@ export default function Plant({ navigation, route }) {
                                         );
                                     })}
                                 </View>
+                                <TextInput
+                                    placeholder="Inserisci il nuovo valore"
+                                    onChangeText={setInputValue}
+                                    value={inputValue}
+                                    keyboardType="numeric" // Per consentire solo input numerici
+                                />
+                                <Button title="Aggiungi" onPress={handleAddData} />
                                 <LineChart
                                     scrollRef={ref}
                                     data={dummyData}
@@ -763,6 +839,8 @@ export default function Plant({ navigation, route }) {
                                     textFontSize={15}
                                     curved
                                     label
+                                    secondaryYAxis={true}
+                                    maxValue2={10}
                                     maxValue={10}
                                     showScrollIndicator={true}
                                     scrollToEnd={true}
@@ -818,6 +896,9 @@ export default function Plant({ navigation, route }) {
                                             elevation={2}
                                         />
                                     </View>
+                                </View>
+                                <View>
+                                    <Text style={[styles.text, { alignSelf: 'center', fontSize: 8 }]}> The water is mesured in glasses, while the sunligth in hours of exposition</Text>
                                 </View>
                             </View>
                             <Text style={[styles.title, { alignSelf: 'center', marginTop: 10, fontSize: 20 }]}>
@@ -952,7 +1033,6 @@ export default function Plant({ navigation, route }) {
                                 initialSpacing={0}
                                 rotateLabel
                                 spacing={50}
-                                // line
                                 xAxisLabelsVerticalShift={10}
                             />
                         </View>
@@ -972,6 +1052,27 @@ const styles = StyleSheet.create({
         padding: 20,
         // borderColor: 'green',
         // borderWidth: 1
+    },
+    centeredView: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 22,
+    },
+    modalView: {
+        margin: 20,
+        backgroundColor: 'white',
+        borderRadius: 20,
+        padding: 35,
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
     },
     buttonBack: {
         backgroundColor: Colors.ORANGE,
@@ -1022,6 +1123,17 @@ const styles = StyleSheet.create({
         padding: 8,
         margin: 6,
         borderRadius: 8,
+    },
+    buttonInput: {
+        borderRadius: 20,
+        padding: 10,
+        elevation: 2,
+    },
+    buttonOpen: {
+        backgroundColor: Colors.DARKGREEN,
+    },
+    buttonClose: {
+        backgroundColor: Colors.DARKGREEN,
     },
     buttonText: {
         textAlign: 'center',
