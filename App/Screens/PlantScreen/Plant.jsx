@@ -19,6 +19,7 @@ export default function Plant({ navigation, route }) {
     const [showWaterLine, setShowWaterLine] = useState(true);
     const [showSunLine, setShowSunLine] = useState(true);
     const [showDiseasesLine, setShowDiseasesLine] = useState(true);
+    const [set2Glasses] = useState(false);
 
     const screenWidth = Dimensions.get('window').width;
     const ref = useRef(null)
@@ -159,16 +160,40 @@ export default function Plant({ navigation, route }) {
         { value: 4.5, label: '9 May', dataPointText: '4.5' },
     ]);
 
-    const handleAddData = () => {
+    const openInputWater = () => {
+
+    }
+
+    const handleAddData = (inputValue) => {
         if (inputValue.trim() !== '') {
             const newValue = parseFloat(inputValue);
             const newDataPoint = { value: newValue, label: '10 May', dataPointText: String(newValue) };
-            setWaterData([...waterDataLine, newDataPoint]); // Aggiungi il nuovo dato al dataset esistente
-            setInputValue(''); // Resetta il valore dell'input
+            setWaterData([...waterDataLine, newDataPoint]); // Add new data point to the current dataset
+            setInputValue(''); // Reset the input field
+            setShowInput(!showInput)
+        }
+        else if (inputValue.trim() === '2') {
+            const newValue = parseFloat(inputValue);
+            const newDataPoint = { value: newValue, label: '10 May', dataPointText: String(newValue) };
+            setWaterData([...waterDataLine, newDataPoint]); // Add new data point to the current dataset
+            setInputValue(''); // Reset the input field
+            setShowInput(!showInput)
+        }
+    };
+
+    const handleAddDataWater = (inputValue) => {
+        if (inputValue.trim() !== '') {
+            const newValue = parseFloat(inputValue);
+            const newDataPoint = { value: newValue, label: '10 May', dataPointText: String(newValue) };
+            setWaterData([...waterDataLine, newDataPoint]); // Add new data point to the current dataset
+            setInputValue(''); // Reset the input field
+            setShowInputWater(!showInputWater)
+            setShowInput(!showInput)
         }
     };
 
     const [inputValue, setInputValue] = useState('');
+    const twoGlasses = useState('2');
 
 
     const sumWater = waterDataLine.reduce((a, b) => a + b.value, 0);
@@ -599,7 +624,6 @@ export default function Plant({ navigation, route }) {
     const handlePress = (buttonName) => {
         setCurrentButton(buttonName);
         setIsPressed(true);
-
         switch (buttonName) {
             case 'button1':
                 setShowGeneral(true);
@@ -636,6 +660,7 @@ export default function Plant({ navigation, route }) {
 
     //------------manage views----------------------------
     const [showInput, setShowInput] = useState(true);
+    const [showInputWater, setShowInputWater] = useState(false);
     const [showGeneral, setShowGeneral] = useState(true);
     const [showWater, setShowWater] = useState(false);
     const [showSun, setShowSun] = useState(false);
@@ -643,15 +668,17 @@ export default function Plant({ navigation, route }) {
     //------------------------------------------------------
     const [showInfo, setShowInfo] = useState(false);
 
-    const openInfoModal = () => {
+    const openAIModal = () => {
         setShowInfo(true);
     };
 
-    const closeInfoModal = () => {
+    const closeAIModal = () => {
         setShowInfo(false);
     };
 
-
+    const openInputWaterModal = () => {
+        setShowInputWater(true);
+    }
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
@@ -671,25 +698,12 @@ export default function Plant({ navigation, route }) {
                     </View>
 
 
-                    {/* Bottone per aprire il pop-up */}
-                    <TouchableOpacity onPress={openInfoModal}>
+                    {/* Button fo AI Pop-up*/}
+                    <TouchableOpacity onPress={openAIModal}>
                         <View style={styles.buttonBack}>
                             <FontAwesome name="magic" size={24} color={Colors.WHITE} />
                         </View>
                     </TouchableOpacity>
-
-                    {/* Pop-up */}
-                    {showInfo && (
-                        <View style={styles.modalContainer}>
-                            <View style={styles.modalContent}>
-                                {/* Contenuto del pop-up */}
-                                <Text style={styles.infoText}>This function will be implemented soon!</Text>
-                                <TouchableOpacity onPress={closeInfoModal}>
-                                    <Fontisto name="close" size={30} color={Colors.DARKGREEN} />
-                                </TouchableOpacity>
-                            </View>
-                        </View>
-                    )}
 
                 </View>
                 {/* ---------------------------END HEADER------------------------------ */}
@@ -733,7 +747,33 @@ export default function Plant({ navigation, route }) {
                 {showGeneral && (
                     <ScrollView showsVerticalScrollIndicator={false}>
                         <View>
+                            {/* Pop-up AI section */}
+                            {showInfo && (
+                                <View style={styles.centeredView}>
+                                    <Modal
+                                        animationType="fade"
+                                        transparent={false}
+                                        visible={showInfo}
+                                        onRequestClose={() => {
+                                            Alert.alert('Modal has been closed.');
+                                            setShowInfo(!showInfo);
+                                        }}>
+                                        <View style={styles.centeredView}>
+                                            <View style={styles.modalView}>
+                                                <Text style={styles.text}>THIS FUNCTION WILL BE IMPLEMENTED SOON!</Text>
+                                                <Pressable
+                                                    style={[styles.button, styles.buttonOpen, { marginTop: 10 }]}
+                                                    onPress={() => setShowInfo(false)}>
+                                                    <Text style={[styles.textStyle, { color: 'white' }]}>CLOSE</Text>
+                                                </Pressable>
+                                            </View>
+                                        </View>
+                                    </Modal>
+                                </View>
+                            )}
+                            <Text style={[styles.title, { alignSelf: 'center' }]}>Overview of {nickname}'s health</Text>
 
+                            {/* Pop-up INPUT*/}
                             <View style={styles.centeredView}>
                                 <Modal
                                     animationType="fade"
@@ -746,16 +786,18 @@ export default function Plant({ navigation, route }) {
                                     <View style={styles.centeredView}>
                                         <View style={styles.modalView}>
                                             <Text style={styles.text}>The optimal amount of water
-                                                <Text style={{ fontWeight: 'bold' }}> {nickname}</Text> needs today is 2 glasses of water. Did you put this amount?</Text>
+                                                <Text style={{ fontWeight: 'bold' }}> {nickname}</Text> needs today is
+                                                <Text style={{ fontWeight: 'bold' }}> 2 glasses </Text> of water. Did you put this amount?</Text>
                                             <View style={{ flexDirection: 'row' }}>
                                                 <Pressable
                                                     style={[styles.button, styles.buttonClose]}
-                                                    onPress={() => setShowInput(!showInput)}>
+                                                    onPress={() => handleAddData('2')}>
                                                     <Text style={[styles.text, { color: 'white' }]}>YES</Text>
                                                 </Pressable>
                                                 <Pressable
                                                     style={[styles.button, styles.buttonClose]}
-                                                    onPress={() => setShowInput(!showInput)}>
+                                                    // onPress={() => handleAddData(inputValue)}>
+                                                    onPress={() => setShowInputWater(!showInputWater)}>
                                                     <Text style={[styles.text, { color: 'white' }]}>NO</Text>
                                                 </Pressable>
                                             </View>
@@ -780,14 +822,32 @@ export default function Plant({ navigation, route }) {
                                         </View>
                                     </View>
                                 </Modal>
-                                <Pressable
-                                    style={[styles.button, styles.buttonOpen]}
-                                    onPress={() => setShowInput(true)}>
-                                    <Text style={styles.textStyle}>INPUT</Text>
-                                </Pressable>
                             </View>
 
-                            <Text style={[styles.title, { alignSelf: 'center' }]}>Overview of {nickname}'s health</Text>
+                            {/* Pop-up INPUT WATER*/}
+                            {showInputWater && (
+                                <View style={styles.centeredView}>
+                                    <Modal
+                                        animationType="fade"
+                                        transparent={false}
+                                        visible={!showInputWater}
+                                        onRequestClose={() => {
+                                            Alert.alert('Modal has been closed.');
+                                            setShowInput(!showInputWater);
+                                        }}>
+                                        <View style={styles.centeredView}>
+                                            <TextInput
+                                                placeholder="How many glasses of water did you put today?"
+                                                onChangeText={setInputValue}
+                                                value={inputValue}
+                                                keyboardType="numeric" // Only numeric inputs
+                                            />
+                                            <Button title="ADD" onPress={handleAddDataWater(inputValue)} />
+                                        </View>
+                                    </Modal>
+                            </View>
+                            )}
+
                             <View>
                                 <View style={{ flexDirection: 'row', justifyContent: 'center', paddingTop: 10 }}>
                                     <Text style={[styles.title, { fontSize: 18 }]}>Sunligth, water and Diseases plot</Text>
@@ -812,13 +872,6 @@ export default function Plant({ navigation, route }) {
                                         );
                                     })}
                                 </View>
-                                <TextInput
-                                    placeholder="Inserisci il nuovo valore"
-                                    onChangeText={setInputValue}
-                                    value={inputValue}
-                                    keyboardType="numeric" // Per consentire solo input numerici
-                                />
-                                <Button title="Aggiungi" onPress={handleAddData} />
                                 <LineChart
                                     scrollRef={ref}
                                     data={dummyData}
