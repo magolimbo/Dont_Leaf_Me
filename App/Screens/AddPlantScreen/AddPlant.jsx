@@ -1,4 +1,4 @@
-import { Button, StyleSheet, Text, View} from 'react-native'
+import { Button, StyleSheet, Text, View, Image } from 'react-native'
 import {Picker} from '@react-native-picker/picker';
 import { SafeAreaView } from 'react-native-safe-area-context'
 import React, { useEffect, useState } from 'react'
@@ -10,6 +10,7 @@ import { Raleway_400Regular } from "@expo-google-fonts/raleway";
 import { Raleway_800ExtraBold } from "@expo-google-fonts/raleway";
 import { useFonts } from "expo-font";
 import { AntDesign } from '@expo/vector-icons';
+import { FontAwesome } from '@expo/vector-icons';
 
 export default function AddPlant({ navigation, route}) {
 
@@ -61,6 +62,11 @@ export default function AddPlant({ navigation, route}) {
                     {/* PROFILE PICTURE */}
                     <View style={{alignItems: 'center'}}>
                         <View style={styles.propic}>
+                            <Image
+                                source={require('./../../../assets/images/Plant_1.png')} // replace with the path to your image
+                                style={{ width: '90%', height: '90%' }}
+                                resizeMode="contain"
+                            />
                         </View>
                         <Text style={{fontFamily:'Raleway_400Regular', color: Colors.WHITE, marginBottom: 30}}>Pro Pic</Text>
                     </View>
@@ -161,7 +167,7 @@ export default function AddPlant({ navigation, route}) {
                     </View>
                     <View style={{flex:1, marginLeft: 40, marginTop: 10}}>
                         <View style={styles.propic}>
-
+                            <FontAwesome name="camera" size={34} color={Colors.ORANGE} />
                         </View>
                     </View>
                 </View>
@@ -215,7 +221,9 @@ const styles = StyleSheet.create({
         marginBottom: 30,
     },
     propic: {
-        backgroundColor: Colors.ORANGE,
+        backgroundColor: Colors.WHITE,
+        borderColor: Colors.ORANGE,
+        borderWidth: 2,
         padding: 10,
         width: 100,
         height: 100,

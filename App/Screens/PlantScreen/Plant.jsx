@@ -1,14 +1,16 @@
-import { Button, Pressable, StyleSheet, Text, View, Switch, Alert, Modal } from 'react-native'
+import { Button, Pressable, StyleSheet, Text, View, Switch, Alert, Modal, Image } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef, useEffect, Component } from 'react'
 import Colors from '../../Utils/Colors'
 import { ScrollView, TextInput, TouchableOpacity } from 'react-native-gesture-handler'
 import { Feather } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
 import { FontAwesome, FontAwesome5, Ionicons, Fontisto } from '@expo/vector-icons';
-import { LineChart, ruleTypes, BarChart } from 'react-native-gifted-charts';
+import { LineChart, ruleTypes, BarChart, PieChart } from 'react-native-gifted-charts';
 import { Dimensions } from 'react-native';
-import moment from 'moment';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import TableAvg from './table';
+
 
 export default function Plant({ navigation, route }) {
 
@@ -18,9 +20,45 @@ export default function Plant({ navigation, route }) {
     const [showWaterLine, setShowWaterLine] = useState(true);
     const [showSunLine, setShowSunLine] = useState(true);
     const [showDiseasesLine, setShowDiseasesLine] = useState(true);
+    const [showChartWater, setShowChartWater] = useState(true);
+    const [showMonthAverageLine, setShowMonthAverageLine] = useState(false);
 
     const screenWidth = Dimensions.get('window').width;
     const ref = useRef(null)
+
+
+
+    const handleAddData = (inputValue) => {
+        if (inputValue.trim() !== '') {
+            const newValue = parseFloat(inputValue);
+            const newDataPoint = { value: newValue, label: '10 May', dataPointText: String(newValue) };
+            setWaterData([...waterDataLine, newDataPoint]); // Add new data point to the current dataset
+            setInputValue(''); // Reset the input field
+            setShowInput(!showInput)
+        }
+        else if (inputValue.trim() === '2') {
+            const newValue = parseFloat(inputValue);
+            const newDataPoint = { value: newValue, label: '10 May', dataPointText: String(newValue) };
+            setWaterData([...waterDataLine, newDataPoint]); // Add new data point to the current dataset
+            setInputValue(''); // Reset the input field
+            setShowInput(!showInput)
+        }
+    };
+
+
+    const handleAddDataWater = (inputValue) => {
+        if (inputValue.trim() !== '') {
+            const newValue = parseFloat(inputValue);
+            const newDataPoint = { value: newValue, label: '10 May', dataPointText: String(newValue) };
+            setWaterData([...waterDataLine, newDataPoint]); // Add new data point to the current dataset
+            setInputValue(''); // Reset the input field
+            setShowInputWater(!showInputWater)
+            setShowInput(!showInput)
+        }
+    };
+
+
+    const [inputValue, setInputValue] = useState('');
 
     const [waterDataLine, setWaterData] = useState([
         { value: 2.5, label: '1 Jan', dataPointText: '2.5' },
@@ -157,37 +195,6 @@ export default function Plant({ navigation, route }) {
         { value: 3.5, label: '8 May', dataPointText: '3.5' },
         { value: 4.5, label: '9 May', dataPointText: '4.5' },
     ]);
-
-
-    const handleAddData = (inputValue) => {
-        if (inputValue.trim() !== '') {
-            const newValue = parseFloat(inputValue);
-            const newDataPoint = { value: newValue, label: '10 May', dataPointText: String(newValue) };
-            setWaterData([...waterDataLine, newDataPoint]); // Add new data point to the current dataset
-            setInputValue(''); // Reset the input field
-            setShowInput(!showInput)
-        }
-        else if (inputValue.trim() === '2') {
-            const newValue = parseFloat(inputValue);
-            const newDataPoint = { value: newValue, label: '10 May', dataPointText: String(newValue) };
-            setWaterData([...waterDataLine, newDataPoint]); // Add new data point to the current dataset
-            setInputValue(''); // Reset the input field
-            setShowInput(!showInput)
-        }
-    };
-
-    const handleAddDataWater = (inputValue) => {
-        if (inputValue.trim() !== '') {
-            const newValue = parseFloat(inputValue);
-            const newDataPoint = { value: newValue, label: '10 May', dataPointText: String(newValue) };
-            setWaterData([...waterDataLine, newDataPoint]); // Add new data point to the current dataset
-            setInputValue(''); // Reset the input field
-            setShowInputWater(!showInputWater)
-            setShowInput(!showInput)
-        }
-    };
-
-    const [inputValue, setInputValue] = useState('');
 
     const sumWater = waterDataLine.reduce((a, b) => a + b.value, 0);
     const avgWater = sumWater / waterDataLine.length;
@@ -604,6 +611,39 @@ export default function Plant({ navigation, route }) {
         { value: 0, label: '8 May' },
         { value: 0, label: '9 May' },
     ];
+    // Funzione per calcolare la media di un array di valori
+    const calculateAverage = (values) => {
+        if (values.length === 0) return 0;
+        const sum = values.reduce((acc, value) => acc + value, 0);
+        return sum / values.length;
+    }
+
+    // Funzione per calcolare la media per ogni mese
+    const calculateMonthlyAverages = (data) => {
+        const monthlyAverages = {};
+        data.forEach((item) => {
+            const month = item.label.split(' ')[1]; // Estrarre il mese dalla label
+            if (!monthlyAverages[month]) {
+                monthlyAverages[month] = {
+                    sum: item.value,
+                    count: 1
+                };
+            } else {
+                monthlyAverages[month].sum += item.value;
+                monthlyAverages[month].count += 1;
+            }
+        });
+
+        // Calcolare la media per ogni mese
+        const result = [];
+        for (const month in monthlyAverages) {
+            const average = monthlyAverages[month].sum / monthlyAverages[month].count;
+            result.push({ value: average, label: month, dataPointText: average.toFixed(1) });
+        }
+        return result;
+    }
+
+    const monthlyAverages = calculateMonthlyAverages(waterDataLine);
 
     const { nickname } = route.params || { nickname: "" };
 
@@ -620,46 +660,31 @@ export default function Plant({ navigation, route }) {
         switch (buttonName) {
             case 'button1':
                 setShowGeneral(true);
-                setShowWater(false);
-                setShowSun(false);
-                setShowDiseases(false);
+                setShowStats(false);
+
                 break;
             case 'button2':
                 setShowGeneral(false);
-                setShowWater(true);
-                setShowSun(false);
-                setShowDiseases(false);
-                break;
-            case 'button3':
-                setShowGeneral(false);
-                setShowWater(false);
-                setShowSun(true);
-                setShowDiseases(false);
-                break;
-            case 'button4':
-                setShowGeneral(false);
-                setShowWater(false);
-                setShowSun(false);
-                setShowDiseases(true);
+                setShowStats(true);
+
                 break;
             default:
                 setShowGeneral(true);
-                setShowWater(false);
-                setShowSun(false);
-                setShowDiseases(false);
+                setShowStats(false);
+
         }
     };
     //------------END button selected (general state, water ecc)----------------
 
     //------------manage views----------------------------
+    const [showGeneral, setShowGeneral] = useState(true);
+    const [showStats, setShowStats] = useState(false);
+    //------------------------------------------------------
+    //------------manage inputs----------------------------
     const [showInput, setShowInput] = useState(true);
     const [showInputWater, setShowInputWater] = useState(false);
-    const [showGeneral, setShowGeneral] = useState(true);
-    const [showWater, setShowWater] = useState(false);
-    const [showSun, setShowSun] = useState(false);
-    const [showDiseases, setShowDiseases] = useState(false);
-    //------------------------------------------------------
     const [showInfo, setShowInfo] = useState(false);
+    //------------------------------------------------------
 
     {/** SCROLLING OF 2 GRAPHS AT THE SAME TIME */ }
     const scrollRef1 = useRef();
@@ -675,6 +700,71 @@ export default function Plant({ navigation, route }) {
     };
     const openAIModal = () => {
         setShowInfo(true);
+    };
+
+    {/** MOOD Pie Chart */ }
+    const pieData = [
+        {
+            value: 58,
+            color: '#27ae60',
+            gradientCenterColor: '#2ecc71',
+            focused: true,
+        },
+        { value: 40, color: '#f39c12', gradientCenterColor: '#f1c40f' },
+        { value: 12, color: '#c0392b', gradientCenterColor: '#e74c3c' },
+    ];
+    const renderDot = color => {
+        return (
+            <View
+                style={{
+                    height: 10,
+                    width: 10,
+                    borderRadius: 5,
+                    backgroundColor: color,
+                    marginRight: 5,
+                }}
+            />
+        );
+    };
+
+    const renderLegendComponent = () => {
+        return (
+            <>
+                <View
+                    style={{
+                        flexDirection: 'row',
+                        justifyContent: 'center',
+                        marginBottom: 10,
+                    }}>
+                    <View
+                        style={{
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            width: 110,
+                            marginLeft: 35,
+                        }}>
+                        {renderDot('#27ae60')}
+                        <Text style={{ color: Colors.DARKGREEN }}>Great:
+                            <Text style={{ fontWeight: 'bold' }}> {pieData[0]['value']}%</Text></Text>
+                    </View>
+                    <View
+                        style={{ flexDirection: 'row', alignItems: 'center', width: 110 }}>
+                        {renderDot('#f39c12')}
+                        <Text style={{ color: Colors.DARKGREEN }}>Okay:
+                            <Text style={{ fontWeight: 'bold' }}> {pieData[1]['value']}%</Text></Text>
+                    </View>
+                    <View
+                        style={{ flexDirection: 'row', alignItems: 'center', width: 110 }}>
+                        {renderDot('#c0392b')}
+                        <Text style={{ color: Colors.DARKGREEN }}>Bad:
+                            <Text style={{ fontWeight: 'bold' }}> {pieData[2]['value']}%</Text></Text>
+                    </View>
+                </View>
+                <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+
+                </View>
+            </>
+        );
     };
 
     useEffect(() => {
@@ -720,27 +810,16 @@ export default function Plant({ navigation, route }) {
                     <Pressable onPress={() => handlePress('button1')}>
                         <View style={[styles.buttonStats, isPressed && currentButton == 'button1' ? { elevation: 2, borderColor: Colors.DARKGREEN, borderWidth: 2 } : {}]}>
                             <FontAwesome5 name="smile" size={30} color={Colors.DARKGREEN} />
+
                         </View>
                     </Pressable>
 
                     <Pressable onPress={() => handlePress('button2')}>
                         <View style={[styles.buttonStats, isPressed && currentButton == 'button2' ? { elevation: 2, borderColor: Colors.DARKGREEN, borderWidth: 2 } : {}]}>
-                            <Ionicons name="water-outline" size={34} color={Colors.DARKGREEN} />
+                            {/* <Ionicons name="water-outline" size={34} color={Colors.DARKGREEN} /> */}
+                            <Ionicons name="stats-chart-outline" size={30} color={Colors.DARKGREEN} />
                         </View>
                     </Pressable>
-
-                    <Pressable onPress={() => handlePress('button3')}>
-                        <View style={[styles.buttonStats, isPressed && currentButton == 'button3' ? { elevation: 2, borderColor: Colors.DARKGREEN, borderWidth: 2 } : {}]}>
-                            <Feather name="sun" size={30} color={Colors.DARKGREEN} />
-                        </View>
-                    </Pressable>
-
-                    <Pressable onPress={() => handlePress('button4')}>
-                        <View style={[styles.buttonStats, isPressed && currentButton == 'button4' ? { elevation: 2, borderColor: Colors.DARKGREEN, borderWidth: 2 } : {}]}>
-                            <Ionicons name="skull-outline" size={30} color={Colors.DARKGREEN} />
-                        </View>
-                    </Pressable>
-
                 </View>
                 {/* ------------------------END BUTTONS GENERAL, WATER, SUN, DISEASES--------------------------- */}
 
@@ -772,9 +851,9 @@ export default function Plant({ navigation, route }) {
                                     </Modal>
                                 </View>
                             )}
-                            <Text style={[styles.title, { alignSelf: 'center' }]}>Overview of {nickname}'s health</Text>
+                            <Text style={[styles.title, { alignSelf: 'center' }]}>Overview of {nickname}!</Text>
 
-                            {/* Pop-up INPUT*/}
+                            {/* Pop-up INPUT Water Mood*/}
                             <View style={styles.centeredView}>
                                 <Modal
                                     animationType="fade"
@@ -825,7 +904,7 @@ export default function Plant({ navigation, route }) {
                                 </Modal>
                             </View>
 
-                            {/* Pop-up INPUT WATER*/}
+                            {/* Pop-up INPUT WATER Glasses*/}
                             {showInputWater && (
                                 <View style={styles.centeredView}>
                                     <Modal
@@ -849,6 +928,74 @@ export default function Plant({ navigation, route }) {
                                 </View>
                             )}
 
+                            <View
+                                style={{
+                                    paddingVertical: 10,
+                                    backgroundColor: Colors.WHITE,
+                                    flex: 1,
+                                }}>
+                                <View
+                                    style={{
+                                        margin: 5,
+                                        padding: 5,
+                                        borderRadius: 20,
+                                        backgroundColor: Colors.WHITE,
+                                    }}>
+                                    <Text style={{ color: Colors.DARKGREEN, fontSize: 18, fontWeight: 'bold', alignItems: 'center' }}>
+                                        Mood of {nickname} in the last month
+                                    </Text>
+                                    <View style={{ position: 'relative', padding: 20, alignItems: 'center' }}>
+                                        <PieChart
+                                            data={pieData}
+                                            donut
+                                            showGradient
+                                            sectionAutoFocus
+                                            radius={90}
+                                            innerRadius={55}
+                                            innerCircleColor={Colors.WHITE}
+                                        />
+                                        <View style={{ position: 'absolute', top: 65, allignLeft: 'center' }}>
+                                            <Image
+                                                source={require('./../../../assets/images/Plant_1.png')}
+                                                style={{ width: 90, height: 90 }}
+                                                resizeMode="contain"
+                                            />
+                                        </View>
+                                    </View>
+                                    {renderLegendComponent()}
+                                </View>
+                            </View>
+
+                            <Text style={[styles.title, { alignSelf: 'center', marginTop: 10, fontSize: 20 }]}>
+                                <Text style={{ fontWeight: 'bold' }}>Take Action  </Text>
+                                <FontAwesome name="magic" size={18} color={Colors.DARKGREEN} />
+                            </Text>
+                            <View style={{ borderWidth: 1, borderColor: Colors.DARKGREEN, borderRadius: 10, marginTop: 7 }}>
+                                <Text style={[styles.text, { alignSelf: 'center', marginTop: 10, padding: 7, paddingTop: 2 }]}>
+                                    <Text style={{ fontWeight: 'bold' }}>Quick care for {nickname}:{'\n'}{'\n'}</Text>
+                                    <Text style={{ fontWeight: 'bold' }}>Light:</Text> 5-6 hours bright, indirect sunlight daily.{'\n'}
+                                    <Text style={{ fontWeight: 'bold' }}>Water:</Text> Top inch of soil dry? Water deeply, avoid overwatering.{'\n'}
+                                    <Text style={{ fontWeight: 'bold' }}>Temperature:</Text> (18-27°C), avoid drafts.{'\n'}
+                                    <Text style={{ fontWeight: 'bold' }}>Humidity:</Text> Medium to high, group plants, use a pebble tray, or humidifier.{'\n'}
+                                    <Text style={{ fontWeight: 'bold' }}>Soil:</Text> Well-draining potting mix.{'\n'}
+                                    <Text style={{ fontWeight: 'bold' }}>Bonus:</Text> Fertilize monthly (spring/summer), rotate plant, wipe leaves.{'\n'}
+                                </Text>
+
+                            </View>
+                        </View>
+                    </ScrollView>
+                )}
+
+
+                {/* -----------------------END GENERAL STATE OF THE PLANT VIEW------------------------------------- */}
+
+                {/* -----------------------STATS VIEW------------------------------------- */}
+                {showStats && (
+                    <ScrollView showsVerticalScrollIndicator={false}>
+                        <View>
+                            <Text style={[styles.title, { alignSelf: 'center' }]}>{nickname}'s stats</Text>
+
+                            {/** MAIN GRAPH WITH WATER AND SUN */}
                             <View>
                                 <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
                                     <Text style={[styles.title, { fontSize: 18 }]}>Sunligth, water and Diseases plot</Text>
@@ -873,152 +1020,94 @@ export default function Plant({ navigation, route }) {
                                         );
                                     })}
                                 </View>
-                                <LineChart
-                                    scrollRef={ref}
-                                    data={dummyData}
-                                    data2={showWaterLine ? waterDataLine : []}
-                                    data3={showSunLine ? sunDataLine : []}
-                                    data4={showDiseasesLine ? diseasesDataLine : []}
-                                    data5={showDiseasesLine ? diseasesDataLine : []}
-                                    startIndex4={30}
-                                    endIndex4={40}
-                                    thickness4={8}
-                                    startIndex5={117}
-                                    endIndex5={126}
-                                    thickness5={8}
-                                    thickness1={0.0001}
-                                    textColor="black"
-                                    textShiftY={-2}
-                                    textShiftX={-6}
-                                    textFontSize={15}
-                                    curved
-                                    label
-                                    secondaryYAxis={true}
-                                    maxValue2={10}
-                                    maxValue={10}
-                                    showScrollIndicator={true}
-                                    scrollToEnd={true}
-                                    scrollAnimation={false}
-                                    color1="black"
-                                    color2={Colors.LIGHTBLUE}
-                                    color3='orange'
-                                    color4={Colors.PURPLE}
-                                    color5={Colors.PURPLE}
-                                    dataPointsColor1="transparent"
-                                    dataPointsColor2={Colors.LIGHTBLUE}
-                                    dataPointsColor3='orange'
-                                    dataPointsColor4={Colors.PURPLE}
-                                    dataPointsColor5={Colors.PURPLE}
-                                    height={200}
-                                    initialSpacing={0}
-                                    rotateLabel
-                                    spacing={50}
-                                    line
-                                    xAxisLabelsVerticalShift={10}
-                                />
-                                {/** TRYING TO FIGURE OUT HOW TO SCROLL BOTH GRAPHS */}
-                                {/* <View>
-                                    <ScrollView
-                                        ref={scrollRef1}
-                                        horizontal
-                                        onScroll={handleScroll1}
-                                        scrollEventThrottle={25} // controlla la frequenza degli eventi di scorrimento
-                                    >
-                                        <LineChart
-                                            scrollRef={ref}
-                                            data={dummyData}
-                                            data2={showWaterLine ? waterDataLine : []}
-                                            data3={showSunLine ? sunDataLine : []}
-                                            data4={showDiseasesLine ? diseasesDataLine : []}
-                                            data5={showDiseasesLine ? diseasesDataLine : []}
-                                            startIndex4={30}
-                                            endIndex4={40}
-                                            thickness4={8}
-                                            startIndex5={117}
-                                            endIndex5={126}
-                                            thickness5={8}
-                                            thickness1={0.0001}
-                                            textColor="black"
-                                            textShiftY={-2}
-                                            textShiftX={-6}
-                                            textFontSize={15}
-                                            curved
-                                            label
-                                            secondaryYAxis={true}
-                                            maxValue2={10}
-                                            maxValue={10}
-                                            showScrollIndicator={true}
-                                            scrollToEnd={true}
-                                            scrollAnimation={false}
-                                            color1="black"
-                                            color2={Colors.LIGHTBLUE}
-                                            color3='orange'
-                                            color4={Colors.PURPLE}
-                                            color5={Colors.PURPLE}
-                                            dataPointsColor1="transparent"
-                                            dataPointsColor2={Colors.LIGHTBLUE}
-                                            dataPointsColor3='orange'
-                                            dataPointsColor4={Colors.PURPLE}
-                                            dataPointsColor5={Colors.PURPLE}
-                                            height={200}
-                                            initialSpacing={0}
-                                            rotateLabel
-                                            spacing={50}
-                                            line
-                                            xAxisLabelsVerticalShift={10}
+                                <View style={{ position: 'relative' }}>
+                                    {/* Switch */}
+                                    <View style={{ position: 'absolute', top: -10, right: 0 }}>
+                                        <Text style={{ fontSize: 16, color: Colors.PURPLE, marginTop: 10, marginLeft: 10 }}>Month Avg</Text>
+                                        <Switch
+                                            trackColor={{ false: Colors.GREY, true: Colors.PURPLE }}
+                                            thumbColor={showMonthAverageLine ? Colors.WHITE : Colors.WHITE}
+                                            ios_backgroundColor={Colors.GREY}
+                                            onValueChange={(newValue) => {
+                                                setShowMonthAverageLine(newValue);
+                                                setShowWaterLine(!newValue);
+                                                setShowSunLine(!newValue);
+                                                setShowChartWater(!newValue);
+                                            }}
+                                            value={showMonthAverageLine}
+                                            elevation={2}
                                         />
-                                    </ScrollView>
-                                    <ScrollView
-                                        ref={scrollRef2}
-                                        horizontal
-                                        onScroll={handleScroll2}
-                                        scrollEventThrottle={25} // controlla la frequenza degli eventi di scorrimento
-                                    >
-                                        <LineChart
-                                            scrollRef={ref}
-                                            data={dummyData}
-                                            data2={showWaterLine ? waterDataLine : []}
-                                            data3={showSunLine ? sunDataLine : []}
-                                            data4={showDiseasesLine ? diseasesDataLine : []}
-                                            data5={showDiseasesLine ? diseasesDataLine : []}
-                                            startIndex4={30}
-                                            endIndex4={40}
-                                            thickness4={8}
-                                            startIndex5={117}
-                                            endIndex5={126}
-                                            thickness5={8}
-                                            thickness1={0.0001}
-                                            textColor="black"
-                                            textShiftY={-2}
-                                            textShiftX={-6}
-                                            textFontSize={15}
-                                            curved
-                                            label
-                                            secondaryYAxis={true}
-                                            maxValue2={10}
-                                            maxValue={10}
-                                            showScrollIndicator={true}
-                                            scrollToEnd={true}
-                                            scrollAnimation={false}
-                                            color1="black"
-                                            color2={Colors.LIGHTBLUE}
-                                            color3='orange'
-                                            color4={Colors.PURPLE}
-                                            color5={Colors.PURPLE}
-                                            dataPointsColor1="transparent"
-                                            dataPointsColor2={Colors.LIGHTBLUE}
-                                            dataPointsColor3='orange'
-                                            dataPointsColor4={Colors.PURPLE}
-                                            dataPointsColor5={Colors.PURPLE}
-                                            height={200}
-                                            initialSpacing={0}
-                                            rotateLabel
-                                            spacing={50}
-                                            line
-                                            xAxisLabelsVerticalShift={10}
-                                        />
-                                    </ScrollView>
-                                </View> */}
+                                    </View>
+
+                                    {/* Line Chart */}
+                                    <View>
+                                        {showMonthAverageLine && (
+                                            <LineChart
+                                                scrollRef={ref}
+                                                data={monthlyAverages}
+                                                textColor="black"
+                                                textShiftY={-2}
+                                                textShiftX={-6}
+                                                textFontSize={15}
+                                                // thickness1={5}
+                                                dataPointsColor={Colors.PURPLE}
+                                                curved
+                                                label
+                                                maxValue2={10}
+                                                maxValue={10}
+                                                showScrollIndicator={true}
+                                                scrollToEnd={true}
+                                                scrollAnimation={true}
+                                                color1={Colors.PURPLE}
+                                                height={200}
+                                                initialSpacing={20}
+                                                rotateLabel
+                                                spacing={50}
+                                                line
+                                                xAxisLabelsVerticalShift={10}
+                                            />
+                                        )}
+                                        {showChartWater && (
+                                            <LineChart
+                                                scrollRef={ref}
+                                                data={dummyData}
+                                                data2={showWaterLine ? waterDataLine : []}
+                                                data3={showSunLine ? sunDataLine : []}
+                                                data4={showMonthAverageLine ? monthlyAverages : []}
+                                                thickness1={0.0001}
+                                                textColor="black"
+                                                textShiftY={-2}
+                                                textShiftX={-6}
+                                                textFontSize={15}
+                                                curved
+                                                label
+                                                secondaryYAxis={true}
+                                                maxValue2={10}
+                                                maxValue={10}
+                                                showScrollIndicator={true}
+                                                scrollToEnd={true}
+                                                scrollAnimation={false}
+                                                color1="black"
+                                                color2={Colors.LIGHTBLUE}
+                                                color3='orange'
+                                                color4={Colors.PURPLE}
+                                                color5={Colors.PURPLE}
+                                                dataPointsColor1="transparent"
+                                                dataPointsColor2={Colors.LIGHTBLUE}
+                                                dataPointsColor3='orange'
+                                                dataPointsColor4={Colors.PURPLE}
+                                                dataPointsColor5={Colors.PURPLE}
+                                                height={200}
+                                                initialSpacing={0}
+                                                rotateLabel
+                                                spacing={50}
+                                                line
+                                                xAxisLabelsVerticalShift={10}
+                                            />
+                                        )}
+                                    </View>
+                                </View>
+
 
                                 <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 20 }}>
                                     <Text style={{ fontSize: 16, color: Colors.LIGHTBLUE, marginTop: 9 }}>Water</Text>
@@ -1043,161 +1132,68 @@ export default function Plant({ navigation, route }) {
                                             elevation={2}
                                         />
                                     </View>
-                                    <Text style={{ fontSize: 16, color: Colors.PURPLE, marginTop: 9, marginLeft: 10 }}>Diseases</Text>
-                                    <View style={{ alignItems: 'center', flexDirection: 'row' }}>
-                                        <Switch
-                                            trackColor={{ false: Colors.GREY, true: Colors.PURPLE }}
-                                            thumbColor={showDiseasesLine ? Colors.WHITE : Colors.WHITE}
-                                            ios_backgroundColor={Colors.GREY}
-                                            onValueChange={() => setShowDiseasesLine((previousState) => !previousState)}
-                                            value={showDiseasesLine}
-                                            elevation={2}
-                                        />
-                                    </View>
                                 </View>
                                 <View>
                                     <Text style={[styles.text, { alignSelf: 'center', fontSize: 8 }]}> The water is mesured in glasses, while the sunligth in hours of exposition</Text>
                                 </View>
                             </View>
-                            <Text style={[styles.title, { alignSelf: 'center', marginTop: 10, fontSize: 20 }]}>
-                                <Text style={{ fontWeight: 'bold' }}>Take Action  </Text>
-                                <FontAwesome name="magic" size={18} color={Colors.DARKGREEN} />
-                            </Text>
-                            <View style={{ borderWidth: 1, borderColor: Colors.DARKGREEN, borderRadius: 10, marginTop: 7 }}>
-                                <Text style={[styles.text, { alignSelf: 'center', marginTop: 10, padding: 7, paddingTop: 2 }]}>
-                                    <Text style={{ fontWeight: 'bold' }}>Quick care for {nickname}:{'\n'}{'\n'}</Text>
-                                    <Text style={{ fontWeight: 'bold' }}>Light:</Text> 5-6 hours bright, indirect sunlight daily.{'\n'}
-                                    <Text style={{ fontWeight: 'bold' }}>Water:</Text> Top inch of soil dry? Water deeply, avoid overwatering.{'\n'}
-                                    <Text style={{ fontWeight: 'bold' }}>Temperature:</Text> (18-27°C), avoid drafts.{'\n'}
-                                    <Text style={{ fontWeight: 'bold' }}>Humidity:</Text> Medium to high, group plants, use a pebble tray, or humidifier.{'\n'}
-                                    <Text style={{ fontWeight: 'bold' }}>Soil:</Text> Well-draining potting mix.{'\n'}
-                                    <Text style={{ fontWeight: 'bold' }}>Bonus:</Text> Fertilize monthly (spring/summer), rotate plant, wipe leaves.{'\n'}
-                                </Text>
-
-                            </View>
-                        </View>
-                    </ScrollView>
-                )}
-
-
-                {/* -----------------------END GENERAL STATE OF THE PLANT VIEW------------------------------------- */}
-
-                {/* -----------------------WATER VIEW------------------------------------- */}
-                {showWater && (
-                    <ScrollView showsVerticalScrollIndicator={false}>
-                        <View>
-                            <Text style={[styles.title, { alignSelf: 'center' }]}>Water stats</Text>
 
                             <View>
-                                <BarChart
-                                    data={waterDataLine}
-                                    height={200}
-                                    width={screenWidth - 90}
-                                    spacing={35}
-                                    barWidth={15}
-                                    rotateLabel
-                                    barBorderRadius={20}
-                                    showScrollIndicator={true}
-                                    scrollToEnd={true}
-                                    scrollAnimation={false}
-                                    frontColor={Colors.LIGHTBLUE}
-
-                                />
-                                <View style={{ flexDirection: 'row', justifyContent: 'space-around', padding: 20, marginTop: 20 }}>
-                                    <View style={{ alignItems: 'center' }}>
-                                        <Text style={{ fontSize: 20, color: Colors.LIGHTBLUE }}>Avg</Text>
-                                        <Text style={{ fontSize: 16 }}>{parseFloat(avgWater.toFixed(1))}</Text>
+                                {/* Intestazione delle colonne */}
+                                <View style={{ flexDirection: 'row', justifyContent: 'space-around', paddingHorizontal: 5, marginTop: 20 }}>
+                                    {/* Intestazioni delle colonne Avg, Min e Max */}
+                                    <View style={{ alignItems: 'center', paddingLeft: 80 }}>
                                     </View>
                                     <View style={{ alignItems: 'center' }}>
-                                        <Text style={{ fontSize: 20, color: Colors.LIGHTBLUE }}>Min</Text>
-                                        <Text style={{ fontSize: 16 }}>{minWater}</Text>
+                                        <Text style={[styles.text, { fontSize: 20, color: Colors.DARKGREEN, fontWeight: 'bold' }]}>Avg</Text>
                                     </View>
                                     <View style={{ alignItems: 'center' }}>
-                                        <Text style={{ fontSize: 20, color: Colors.LIGHTBLUE }}>Max</Text>
-                                        <Text style={{ fontSize: 16 }}>{maxWater}</Text>
+                                        <Text style={[styles.text, { fontSize: 20, color: Colors.DARKGREEN, fontWeight: 'bold' }]}>Min</Text>
+                                    </View>
+                                    <View style={{ alignItems: 'center' }}>
+                                        <Text style={[styles.text, { fontSize: 20, color: Colors.DARKGREEN, fontWeight: 'bold' }]}>Max</Text>
+                                    </View>
+                                </View>
+                                {/**First row for Water */}
+                                <View style={{ flexDirection: 'row', justifyContent: 'space-around', paddingHorizontal: 5, marginTop: 5 }}>
+                                    {/* Intestazione Water */}
+                                    <View style={{ alignItems: 'center' }}>
+                                        <Text style={[styles.text, { fontSize: 20, color: Colors.LIGHTBLUE, fontWeight: 'bold' }]}>Water</Text>
+                                    </View>
+                                    {/* Dati per Water */}
+                                    <View style={{ alignItems: 'center' }}>
+                                        <Text style={styles.text}>{parseFloat(avgWater.toFixed(1))}</Text>
+                                    </View>
+                                    <View style={{ alignItems: 'center' }}>
+                                        <Text style={styles.text}>{minWater}</Text>
+                                    </View>
+                                    <View style={{ alignItems: 'center' }}>
+                                        <Text style={styles.text}>{maxWater}</Text>
+                                    </View>
+                                </View>
+                                {/**Second row for Sun */}
+                                <View style={{ flexDirection: 'row', justifyContent: 'space-around', paddingHorizontal: 5, marginTop: 5 }}>
+                                    {/* Intestazione Sun */}
+                                    <View style={{ alignItems: 'center' }}>
+                                        <Text style={[styles.text, { fontSize: 20, color: 'orange', fontWeight: 'bold' }]}>Sun</Text>
+                                    </View>
+                                    {/* Dati per Sun */}
+                                    <View style={{ alignItems: 'center', paddingLeft: 12 }}>
+                                        <Text style={styles.text}>{parseFloat(avgSun.toFixed(1))}</Text>
+                                    </View>
+                                    <View style={{ alignItems: 'center' }}>
+                                        <Text style={styles.text}>{minSun}</Text>
+                                    </View>
+                                    <View style={{ alignItems: 'center' }}>
+                                        <Text style={styles.text}>{maxSun}</Text>
                                     </View>
                                 </View>
                             </View>
                         </View>
                     </ScrollView>
                 )}
-                {/* -----------------------END WATER VIEW------------------------------------- */}
+                {/* -----------------------END STATS VIEW------------------------------------- */}
 
-                {/* -----------------------SUN VIEW------------------------------------- */}
-                {showSun && (
-                    <ScrollView showsVerticalScrollIndicator={false}>
-                        <View>
-                            <Text style={[styles.title, { alignSelf: 'center' }]}>Sun and Temperature stats</Text>
-                            <View>
-                                <BarChart
-                                    data={sunDataLine}
-                                    height={200}
-                                    width={screenWidth - 90}
-                                    spacing={35}
-                                    barWidth={15}
-                                    capColor={'rgba(78, 0, 142)'}
-                                    rotateLabel
-                                    barBorderRadius={20}
-                                    showScrollIndicator={true}
-                                    scrollToEnd={true}
-                                    scrollAnimation={false}
-                                    frontColor={Colors.ORANGE}
-                                />
-                                <View style={{ flexDirection: 'row', justifyContent: 'space-around', padding: 20, marginTop: 20 }}>
-                                    <View style={{ alignItems: 'center' }}>
-                                        <Text style={{ fontSize: 20, color: 'orange' }}>Avg</Text>
-                                        <Text style={{ fontSize: 16 }}>{parseFloat(avgSun.toFixed(1))}</Text>
-                                    </View>
-                                    <View style={{ alignItems: 'center' }}>
-                                        <Text style={{ fontSize: 20, color: 'orange' }}>Min</Text>
-                                        <Text style={{ fontSize: 16 }}>{minSun}</Text>
-                                    </View>
-                                    <View style={{ alignItems: 'center' }}>
-                                        <Text style={{ fontSize: 20, color: 'orange' }}>Max</Text>
-                                        <Text style={{ fontSize: 16 }}>{maxSun}</Text>
-                                    </View>
-                                </View>
-                            </View>
-                        </View>
-                    </ScrollView>
-                )}
-                {/* -----------------------END SUN VIEW------------------------------------- */}
-
-                {/* -----------------------DISEASES VIEW------------------------------------- */}
-                {showDiseases && (
-                    <View>
-                        <Text style={[styles.title, { alignSelf: 'center' }]}>Diseases stats</Text>
-
-                        <View>
-                            <LineChart
-                                scrollRef={ref}
-                                data={diseasesDataLine}
-                                startIndex={30}
-                                endIndex={40}
-                                thickness={15}
-                                textColor="black"
-                                textShiftY={-2}
-                                textShiftX={-6}
-                                textFontSize={15}
-                                curved
-                                label
-                                maxValue={10}
-                                showScrollIndicator={true}
-                                scrollToEnd={true}
-                                scrollAnimation={false}
-                                color={Colors.PURPLE}
-                                dataPointsColor={Colors.PURPLE}
-                                height={200}
-                                initialSpacing={0}
-                                rotateLabel
-                                spacing={50}
-                                xAxisLabelsVerticalShift={10}
-                            />
-                        </View>
-
-                    </View>
-                )}
-                {/* -----------------------END DISEASES VIEW------------------------------------- */}
             </View>
         </SafeAreaView >
     )
