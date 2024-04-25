@@ -108,7 +108,7 @@ export default function Home({ navigation, route }) {
                   <TouchableOpacity onPress={() => { navigation.navigate("AddPlantPage", { nickname: nickname }) }}>
                     <MaterialCommunityIcons name="pencil-circle-outline" size={34} color={Colors.WHITE} marginRight={3} />
                   </TouchableOpacity>
-                  <TouchableOpacity onPress={() => { navigation.navigate("PlantPage", { nickname: nickname }) }}>
+                  <TouchableOpacity onPress={() => { navigation.navigate("PlantPage", { nickname: nickname, showPlantView: true, soil: soil, species: species, height: height }) }}>
                     <Feather name="arrow-right-circle" size={34} color={Colors.DARKGREEN} />
                   </TouchableOpacity>
                 </View>

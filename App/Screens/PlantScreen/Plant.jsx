@@ -9,7 +9,6 @@ import { FontAwesome, FontAwesome5, Ionicons, Fontisto } from '@expo/vector-icon
 import { LineChart, ruleTypes, BarChart, PieChart } from 'react-native-gifted-charts';
 import { Dimensions } from 'react-native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import TableAvg from './table';
 
 
 export default function Plant({ navigation, route }) {
@@ -23,10 +22,7 @@ export default function Plant({ navigation, route }) {
     const [showChartWater, setShowChartWater] = useState(true);
     const [showMonthAverageLine, setShowMonthAverageLine] = useState(false);
 
-    const screenWidth = Dimensions.get('window').width;
     const ref = useRef(null)
-
-
 
     const handleAddData = (inputValue) => {
         if (inputValue.trim() !== '') {
@@ -56,7 +52,6 @@ export default function Plant({ navigation, route }) {
             setShowInput(!showInput)
         }
     };
-
 
     const [inputValue, setInputValue] = useState('');
 
@@ -611,18 +606,18 @@ export default function Plant({ navigation, route }) {
         { value: 0, label: '8 May' },
         { value: 0, label: '9 May' },
     ];
-    // Funzione per calcolare la media di un array di valori
+    // Function to calculate the average of an array of values
     const calculateAverage = (values) => {
         if (values.length === 0) return 0;
         const sum = values.reduce((acc, value) => acc + value, 0);
         return sum / values.length;
     }
 
-    // Funzione per calcolare la media per ogni mese
+    // Function to calculate the monthly averages
     const calculateMonthlyAverages = (data) => {
         const monthlyAverages = {};
         data.forEach((item) => {
-            const month = item.label.split(' ')[1]; // Estrarre il mese dalla label
+            const month = item.label.split(' ')[1]; // Extract the month from the label
             if (!monthlyAverages[month]) {
                 monthlyAverages[month] = {
                     sum: item.value,
@@ -634,7 +629,7 @@ export default function Plant({ navigation, route }) {
             }
         });
 
-        // Calcolare la media per ogni mese
+        // Calculate the average for each month
         const result = [];
         for (const month in monthlyAverages) {
             const average = monthlyAverages[month].sum / monthlyAverages[month].count;
@@ -646,6 +641,9 @@ export default function Plant({ navigation, route }) {
     const monthlyAverages = calculateMonthlyAverages(waterDataLine);
 
     const { nickname } = route.params || { nickname: "" };
+    const { species } = route.params || { species: "" };
+    const { height } = route.params || { height: "" };
+    const { soil } = route.params || { soil: "" };
 
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May']
     const showOrHidePointer = (ind) => {
@@ -805,7 +803,7 @@ export default function Plant({ navigation, route }) {
                     <Text style={styles.title}>Stats</Text>
                 </View>
 
-                {/* buttons to navigate between general, water, sun, diseases */}
+                {/* buttons to navigate between general and stats */}
                 <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', marginBottom: 20 }}>
                     <Pressable onPress={() => handlePress('button1')}>
                         <View style={[styles.buttonStats, isPressed && currentButton == 'button1' ? { elevation: 2, borderColor: Colors.DARKGREEN, borderWidth: 2 } : {}]}>
@@ -816,7 +814,6 @@ export default function Plant({ navigation, route }) {
 
                     <Pressable onPress={() => handlePress('button2')}>
                         <View style={[styles.buttonStats, isPressed && currentButton == 'button2' ? { elevation: 2, borderColor: Colors.DARKGREEN, borderWidth: 2 } : {}]}>
-                            {/* <Ionicons name="water-outline" size={34} color={Colors.DARKGREEN} /> */}
                             <Ionicons name="stats-chart-outline" size={30} color={Colors.DARKGREEN} />
                         </View>
                     </Pressable>
@@ -965,7 +962,18 @@ export default function Plant({ navigation, route }) {
                                     {renderLegendComponent()}
                                 </View>
                             </View>
-
+                            <View>
+                                <View style={[styles.container, { marginTop: -10 }]}>
+                                    <Text style={[styles.text, { fontSize: 16, color: Colors.DARKGREEN, fontWeight: 'bold' }]}>Nickname:
+                                        <Text style={styles.text}>   {nickname}</Text></Text>
+                                    <Text style={[styles.text, { fontSize: 16, color: Colors.DARKGREEN, fontWeight: 'bold' }]}>Species:
+                                        <Text style={styles.text}>   {species}</Text></Text>
+                                    <Text style={[styles.text, { fontSize: 16, color: Colors.DARKGREEN, fontWeight: 'bold' }]}>Height:
+                                        <Text style={styles.text}>   {height} cm</Text></Text>
+                                    <Text style={[styles.text, { fontSize: 16, color: Colors.DARKGREEN, fontWeight: 'bold' }]}>Soil:
+                                        <Text style={styles.text}>   {soil}</Text></Text>
+                                </View>
+                            </View>
                             <Text style={[styles.title, { alignSelf: 'center', marginTop: 10, fontSize: 20 }]}>
                                 <Text style={{ fontWeight: 'bold' }}>Take Action  </Text>
                                 <FontAwesome name="magic" size={18} color={Colors.DARKGREEN} />
