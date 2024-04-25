@@ -92,15 +92,21 @@ export default function Home({ navigation, route }) {
             {showPlantView && (
               <View style={[styles.plant, { height: 80 }]}>
                 <View style={{ flexDirection: 'row' }}>
-                  <View style={{ width: 50, height: 50, borderRadius: 25, backgroundColor: Colors.WHITE, marginRight: 5 }} />
+                  <View style={{ width: 50, height: 50, borderRadius: 25, backgroundColor: Colors.WHITE, marginRight: 5 }}>
+                    <Image
+                      source={require('./../../../assets/images/Plant_1.png')} // replace with the path to your image
+                      style={{ marginLeft: 5, marginTop: 3, width: '80%', height: '80%' }}
+                      resizeMode="contain"
+                    />
+                  </View>
                   <Text style={{ color: Colors.WHITE, fontFamily: "Raleway_800ExtraBold", fontSize: 18, paddingTop: 8, paddingLeft: 5 }}>{nickname}</Text>
                 </View>
-                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 5 }}>
                   <TouchableOpacity onPress={infoPressHandler}>
-                    <MaterialCommunityIcons name="information-outline" size={34} color={Colors.WHITE} />
+                    <MaterialCommunityIcons name="information-outline" size={34} color={Colors.WHITE} marginRight={3} />
                   </TouchableOpacity>
                   <TouchableOpacity onPress={() => { navigation.navigate("AddPlantPage", { nickname: nickname }) }}>
-                    <MaterialCommunityIcons name="pencil-circle-outline" size={34} color={Colors.WHITE} />
+                    <MaterialCommunityIcons name="pencil-circle-outline" size={34} color={Colors.WHITE} marginRight={3} />
                   </TouchableOpacity>
                   <TouchableOpacity onPress={() => { navigation.navigate("PlantPage", { nickname: nickname }) }}>
                     <Feather name="arrow-right-circle" size={34} color={Colors.DARKGREEN} />
