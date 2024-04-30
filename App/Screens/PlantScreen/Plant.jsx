@@ -7,9 +7,8 @@ import { Feather } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
 import { FontAwesome, FontAwesome5, Ionicons, Fontisto } from '@expo/vector-icons';
 import { LineChart, ruleTypes, BarChart, PieChart } from 'react-native-gifted-charts';
-import { Dimensions } from 'react-native';
-import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-
+import { Fragment, useCallback } from 'react';
+import { Calendar, CalendarUtils } from 'react-native-calendars';
 
 export default function Plant({ navigation, route }) {
 
@@ -336,10 +335,10 @@ export default function Plant({ navigation, route }) {
     const minSun = Math.min(...sunDataLine.map(item => item.value));
     const maxSun = Math.max(...sunDataLine.map(item => item.value));
 
-    const diseasesDataLine = [
-        { value: 0, label: '1 Jan' },
+    const diseaseDataLine = [
         { value: 0, label: '2 Jan' },
         { value: 0, label: '3 Jan' },
+        { value: 0, label: '1 Jan' },
         { value: 0, label: '4 Jan' },
         { value: 0, label: '5 Jan' },
         { value: 0, label: '6 Jan' },
@@ -367,19 +366,18 @@ export default function Plant({ navigation, route }) {
         { value: 0, label: '28 Jan' },
         { value: 0, label: '29 Jan' },
         { value: 0, label: '30 Jan' },
-        { value: 5, label: '31 Jan' },
+        { value: 0, label: '31 Jan' },
         // February
-        { value: 5, label: '1 Feb' },
-        { value: 5, label: '2 Feb' },
-        { value: 5, label: '3 Feb' },
-        { value: 5, label: '4 Feb' },
-        { value: 5, label: '5 Feb' },
-        { value: 5, label: '6 Feb' },
-        { value: 5, label: '7 Feb' },
-        { value: 5, label: '8 Feb' },
-        { value: 5, label: '9 Feb' },
-        { value: 5, label: '10 Feb' },
-        { value: 0, label: '11 Feb' },
+        { value: 'Bacteria', label: '2 Feb' },
+        { value: 'Bacteria', label: '1 Feb' },
+        { value: 'Bacteria', label: '3 Feb' },
+        { value: 'Bacteria', label: '4 Feb' },
+        { value: 'Bacteria', label: '5 Feb' },
+        { value: 'Bacteria', label: '6 Feb' },
+        { value: 'Bacteria', label: '7 Feb' },
+        { value: 'Bacteria', label: '8 Feb' },
+        { value: 'Bacteria', label: '9 Feb' },
+        { value: 'Bacteria', label: '10 Feb' },
         { value: 0, label: '12 Feb' },
         { value: 0, label: '13 Feb' },
         { value: 0, label: '14 Feb' },
@@ -392,6 +390,7 @@ export default function Plant({ navigation, route }) {
         { value: 0, label: '21 Feb' },
         { value: 0, label: '22 Feb' },
         { value: 0, label: '23 Feb' },
+        { value: 0, label: '11 Feb' },
         { value: 0, label: '24 Feb' },
         { value: 0, label: '25 Feb' },
         { value: 0, label: '26 Feb' },
@@ -430,17 +429,17 @@ export default function Plant({ navigation, route }) {
         { value: 0, label: '30 Mar' },
         { value: 0, label: '31 Mar' },
         // April
-        { value: 0, label: '1 Apr' },
-        { value: 0, label: '2 Apr' },
-        { value: 0, label: '3 Apr' },
-        { value: 0, label: '4 Apr' },
-        { value: 0, label: '5 Apr' },
-        { value: 0, label: '6 Apr' },
-        { value: 0, label: '7 Apr' },
-        { value: 0, label: '8 Apr' },
-        { value: 0, label: '9 Apr' },
-        { value: 0, label: '10 Apr' },
-        { value: 0, label: '11 Apr' },
+        { value: 'Viruses', label: '1 Apr' },
+        { value: 'Viruses', label: '2 Apr' },
+        { value: 'Viruses', label: '3 Apr' },
+        { value: 'Viruses', label: '4 Apr' },
+        { value: 'Viruses', label: '5 Apr' },
+        { value: 'Viruses', label: '6 Apr' },
+        { value: 'Viruses', label: '7 Apr' },
+        { value: 'Viruses', label: '8 Apr' },
+        { value: 'Viruses', label: '9 Apr' },
+        { value: 'Viruses', label: '10 Apr' },
+        { value: 'Viruses', label: '11 Apr' },
         { value: 0, label: '12 Apr' },
         { value: 0, label: '13 Apr' },
         { value: 0, label: '14 Apr' },
@@ -457,19 +456,20 @@ export default function Plant({ navigation, route }) {
         { value: 0, label: '25 Apr' },
         { value: 0, label: '26 Apr' },
         { value: 0, label: '27 Apr' },
-        { value: 2, label: '28 Apr' },
-        { value: 2, label: '29 Apr' },
-        { value: 2, label: '30 Apr' },
+        { value: 0, label: '28 Apr' },
+        { value: 'Fungus', label: '29 Apr' },
+        { value: 'Fungus', label: '30 Apr' },
         // May
-        { value: 2, label: '1 May' },
-        { value: 2, label: '2 May' },
-        { value: 2, label: '3 May' },
-        { value: 2, label: '4 May' },
-        { value: 2, label: '5 May' },
-        { value: 2, label: '6 May' },
-        { value: 2, label: '7 May' },
+        { value: 'Fungus', label: '1 May' },
+        { value: 'Fungus', label: '2 May' },
+        { value: 'Fungus', label: '3 May' },
+        { value: 'Fungus', label: '4 May' },
+        { value: 'Fungus', label: '5 May' },
+        { value: 'Fungus', label: '6 May' },
+        { value: 'Fungus', label: '7 May' },
         { value: 0, label: '8 May' },
         { value: 0, label: '9 May' },
+        { value: 0, label: '10 May' },
     ];
     const dummyData = [
         { value: 0, label: '1 Jan' },
@@ -502,7 +502,7 @@ export default function Plant({ navigation, route }) {
         { value: 0, label: '28 Jan' },
         { value: 0, label: '29 Jan' },
         { value: 0, label: '30 Jan' },
-        { value: 5, label: '31 Jan' },
+        { value: 0, label: '31 Jan' },
         // February
         { value: 0, label: '1 Feb' },
         { value: 0, label: '2 Feb' },
@@ -605,13 +605,22 @@ export default function Plant({ navigation, route }) {
         { value: 0, label: '7 May' },
         { value: 0, label: '8 May' },
         { value: 0, label: '9 May' },
+        { value: 0, label: '10 May' },
     ];
-    // Function to calculate the average of an array of values
-    const calculateAverage = (values) => {
-        if (values.length === 0) return 0;
-        const sum = values.reduce((acc, value) => acc + value, 0);
-        return sum / values.length;
-    }
+
+    // Map disease names to numerical values
+    const diseaseDataLineNumerical = diseaseDataLine.map((dataPoint) => {
+        switch (dataPoint.value) {
+            case 'Bacteria':
+                return { ...dataPoint, value: 1 };
+            case 'Fungus':
+                return { ...dataPoint, value: 2 };
+            case 'Viruses':
+                return { ...dataPoint, value: 3 };
+            default:
+                return { ...dataPoint, value: 0 };
+        }
+    });
 
     // Function to calculate the monthly averages
     const calculateMonthlyAverages = (data) => {
@@ -638,7 +647,8 @@ export default function Plant({ navigation, route }) {
         return result;
     }
 
-    const monthlyAverages = calculateMonthlyAverages(waterDataLine);
+    const monthlyAveragesWater = calculateMonthlyAverages(waterDataLine);
+    const monthlyAveragesSun = calculateMonthlyAverages(sunDataLine);
 
     const { nickname } = route.params || { nickname: "" };
     const { species } = route.params || { species: "" };
@@ -765,8 +775,164 @@ export default function Plant({ navigation, route }) {
         );
     };
 
+
+
+    const INITIAL_DATE = '2024-05-09';
+
+    const [selected, setSelected] = useState(INITIAL_DATE);
+    const [currentMonth, setCurrentMonth] = useState(INITIAL_DATE);
+
+    const getDate = (count) => {
+        const date = new Date(INITIAL_DATE);
+        const newDate = date.setDate(date.getDate() + count);
+        return CalendarUtils.getCalendarDateString(newDate);
+    };
+
+    const onDayPress = useCallback((day) => {
+        setSelected(day.dateString);
+    }, []);
+
+    const renderCalendarWithCustomMarkingType = () => {
+        return (
+            <Fragment>
+                <Calendar
+                    // style={styles.calendar}
+                    style={{
+                        borderWidth: 1,
+                        borderColor: 'gray',
+                        height: 350
+                    }}
+                    hideExtraDays
+                    current={INITIAL_DATE}
+                    minDate={INITIAL_DATE}
+                    markingType={'custom'}
+                    hideDayNames={false}
+                    theme={{
+                        backgroundColor: Colors.WHITE,
+                        calendarBackground: Colors.WHITE,
+                    }}
+                    markedDates={{
+                        [INITIAL_DATE]: {
+                            customStyles: {
+                                container: {
+                                    backgroundColor: 'white',
+                                    elevation: 2
+                                },
+                                text: {
+                                    color: 'red',
+                                    marginTop: 0
+                                }
+                            }
+                        },
+                        [getDate(-1)]: {
+                            customStyles: {
+                                container: {
+                                    backgroundColor: Colors.DARKGREEN,
+                                    elevation: 4
+                                },
+                                text: {
+                                    color: 'white'
+                                }
+                            }
+                        },
+                        [getDate(-2)]: {
+                            customStyles: {
+                                container: {
+                                    backgroundColor: Colors.DARKGREEN,
+                                    elevation: 4
+                                },
+                                text: {
+                                    color: 'white'
+                                }
+                            }
+
+                        },
+                        [getDate(-3)]: {
+                            customStyles: {
+                                container: {
+                                    backgroundColor: Colors.DARKGREEN,
+                                    elevation: 4
+                                },
+                                text: {
+                                    color: 'white'
+                                }
+                            }
+
+                        },
+                        [getDate(-4)]: {
+                            customStyles: {
+                                container: {
+                                    backgroundColor: Colors.DARKGREEN,
+                                    elevation: 4
+                                },
+                                text: {
+                                    color: 'white'
+                                }
+                            }
+
+                        },
+                        [getDate(-5)]: {
+                            customStyles: {
+                                container: {
+                                    backgroundColor: Colors.DARKGREEN,
+                                    elevation: 4
+                                },
+                                text: {
+                                    color: 'white'
+                                }
+                            }
+                        },
+                        [getDate(-6)]: {
+                            customStyles: {
+                                container: {
+                                    backgroundColor: Colors.DARKGREEN,
+                                    elevation: 4
+                                },
+                                text: {
+                                    color: 'white'
+                                }
+                            }
+
+                        },
+                        [getDate(-7)]: {
+                            customStyles: {
+                                container: {
+                                    backgroundColor: 'orange',
+                                    elevation: 4
+                                },
+                                text: {
+                                    color: 'white'
+                                }
+                            }
+                        },
+                        [getDate(-8)]: {
+                            customStyles: {
+                                container: {
+                                    backgroundColor: 'red',
+                                    elevation: 4
+                                },
+                                text: {
+                                    color: 'white'
+                                }
+                            }
+                        }
+                    }}
+                />
+            </Fragment>
+        );
+    };
+
+
+    const renderExamples = () => {
+        return (
+            <Fragment>
+                {renderCalendarWithCustomMarkingType()}
+            </Fragment>
+        );
+    };
+
     useEffect(() => {
-        handlePress('button1')
+        handlePress('button2')
     }, []);
 
     return (
@@ -918,8 +1084,9 @@ export default function Plant({ navigation, route }) {
                                                 onChangeText={setInputValue}
                                                 value={inputValue}
                                                 keyboardType="numeric" // Only numeric inputs
+                                                marginBottom={10}
                                             />
-                                            <Button title="ADD" onPress={handleAddDataWater(inputValue)} />
+                                            <Button title="ADD" onPress={handleAddDataWater(inputValue)} marginTop={10} />
                                         </View>
                                     </Modal>
                                 </View>
@@ -935,7 +1102,7 @@ export default function Plant({ navigation, route }) {
                                     style={{
                                         margin: 5,
                                         padding: 5,
-                                        borderRadius: 20,
+                                        borderRadius: 15,
                                         backgroundColor: Colors.WHITE,
                                     }}>
                                     <Text style={{ color: Colors.DARKGREEN, fontSize: 18, fontWeight: 'bold', alignItems: 'center' }}>
@@ -978,7 +1145,7 @@ export default function Plant({ navigation, route }) {
                                 <Text style={{ fontWeight: 'bold' }}>Take Action  </Text>
                                 <FontAwesome name="magic" size={18} color={Colors.DARKGREEN} />
                             </Text>
-                            <View style={{ borderWidth: 1, borderColor: Colors.DARKGREEN, borderRadius: 10, marginTop: 7 }}>
+                            <View style={{ borderWidth: 1, borderColor: Colors.DARKGREEN, borderRadius: 15, marginTop: 7 }}>
                                 <Text style={[styles.text, { alignSelf: 'center', marginTop: 10, padding: 7, paddingTop: 2 }]}>
                                     <Text style={{ fontWeight: 'bold' }}>Quick care for {nickname}:{'\n'}{'\n'}</Text>
                                     <Text style={{ fontWeight: 'bold' }}>Light:</Text> 5-6 hours bright, indirect sunlight daily.{'\n'}
@@ -1000,13 +1167,13 @@ export default function Plant({ navigation, route }) {
                 {/* -----------------------STATS VIEW------------------------------------- */}
                 {showStats && (
                     <ScrollView showsVerticalScrollIndicator={false}>
-                        <View>
+                        <View style={{ marginBottom: 100 }} >
                             <Text style={[styles.title, { alignSelf: 'center' }]}>{nickname}'s stats</Text>
 
                             {/** MAIN GRAPH WITH WATER AND SUN */}
                             <View>
                                 <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
-                                    <Text style={[styles.title, { fontSize: 18 }]}>Sunligth, water and Diseases plot</Text>
+                                    <Text style={[styles.title, { fontSize: 18, marginTop: 10 }]}>Sunligth and  water plot</Text>
                                 </View>
                                 <View style={{ flexDirection: 'row', justifyContent: 'center', marginLeft: 8, paddingTop: 8 }}>
                                     {months.map((item, index) => {
@@ -1017,7 +1184,7 @@ export default function Plant({ navigation, route }) {
                                                     padding: 8,
                                                     margin: 6,
                                                     backgroundColor: Colors.WHITE,
-                                                    borderRadius: 8,
+                                                    borderRadius: 15,
                                                     borderColor: Colors.DARKGREEN,
                                                     borderWidth: 1.5,
                                                     elevation: 2
@@ -1030,7 +1197,7 @@ export default function Plant({ navigation, route }) {
                                 </View>
                                 <View style={{ position: 'relative' }}>
                                     {/* Switch */}
-                                    <View style={{ position: 'absolute', top: -10, right: 0 }}>
+                                    <View style={{ position: 'absolute', top: -10, right: 0, zIndex: 1 }}>
                                         <Text style={{ fontSize: 16, color: Colors.PURPLE, marginTop: 10, marginLeft: 10 }}>Month Avg</Text>
                                         <Switch
                                             trackColor={{ false: Colors.GREY, true: Colors.PURPLE }}
@@ -1052,21 +1219,26 @@ export default function Plant({ navigation, route }) {
                                         {showMonthAverageLine && (
                                             <LineChart
                                                 scrollRef={ref}
-                                                data={monthlyAverages}
+                                                data={monthlyAveragesWater}
+                                                data2={monthlyAveragesSun}
                                                 textColor="black"
                                                 textShiftY={-2}
                                                 textShiftX={-6}
                                                 textFontSize={15}
-                                                // thickness1={5}
-                                                dataPointsColor={Colors.PURPLE}
+                                                thickness1={4}
+                                                thickness2={4}
+                                                dataPointsColor1={Colors.LIGHTBLUE}
+                                                color1={Colors.LIGHTBLUE}
+                                                dataPointsColor2='orange'
+                                                color2='orange'
                                                 curved
                                                 label
+                                                hideRules
                                                 maxValue2={10}
                                                 maxValue={10}
                                                 showScrollIndicator={true}
                                                 scrollToEnd={true}
                                                 scrollAnimation={true}
-                                                color1={Colors.PURPLE}
                                                 height={200}
                                                 initialSpacing={20}
                                                 rotateLabel
@@ -1081,7 +1253,6 @@ export default function Plant({ navigation, route }) {
                                                 data={dummyData}
                                                 data2={showWaterLine ? waterDataLine : []}
                                                 data3={showSunLine ? sunDataLine : []}
-                                                data4={showMonthAverageLine ? monthlyAverages : []}
                                                 thickness1={0.0001}
                                                 textColor="black"
                                                 textShiftY={-2}
@@ -1089,22 +1260,19 @@ export default function Plant({ navigation, route }) {
                                                 textFontSize={15}
                                                 curved
                                                 label
+                                                hideRules
                                                 secondaryYAxis={true}
                                                 maxValue2={10}
                                                 maxValue={10}
                                                 showScrollIndicator={true}
                                                 scrollToEnd={true}
-                                                scrollAnimation={false}
+                                                scrollAnimation={true}
                                                 color1="black"
                                                 color2={Colors.LIGHTBLUE}
                                                 color3='orange'
-                                                color4={Colors.PURPLE}
-                                                color5={Colors.PURPLE}
                                                 dataPointsColor1="transparent"
                                                 dataPointsColor2={Colors.LIGHTBLUE}
                                                 dataPointsColor3='orange'
-                                                dataPointsColor4={Colors.PURPLE}
-                                                dataPointsColor5={Colors.PURPLE}
                                                 height={200}
                                                 initialSpacing={0}
                                                 rotateLabel
@@ -1129,7 +1297,7 @@ export default function Plant({ navigation, route }) {
                                             elevation={2}
                                         />
                                     </View>
-                                    <Text style={{ fontSize: 16, color: 'orange', marginTop: 9, marginLeft: 10 }}>Sun</Text>
+                                    <Text style={{ fontSize: 16, color: 'orange', marginTop: 9, marginLeft: 10 }}>Sun Exposure</Text>
                                     <View style={{ alignItems: 'center', flexDirection: 'row' }}>
                                         <Switch
                                             trackColor={{ false: Colors.GREY, true: 'orange' }}
@@ -1147,6 +1315,14 @@ export default function Plant({ navigation, route }) {
                             </View>
 
                             <View>
+
+                                <ScrollView showsVerticalScrollIndicator={false}>
+                                    {renderExamples()}
+                                </ScrollView>
+
+                            </View>
+
+                            <View style={{ borderWidth: 1, borderColor: Colors.DARKGREEN, borderRadius: 15, paddingBottom: 15, marginTop: 15 }} >
                                 {/* Intestazione delle colonne */}
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-around', paddingHorizontal: 5, marginTop: 20 }}>
                                     {/* Intestazioni delle colonne Avg, Min e Max */}
@@ -1197,6 +1373,63 @@ export default function Plant({ navigation, route }) {
                                     </View>
                                 </View>
                             </View>
+                            <Text style={[styles.title, { alignSelf: 'center', marginTop: 20, marginBottom: 10, fontSize: 18 }]}> {nickname}'s diseases</Text>
+                            <View>
+                                <LineChart
+                                    data1={diseaseDataLineNumerical}
+                                    data2={diseaseDataLineNumerical}
+                                    data3={diseaseDataLineNumerical}
+                                    data4={diseaseDataLineNumerical}
+                                    data={dummyData}
+                                    // startIndex1={0}
+                                    // endIndex1={31}
+                                    startIndex2={32}
+                                    endIndex2={40}
+                                    startIndex3={90}
+                                    endIndex3={100}
+                                    startIndex4={118}
+                                    endIndex4={126}
+                                    thickness2={10}
+                                    thickness4={10}
+                                    thickness3={10}
+                                    textColor="black"
+                                    dataPointsRadius={4.8}
+                                    height={150}
+                                    label
+                                    maxValue={4}
+                                    scrollToEnd={true}
+                                    scrollAnimation={true}
+                                    color='transparent'
+                                    dataPointsColor='transparent'
+                                    color1='transparent'
+                                    dataPointsColor1='transparent'
+                                    color3={Colors.PURPLE}
+                                    dataPointsColor3={Colors.PURPLE}
+                                    color2={Colors.DARKGREEN}
+                                    dataPointsColor2={Colors.DARKGREEN}
+                                    color4={Colors.ORANGE}
+                                    dataPointsColor4={Colors.ORANGE}
+                                    formatYLabel={(value) => {
+                                        switch (parseInt(value)) {
+                                            case 1:
+                                                return 'Bacteria';
+                                            case 2:
+                                                return 'Fungus';
+                                            case 3:
+                                                return 'Viruses';
+                                            default:
+                                                return '';
+                                        }
+                                    }}
+                                    noOfSections={4}
+                                    initialSpacing={10}
+                                    rotateLabel
+                                    spacing={50}
+                                    line
+                                    yAxisLabelWidth={80}
+                                    xAxisLabelsVerticalShift={10}
+                                />
+                            </View>
                         </View>
                     </ScrollView>
                 )}
@@ -1224,7 +1457,7 @@ const styles = StyleSheet.create({
     modalView: {
         margin: 20,
         backgroundColor: 'white',
-        borderRadius: 20,
+        borderRadius: 15,
         padding: 35,
         alignItems: 'center',
         shadowColor: '#000',
@@ -1260,7 +1493,7 @@ const styles = StyleSheet.create({
         fontFamily: "Raleway_400Regular",
     },
     buttonStats: {
-        width: 60,
+        width: 120,
         height: 60,
         borderRadius: 15,
         backgroundColor: Colors.WHITE,
@@ -1287,7 +1520,7 @@ const styles = StyleSheet.create({
         borderRadius: 8,
     },
     buttonInput: {
-        borderRadius: 20,
+        borderRadius: 15,
         padding: 10,
         elevation: 2,
     },
@@ -1312,7 +1545,7 @@ const styles = StyleSheet.create({
     modalContent: {
         backgroundColor: '#fff',
         padding: 30,
-        borderRadius: 10,
+        borderRadius: 15,
         shadowColor: '#000',
         shadowOffset: {
             width: 0,
@@ -1323,5 +1556,12 @@ const styles = StyleSheet.create({
         elevation: 16,
         height: 230,
         width: 250
+    },
+    calendar: {
+        marginBottom: 10,
+        backgroundColor: Colors.WHITE,
+        borderRadius: 15,
+        borderColor: Colors.DARKGREEN,
+        borderWidth: 1,
     },
 })
