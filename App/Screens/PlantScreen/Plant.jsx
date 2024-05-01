@@ -17,7 +17,6 @@ export default function Plant({ navigation, route }) {
     const [currentButton, setCurrentButton] = useState(null);
     const [showWaterLine, setShowWaterLine] = useState(true);
     const [showSunLine, setShowSunLine] = useState(true);
-    const [showDiseasesLine, setShowDiseasesLine] = useState(true);
     const [showChartWater, setShowChartWater] = useState(true);
     const [showMonthAverageLine, setShowMonthAverageLine] = useState(false);
     const [isPressedYes, setIsPressedYes] = useState(false);
@@ -53,10 +52,8 @@ export default function Plant({ navigation, route }) {
             const newValue = parseFloat(inputValue);
             const newDataPoint = { value: newValue, label: '10 May', dataPointText: String(newValue) };
             setWaterData([...waterDataLine, newDataPoint]); // Add new data point to the current dataset
-            // setInputValue(''); // Reset the input field
             setShowInputWater(!showInputWater)
             setIsPressedNo(!isPressedNo)
-            // setShowInput(!showInput)
         }
     };
 
@@ -776,7 +773,6 @@ export default function Plant({ navigation, route }) {
     const INITIAL_DATE = '2024-05-10';
 
     const [selected, setSelected] = useState(INITIAL_DATE);
-    const [currentMonth, setCurrentMonth] = useState(INITIAL_DATE);
 
     const getDate = (count) => {
         const date = new Date(INITIAL_DATE);
@@ -784,16 +780,11 @@ export default function Plant({ navigation, route }) {
         return CalendarUtils.getCalendarDateString(newDate);
     };
 
-    const onDayPress = useCallback((day) => {
-        setSelected(day.dateString);
-    }, []);
-
     const renderCalendarWithCustomMarkingType = () => {
         return (
             <Fragment>
                 <Text style={[styles.title, { textAlign: 'center', marginBottom: 10, color: Colors.DARKGREEN, fontSize: 18, marginTop: 10 }]}>Mood calendar</Text>
                 <Calendar
-                    // style={styles.calendar}
                     style={{
                         borderWidth: 1,
                         borderColor: Colors.DARKGREEN,
@@ -1370,9 +1361,9 @@ export default function Plant({ navigation, route }) {
 
                             <View style={{ borderWidth: 1, borderColor: Colors.DARKGREEN, borderRadius: 15, paddingBottom: 15 }} >
                                 <Text style={[styles.title, { alignSelf: 'center', marginTop: 10, fontSize: 18 }]}>Total averages</Text>
-                                {/* Intestazione delle colonne */}
+                                {/* Columns header*/}
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-around', paddingHorizontal: 5, marginTop: 20 }}>
-                                    {/* Intestazioni delle colonne Avg, Min e Max */}
+                                    {/* header of columns Avg, Min e Max */}
                                     <View style={{ alignItems: 'center', paddingLeft: 80 }}>
                                     </View>
                                     <View style={{ alignItems: 'center' }}>
@@ -1387,11 +1378,11 @@ export default function Plant({ navigation, route }) {
                                 </View>
                                 {/**First row for Water */}
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-around', paddingHorizontal: 5, marginTop: 5 }}>
-                                    {/* Intestazione Water */}
+                                    {/* Header Water */}
                                     <View style={{ alignItems: 'center' }}>
                                         <Text style={[styles.text, { fontSize: 20, color: Colors.LIGHTBLUE, fontWeight: 'bold' }]}>Water</Text>
                                     </View>
-                                    {/* Dati per Water */}
+                                    {/* Data for Water */}
                                     <View style={{ alignItems: 'center' }}>
                                         <Text style={styles.text}>{parseFloat(avgWater.toFixed(1))}</Text>
                                     </View>
@@ -1404,11 +1395,11 @@ export default function Plant({ navigation, route }) {
                                 </View>
                                 {/**Second row for Sun */}
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-around', paddingHorizontal: 5, marginTop: 5 }}>
-                                    {/* Intestazione Sun */}
+                                    {/* Header Sun */}
                                     <View style={{ alignItems: 'center' }}>
                                         <Text style={[styles.text, { fontSize: 20, color: 'orange', fontWeight: 'bold' }]}>Sun</Text>
                                     </View>
-                                    {/* Dati per Sun */}
+                                    {/* Data for Sun */}
                                     <View style={{ alignItems: 'center', paddingLeft: 12 }}>
                                         <Text style={styles.text}>{parseFloat(avgSun.toFixed(1))}</Text>
                                     </View>
@@ -1428,8 +1419,6 @@ export default function Plant({ navigation, route }) {
                                     data3={diseaseDataLineNumerical}
                                     data4={diseaseDataLineNumerical}
                                     data={dummyData}
-                                    // startIndex1={0}
-                                    // endIndex1={31}
                                     startIndex2={32}
                                     endIndex2={40}
                                     startIndex3={90}
@@ -1492,8 +1481,6 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: Colors.WHITE,
         padding: 20,
-        // borderColor: 'green',
-        // borderWidth: 1
     },
     centeredView: {
         flex: 1,
@@ -1523,11 +1510,10 @@ const styles = StyleSheet.create({
         paddingBottom: 5,
         borderRadius: 10,
         width: 50,
-        justifyContent: 'center', // Aggiungi questa linea
+        justifyContent: 'center',
         alignItems: 'center',
         elevation: 5
     },
-    //title text like hello Rose
     title: {
         fontSize: 24,
         color: Colors.DARKGREEN,
