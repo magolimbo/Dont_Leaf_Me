@@ -102,9 +102,6 @@ export default function Home({ navigation, route }) {
                   <Text style={{ color: Colors.WHITE, fontFamily: "Raleway_800ExtraBold", fontSize: 18, paddingTop: 8, paddingLeft: 5 }}>{nickname}</Text>
                 </View>
                 <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 5 }}>
-                  <TouchableOpacity onPress={infoPressHandler}>
-                    <MaterialCommunityIcons name="information-outline" size={34} color={Colors.WHITE} marginRight={3} />
-                  </TouchableOpacity>
                   <TouchableOpacity onPress={() => { navigation.navigate("AddPlantPage", { nickname: nickname }) }}>
                     <MaterialCommunityIcons name="pencil-circle-outline" size={34} color={Colors.WHITE} marginRight={3} />
                   </TouchableOpacity>
@@ -117,35 +114,6 @@ export default function Home({ navigation, route }) {
             }
             {/* -----------------------Single plant--------------------------------------- */}
           </View>
-
-
-
-          {/*-----------------------------INFO MODAL VIEW------------------------------------- */}
-          {showInfo && (
-            <Modal
-              animationType="fade"
-              transparent={true}
-              visible={showInfo}
-              onRequestClose={infoPressHandler}
-            >
-              <View style={styles.modalContainer}>
-                <View style={styles.modalContent}>
-                  <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
-                    <Text style={styles.title}>Plant ID</Text>
-                    <TouchableOpacity onPress={infoPressHandler}>
-                      <Fontisto name="close" size={30} color={Colors.DARKGREEN} />
-                    </TouchableOpacity>
-                  </View>
-                  <Text style={styles.text}>Nickname: {nickname}</Text>
-                  <Text style={styles.text}>Species: {species}</Text>
-                  <Text style={styles.text}>Height: {height} cm</Text>
-                  <Text style={styles.text}>Soil: {soil}</Text>
-                </View>
-              </View>
-            </Modal>
-          )}
-          {/*-----------------------------INFO MODAL VIEW------------------------------------- */}
-
         </View>
       </SafeAreaView>
     </ScrollView>

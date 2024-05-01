@@ -694,18 +694,6 @@ export default function Plant({ navigation, route }) {
     const [showInfo, setShowInfo] = useState(false);
     //------------------------------------------------------
 
-    {/** SCROLLING OF 2 GRAPHS AT THE SAME TIME */ }
-    const scrollRef1 = useRef();
-    const scrollRef2 = useRef();
-    const handleScroll1 = (event) => {
-        const scrollPosition = event.nativeEvent.contentOffset.x;
-        scrollRef2.current.scrollTo({ x: scrollPosition });
-    };
-
-    const handleScroll2 = (event) => {
-        const scrollPosition = event.nativeEvent.contentOffset.x;
-        scrollRef1.current.scrollTo({ x: scrollPosition });
-    };
     const openAIModal = () => {
         setShowInfo(true);
     };
@@ -714,12 +702,12 @@ export default function Plant({ navigation, route }) {
     const pieData = [
         {
             value: 58,
-            color: '#27ae60',
-            gradientCenterColor: '#2ecc71',
+            color: Colors.LIGHTGREEN,
+            gradientCenterColor: Colors.LIGHTGREEN,
             focused: true,
         },
-        { value: 40, color: '#f39c12', gradientCenterColor: '#f1c40f' },
-        { value: 12, color: '#c0392b', gradientCenterColor: '#e74c3c' },
+        { value: 40, color: 'orange', gradientCenterColor: 'orange' },
+        { value: 12, color: 'red', gradientCenterColor: 'red' },
     ];
     const renderDot = color => {
         return (
@@ -751,19 +739,19 @@ export default function Plant({ navigation, route }) {
                             width: 110,
                             marginLeft: 35,
                         }}>
-                        {renderDot('#27ae60')}
+                        {renderDot(Colors.LIGHTGREEN)}
                         <Text style={{ color: Colors.DARKGREEN }}>Great:
                             <Text style={{ fontWeight: 'bold' }}> {pieData[0]['value']}%</Text></Text>
                     </View>
                     <View
                         style={{ flexDirection: 'row', alignItems: 'center', width: 110 }}>
-                        {renderDot('#f39c12')}
+                        {renderDot('orange')}
                         <Text style={{ color: Colors.DARKGREEN }}>Okay:
                             <Text style={{ fontWeight: 'bold' }}> {pieData[1]['value']}%</Text></Text>
                     </View>
                     <View
                         style={{ flexDirection: 'row', alignItems: 'center', width: 110 }}>
-                        {renderDot('#c0392b')}
+                        {renderDot('red')}
                         <Text style={{ color: Colors.DARKGREEN }}>Bad:
                             <Text style={{ fontWeight: 'bold' }}> {pieData[2]['value']}%</Text></Text>
                     </View>
@@ -795,12 +783,16 @@ export default function Plant({ navigation, route }) {
     const renderCalendarWithCustomMarkingType = () => {
         return (
             <Fragment>
+                <Text style={[styles.title, { textAlign: 'center', marginBottom: 10, color: Colors.DARKGREEN, fontSize: 18, marginTop: 10 }]}>Mood calendar</Text>
                 <Calendar
                     // style={styles.calendar}
                     style={{
                         borderWidth: 1,
-                        borderColor: 'gray',
-                        height: 350
+                        borderColor: Colors.DARKGREEN,
+                        borderRadius: 15,
+                        fontFamily: "Raleway_400Regular",
+                        height: 380,
+                        arrowColor: Colors.DARKGREEN,
                     }}
                     hideExtraDays
                     current={INITIAL_DATE}
@@ -927,6 +919,28 @@ export default function Plant({ navigation, route }) {
         return (
             <Fragment>
                 {renderCalendarWithCustomMarkingType()}
+                <View style={{ position: 'relative' }}>
+                    <View style={{ flexDirection: 'row', position: 'relative', top: -50, left: 120, zIndex: 1 }}>
+                        <Pressable
+                            style={[styles.button, { backgroundColor: 'red', padding: 7, width: 70 }]}
+                            flexDirection='row'>
+                            <Entypo name="emoji-sad" size={16} color='white' />
+                            <Text style={{ color: 'white', fontSize: 10 }}> Bad</Text>
+                        </Pressable>
+                        <Pressable
+                            style={[styles.button, { backgroundColor: 'orange', padding: 7, width: 70 }]}
+                            flexDirection='row'>
+                            <Entypo name="emoji-neutral" size={16} color='white' />
+                            <Text style={{ color: 'white', fontSize: 10 }}> Neutral</Text>
+                        </Pressable>
+                        <Pressable
+                            style={[styles.button, { backgroundColor: Colors.DARKGREEN, padding: 7, width: 70 }]}
+                            flexDirection='row'>
+                            <Entypo name="emoji-happy" size={16} color='white' />
+                            <Text style={{ color: 'white', fontSize: 10 }}> Happy</Text>
+                        </Pressable>
+                    </View>
+                </View>
             </Fragment>
         );
     };
@@ -1141,7 +1155,7 @@ export default function Plant({ navigation, route }) {
                                         <Text style={styles.text}>   {soil}</Text></Text>
                                 </View>
                             </View>
-                            <Text style={[styles.title, { alignSelf: 'center', marginTop: 10, fontSize: 20 }]}>
+                            <Text style={[styles.title, { alignSelf: 'center', marginTop: 10, fontSize: 18 }]}>
                                 <Text style={{ fontWeight: 'bold' }}>Take Action  </Text>
                                 <FontAwesome name="magic" size={18} color={Colors.DARKGREEN} />
                             </Text>
@@ -1203,6 +1217,7 @@ export default function Plant({ navigation, route }) {
                                             trackColor={{ false: Colors.GREY, true: Colors.PURPLE }}
                                             thumbColor={showMonthAverageLine ? Colors.WHITE : Colors.WHITE}
                                             ios_backgroundColor={Colors.GREY}
+                                            marginTop={-10}
                                             onValueChange={(newValue) => {
                                                 setShowMonthAverageLine(newValue);
                                                 setShowWaterLine(!newValue);
@@ -1212,6 +1227,32 @@ export default function Plant({ navigation, route }) {
                                             value={showMonthAverageLine}
                                             elevation={2}
                                         />
+                                    </View>
+                                    <View style={{ position: 'absolute', top: -35, right: 130, zIndex: 1 }}>
+                                        <Text style={{ fontSize: 16, color: Colors.PURPLE, marginTop: 10, marginLeft: 10 }}></Text>
+                                        <View
+                                            style={{
+                                                flexDirection: 'row',
+                                                alignItems: 'center',
+                                                width: 200,
+                                                marginLeft: 35,
+                                            }}>
+                                            {renderDot('orange')}
+                                            <Text style={{ color: Colors.DARKGREEN, fontSize: 10 }}> Hours of sunligth</Text>
+                                        </View>
+                                    </View>
+                                    <View style={{ position: 'absolute', top: -20, right: 130, zIndex: 1 }}>
+                                        <Text style={{ fontSize: 16, color: Colors.PURPLE, marginTop: 10, marginLeft: 10 }}></Text>
+                                        <View
+                                            style={{
+                                                flexDirection: 'row',
+                                                alignItems: 'center',
+                                                width: 200,
+                                                marginLeft: 35,
+                                            }}>
+                                            {renderDot(Colors.LIGHTBLUE)}
+                                            <Text style={{ color: Colors.DARKGREEN, fontSize: 10 }}> Glasses of water</Text>
+                                        </View>
                                     </View>
 
                                     {/* Line Chart */}
@@ -1234,12 +1275,11 @@ export default function Plant({ navigation, route }) {
                                                 curved
                                                 label
                                                 hideRules
-                                                maxValue2={10}
                                                 maxValue={10}
                                                 showScrollIndicator={true}
                                                 scrollToEnd={true}
                                                 scrollAnimation={true}
-                                                height={200}
+                                                height={210}
                                                 initialSpacing={20}
                                                 rotateLabel
                                                 spacing={50}
@@ -1261,8 +1301,6 @@ export default function Plant({ navigation, route }) {
                                                 curved
                                                 label
                                                 hideRules
-                                                secondaryYAxis={true}
-                                                maxValue2={10}
                                                 maxValue={10}
                                                 showScrollIndicator={true}
                                                 scrollToEnd={true}
@@ -1309,9 +1347,6 @@ export default function Plant({ navigation, route }) {
                                         />
                                     </View>
                                 </View>
-                                <View>
-                                    <Text style={[styles.text, { alignSelf: 'center', fontSize: 8 }]}> The water is mesured in glasses, while the sunligth in hours of exposition</Text>
-                                </View>
                             </View>
 
                             <View>
@@ -1322,7 +1357,8 @@ export default function Plant({ navigation, route }) {
 
                             </View>
 
-                            <View style={{ borderWidth: 1, borderColor: Colors.DARKGREEN, borderRadius: 15, paddingBottom: 15, marginTop: 15 }} >
+                            <View style={{ borderWidth: 1, borderColor: Colors.DARKGREEN, borderRadius: 15, paddingBottom: 15 }} >
+                                <Text style={[styles.title, { alignSelf: 'center', marginTop: 10, fontSize: 18 }]}>Total averages</Text>
                                 {/* Intestazione delle colonne */}
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-around', paddingHorizontal: 5, marginTop: 20 }}>
                                     {/* Intestazioni delle colonne Avg, Min e Max */}
