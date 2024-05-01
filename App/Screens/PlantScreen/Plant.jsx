@@ -946,7 +946,7 @@ export default function Plant({ navigation, route }) {
     };
 
     useEffect(() => {
-        handlePress('button2')
+        handlePress('button1')
     }, []);
 
     return (
