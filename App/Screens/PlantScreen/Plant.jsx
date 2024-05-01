@@ -20,6 +20,11 @@ export default function Plant({ navigation, route }) {
     const [showDiseasesLine, setShowDiseasesLine] = useState(true);
     const [showChartWater, setShowChartWater] = useState(true);
     const [showMonthAverageLine, setShowMonthAverageLine] = useState(false);
+    const [isPressedYes, setIsPressedYes] = useState(false);
+    const [isPressedNo, setIsPressedNo] = useState(false);
+    const [isPressedMoodSad, setIsPressedMoodSad] = useState(false);
+    const [isPressedMoodNeutral, setIsPressedMoodNeutral] = useState(false);
+    const [isPressedMoodHappy, setIsPressedMoodHappy] = useState(false);
 
     const ref = useRef(null)
 
@@ -29,14 +34,16 @@ export default function Plant({ navigation, route }) {
             const newDataPoint = { value: newValue, label: '10 May', dataPointText: String(newValue) };
             setWaterData([...waterDataLine, newDataPoint]); // Add new data point to the current dataset
             setInputValue(''); // Reset the input field
-            setShowInput(!showInput)
+            setIsPressedYes(!isPressedYes)
+            // setShowInput(!showInput)
         }
         else if (inputValue.trim() === '2') {
             const newValue = parseFloat(inputValue);
             const newDataPoint = { value: newValue, label: '10 May', dataPointText: String(newValue) };
             setWaterData([...waterDataLine, newDataPoint]); // Add new data point to the current dataset
             setInputValue(''); // Reset the input field
-            setShowInput(!showInput)
+            setIsPressedYes(!isPressedYes)
+            // setShowInput(!showInput)
         }
     };
 
@@ -46,9 +53,10 @@ export default function Plant({ navigation, route }) {
             const newValue = parseFloat(inputValue);
             const newDataPoint = { value: newValue, label: '10 May', dataPointText: String(newValue) };
             setWaterData([...waterDataLine, newDataPoint]); // Add new data point to the current dataset
-            setInputValue(''); // Reset the input field
+            // setInputValue(''); // Reset the input field
             setShowInputWater(!showInputWater)
-            setShowInput(!showInput)
+            setIsPressedNo(!isPressedNo)
+            // setShowInput(!showInput)
         }
     };
 
@@ -765,7 +773,7 @@ export default function Plant({ navigation, route }) {
 
 
 
-    const INITIAL_DATE = '2024-05-09';
+    const INITIAL_DATE = '2024-05-10';
 
     const [selected, setSelected] = useState(INITIAL_DATE);
     const [currentMonth, setCurrentMonth] = useState(INITIAL_DATE);
@@ -806,14 +814,11 @@ export default function Plant({ navigation, route }) {
                     markedDates={{
                         [INITIAL_DATE]: {
                             customStyles: {
-                                container: {
-                                    backgroundColor: 'white',
-                                    elevation: 2
-                                },
-                                text: {
-                                    color: 'red',
-                                    marginTop: 0
-                                }
+                                container: isPressedMoodHappy
+                                    ? { backgroundColor: Colors.DARKGREEN, elevation: 4, borderColor: 'yellow', borderWidth: 1 }
+                                    : isPressedMoodNeutral ? { backgroundColor: 'orange', elevation: 4, borderColor: 'yellow', borderWidth: 1 }
+                                        : isPressedMoodSad ? { backgroundColor: 'red', elevation: 4, borderColor: 'yellow', borderWidth: 1 } : {},
+                                text: { color: 'white' }
                             }
                         },
                         [getDate(-1)]: {
@@ -907,6 +912,17 @@ export default function Plant({ navigation, route }) {
                                     color: 'white'
                                 }
                             }
+                        },
+                        [getDate(-9)]: {
+                            customStyles: {
+                                container: {
+                                    backgroundColor: 'red',
+                                    elevation: 4
+                                },
+                                text: {
+                                    color: 'white'
+                                }
+                            }
                         }
                     }}
                 />
@@ -952,7 +968,6 @@ export default function Plant({ navigation, route }) {
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <View style={styles.container}>
-
                 {/* ---------------------------HEADER------------------------------ */}
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                     {/* button to go back to home screen */}
@@ -1047,13 +1062,12 @@ export default function Plant({ navigation, route }) {
                                                 <Text style={{ fontWeight: 'bold' }}> 2 glasses </Text> of water. Did you put this amount?</Text>
                                             <View style={{ flexDirection: 'row' }}>
                                                 <Pressable
-                                                    style={[styles.button, styles.buttonClose]}
+                                                    style={[styles.button, styles.buttonClose, isPressedYes ? { backgroundColor: Colors.LIGHTGREEN, borderColor: '#aaa', elevation: 0 } : {}]}
                                                     onPress={() => handleAddData('2')}>
                                                     <Text style={[styles.text, { color: 'white' }]}>YES</Text>
                                                 </Pressable>
                                                 <Pressable
-                                                    style={[styles.button, styles.buttonClose]}
-                                                    // onPress={openInputWaterModal}>
+                                                    style={[styles.button, styles.buttonClose, , isPressedNo ? { backgroundColor: Colors.LIGHTGREEN, borderColor: '#aaa', elevation: 0 } : {}]}
                                                     onPress={() => setShowInputWater(!showInputWater)}>
                                                     <Text style={[styles.text, { color: 'white' }]}>NO</Text>
                                                 </Pressable>
@@ -1062,17 +1076,17 @@ export default function Plant({ navigation, route }) {
                                             <View style={{ flexDirection: 'row' }}>
                                                 <Pressable
                                                     style={[styles.button, styles.buttonClose]}
-                                                    onPress={() => setShowInput(!showInput)}>
+                                                    onPress={() => { setIsPressedMoodSad(!isPressedMoodSad), setShowInput(!showInput) }}>
                                                     <Entypo name="emoji-sad" size={24} color='white' />
                                                 </Pressable>
                                                 <Pressable
                                                     style={[styles.button, styles.buttonClose]}
-                                                    onPress={() => setShowInput(!showInput)}>
+                                                    onPress={() => { setShowInput(!showInput), setIsPressedMoodNeutral(!isPressedMoodNeutral) }}>
                                                     <Entypo name="emoji-neutral" size={24} color='white' />
                                                 </Pressable>
                                                 <Pressable
                                                     style={[styles.button, styles.buttonClose]}
-                                                    onPress={() => setShowInput(!showInput)}>
+                                                    onPress={() => { setIsPressedMoodHappy(!isPressedMoodHappy), setShowInput(!showInput) }}>
                                                     <Entypo name="emoji-happy" size={24} color='white' />
                                                 </Pressable>
                                             </View>
@@ -1088,19 +1102,16 @@ export default function Plant({ navigation, route }) {
                                         animationType="fade"
                                         transparent={false}
                                         visible={showInputWater}
-                                        onRequestClose={() => {
-                                            Alert.alert('Modal has been closed.');
-                                            setShowInput(showInputWater);
-                                        }}>
+                                    >
                                         <View style={styles.centeredView}>
                                             <TextInput
                                                 placeholder="How many glasses of water did you put today?"
-                                                onChangeText={setInputValue}
+                                                onChangeText={(text) => setInputValue(text)}
                                                 value={inputValue}
-                                                keyboardType="numeric" // Only numeric inputs
+                                                keyboardType="numeric"
                                                 marginBottom={10}
                                             />
-                                            <Button title="ADD" onPress={handleAddDataWater(inputValue)} marginTop={10} />
+                                            <Button title="ADD" onPress={() => { handleAddDataWater(inputValue), setIsPressedNo(!isPressedNo) }} marginTop={10} />
                                         </View>
                                     </Modal>
                                 </View>
@@ -1554,6 +1565,7 @@ const styles = StyleSheet.create({
         padding: 8,
         margin: 6,
         borderRadius: 8,
+        elevation: 2,
     },
     buttonInput: {
         borderRadius: 15,
