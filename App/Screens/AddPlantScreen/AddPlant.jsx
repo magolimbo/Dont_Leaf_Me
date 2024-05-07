@@ -193,8 +193,6 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: Colors.WHITE,
         padding: 25,
-        // borderColor: 'green',
-        // borderWidth: 1
     },
     buttonBack: {
         backgroundColor: Colors.ORANGE,
@@ -204,10 +202,9 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         width: 70,
         height: 40,
-        justifyContent: 'center', // Aggiungi questa linea
+        justifyContent: 'center',
         alignItems: 'center',
     },
-    //title text like hello Rose
     title: {
         fontSize: 24,
         color: Colors.DARKGREEN,
@@ -233,107 +230,3 @@ const styles = StyleSheet.create({
         marginBottom: 10
     },
 })
-
-
-
-
-
-
-
-
-
-
-// <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-
-// <View style={{flex:1, alignItems: 'center'}}>
-//     <View style={styles.propic}>
-//     </View>
-//     <Text style={{fontFamily:'Raleway_400Regular', color: Colors.WHITE, marginBottom: 30}}>Pro Pic</Text>
-//     <Text style={{fontFamily:'Raleway_400Regular', color: Colors.WHITE, marginBottom: 25}}>Height:</Text>
-//     <Text style={{fontFamily:'Raleway_400Regular', color: Colors.WHITE, marginBottom: 25}}>Type of Soil:</Text>
-//     <Text style={{fontFamily:'Raleway_400Regular', color: Colors.WHITE}}>Location:</Text>
-
-// </View>
-// <View style={{flex:2, marginLeft: 20}}>
-//     {/* DROPDOWN MENU PLANT SPECIES*/}
-//     <Text style={{fontFamily:'Raleway_400Regular', color: Colors.WHITE, marginBottom: 5}}>Plant Species</Text>
-    // <View style={{ borderRadius: 12, overflow: 'hidden',alignItems2: 'center', justifyContent: 'center',borderColor: Colors.WHITE, borderWidth: 2 }}>
-    //     <Picker
-    //         selectedValue={selectedValue}
-    //         style={{ height: 30, backgroundColor: Colors.DARKGREEN, color: Colors.WHITE}}
-    //         onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
-    //     >
-    //         <Picker.Item label="Rose" value="Rose" />
-    //         <Picker.Item label="Sunflower" value="Sunflower" />
-    //         <Picker.Item label="Orchid" value="Orchid" />
-    //         <Picker.Item label="Ficus" value="Ficus" />
-    //         <Picker.Item label="Lavender" value="Lavender" />
-    //         <Picker.Item label="Pine" value="Pine" />
-    //         <Picker.Item label="Cactus" value="Cactus" />
-    //         <Picker.Item label="Peony" value="Peony" />
-    //         <Picker.Item label="Geranium" value="Geranium" />
-    //         <Picker.Item label="Tulip" value="Tulip" />
-
-    //     </Picker>
-    // </View> 
-//     {/* INPUT TEXT NICKNAME */}
-    // <Text style={{fontFamily:'Raleway_400Regular', color: Colors.WHITE, marginBottom: 5, marginTop: 10}}>Nickname</Text>
-    // <View style={{ borderRadius: 12, overflow: 'hidden',alignItems2: 'center', justifyContent: 'center',borderColor: Colors.WHITE, borderWidth: 2, paddingLeft: 15, marginBottom: 30 }}>
-    //     <TextInput
-    //         style={{ height: 30, backgroundColor: Colors.DARKGREEN, color: Colors.WHITE}}
-    //         placeholder="Hot Ficus"
-    //     />
-    // </View> 
-
-//     {/* INPUT TEXT NICKNAME */}
-//     <View style={{ borderRadius: 12, overflow: 'hidden',alignItems2: 'center', justifyContent: 'center',borderColor: Colors.WHITE, borderWidth: 2, paddingLeft: 15, marginBottom: 10 }}>
-//         <TextInput
-//             style={{ height: 30, backgroundColor: Colors.DARKGREEN, color: Colors.WHITE}}
-//             placeholder="50 cm"
-//         />
-//     </View> 
-
-//     {/* INPUT TEXT NICKNAME */}
-//     <View style={{ borderRadius: 12, overflow: 'hidden',alignItems2: 'center', justifyContent: 'center',borderColor: Colors.WHITE, borderWidth: 2, marginBottom: 10 }}>
-//         <Picker
-//             selectedValue={selectedValue}
-//             style={{ height: 30, backgroundColor: Colors.DARKGREEN, color: Colors.WHITE}}
-//             onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
-//         >
-//             <Picker.Item label="Rose" value="Rose" />
-//             <Picker.Item label="Sunflower" value="Sunflower" />
-//             <Picker.Item label="Orchid" value="Orchid" />
-//             <Picker.Item label="Ficus" value="Ficus" />
-//             <Picker.Item label="Lavender" value="Lavender" />
-//             <Picker.Item label="Pine" value="Pine" />
-//             <Picker.Item label="Cactus" value="Cactus" />
-//             <Picker.Item label="Peony" value="Peony" />
-//             <Picker.Item label="Geranium" value="Geranium" />
-//             <Picker.Item label="Tulip" value="Tulip" />
-
-//         </Picker>
-//     </View>  
-
-//     {/* INPUT TEXT NICKNAME */}
-//     <View style={{ borderRadius: 12, overflow: 'hidden',alignItems2: 'center', justifyContent: 'center',borderColor: Colors.WHITE, borderWidth: 2 }}>
-//         <Picker
-//             selectedValue={selectedValue}
-//             style={{ height: 30, backgroundColor: Colors.DARKGREEN, color: Colors.WHITE}}
-//             onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
-//         >
-//             <Picker.Item label="Rose" value="Rose" />
-//             <Picker.Item label="Sunflower" value="Sunflower" />
-//             <Picker.Item label="Orchid" value="Orchid" />
-//             <Picker.Item label="Ficus" value="Ficus" />
-//             <Picker.Item label="Lavender" value="Lavender" />
-//             <Picker.Item label="Pine" value="Pine" />
-//             <Picker.Item label="Cactus" value="Cactus" />
-//             <Picker.Item label="Peony" value="Peony" />
-//             <Picker.Item label="Geranium" value="Geranium" />
-//             <Picker.Item label="Tulip" value="Tulip" />
-
-//         </Picker>
-//     </View> 
-
-// </View>
-// </View>

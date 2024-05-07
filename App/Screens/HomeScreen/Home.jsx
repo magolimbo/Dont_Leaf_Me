@@ -1,5 +1,5 @@
-import { StyleSheet, View, Text, TouchableOpacity, ScrollView, Image, Modal } from 'react-native'
-import { useEffect, useState } from 'react'
+import { StyleSheet, View, Text, TouchableOpacity, ScrollView, Image } from 'react-native'
+import { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Colors from '../../Utils/Colors'
 import { Raleway_400Regular } from "@expo-google-fonts/raleway";
@@ -7,7 +7,6 @@ import { Raleway_800ExtraBold } from "@expo-google-fonts/raleway";
 import { useFonts } from "expo-font";
 import { Feather } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { Fontisto } from '@expo/vector-icons';
 
 
 export default function Home({ navigation, route }) {
@@ -59,7 +58,7 @@ export default function Home({ navigation, route }) {
           <View style={styles.weather}>
             <View style={{ width: 110, flexDirection: 'column', alignItems: 'center' }}>
               <Image
-                source={require('./../../../assets/images/weathersymbol.png')} // replace with the path to your image
+                source={require('./../../../assets/images/weathersymbol.png')}
                 style={{ width: '70%', height: '70%' }}
                 resizeMode="contain"
               />
@@ -94,7 +93,7 @@ export default function Home({ navigation, route }) {
                 <View style={{ flexDirection: 'row' }}>
                   <View style={{ width: 50, height: 50, borderRadius: 25, backgroundColor: Colors.WHITE, marginRight: 5 }}>
                     <Image
-                      source={require('./../../../assets/images/Plant_1.png')} // replace with the path to your image
+                      source={require('./../../../assets/images/Plant_1.png')}
                       style={{ marginLeft: 5, marginTop: 3, width: '80%', height: '80%' }}
                       resizeMode="contain"
                     />
@@ -125,17 +124,12 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.WHITE,
     padding: 25,
-    // borderColor: 'red',
-    // borderWidth: 1
   },
-  //title text like hello Rose
   title: {
     fontSize: 24,
     color: Colors.DARKGREEN,
     fontFamily: "Raleway_800ExtraBold",
     textAlign: 'left',
-    // borderColor: 'blue',
-    // borderWidth: 1
   },
   text: {
     fontSize: 15,
@@ -143,8 +137,6 @@ const styles = StyleSheet.create({
     fontFamily: "Raleway_400Regular",
   },
   weather: {
-    // borderColor: 'blue',
-    // borderWidth: 1,
     backgroundColor: Colors.DARKGREEN,
     height: 150,
     padding: 20,
