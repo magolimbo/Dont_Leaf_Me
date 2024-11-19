@@ -1,3 +1,4 @@
+## Don't Leaf Me 
 Mobile app prototype that aims to assist users in
 caring for their plants by providing reminders, AI assistance, and
 easy-to-understand visuals. 
